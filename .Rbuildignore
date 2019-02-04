@@ -1,0 +1,8 @@
+^LICENSE\.md$
+^\.DS_Store$
+^Makefile$
+^docs$
+^_pkgdown\.yml$
+^README\.Rmd$
+^mists\.Rproj$
+^\.Rproj\.user$

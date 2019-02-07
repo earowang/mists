@@ -1,3 +1,4 @@
+^data-raw$
 ^LICENSE\.md$
 ^\.DS_Store$
 ^Makefile$
@@ -6,3 +7,4 @@
 ^README\.Rmd$
 ^mists\.Rproj$
 ^\.Rproj\.user$
+\get-started/

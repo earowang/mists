@@ -1,0 +1,31 @@
+---
+title: "Visually exploring missingness of pedestrian data"
+author: "Earo Wang"
+date: "12/02/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  warning = FALSE, message = FALSE, echo = FALSE,
+  fig.path = 'figure/', cache.path = 'cache/', fig.align = 'center',
+  fig.show = 'hold', cache = TRUE, external = TRUE, comment = "#>"
+)
+knitr::read_chunk("get-started/pedestrian.R")
+```
+
+
+```{r initial}
+```
+
+```{r missing-map, fig.width = 10, fig.height = 8}
+```
+
+```{r missing-dots, fig.width = 10, fig.height = 8}
+```
+
+```{r missing-occurrence, fig.width = 10, fig.height = 14}
+```
+
+```{r flinders-corr}
+```

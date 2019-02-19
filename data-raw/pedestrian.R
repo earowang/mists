@@ -16,6 +16,7 @@ ped_clean <- ped %>%
   left_join(ped_sensor_date, by = "Sensor") %>% 
   filter(Year_Installed <= Year) %>% # rm obs b/f the year installed
   group_by(Sensor) %>% 
-  filter(first_non_na(Count, Date) <= Date)
+  filter(first_non_na(Count, Date) <= Date) %>% 
+  ungroup()
 
 readr::write_rds(ped_clean, "data-raw/ped.rds", compress = "xz")

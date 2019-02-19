@@ -4,6 +4,7 @@ library(tsibble)
 library(patchwork)
 library(naniar)
 library(mists)
+library(lubridate)
 # devtools::load_all(".")
 
 ped <- read_rds("data-raw/ped.rds")
@@ -128,7 +129,7 @@ ped_ts %>%
   theme(axis.ticks.y = element_blank(), axis.text.y = element_blank())
 
 ## ---- flinders-corr
-ped_dummy %>%
+ped_ts %>%
   filter(
     Sensor %in% c("Flinders St-Elizabeth St (East)", "Flinders Street Station Underpass")
   ) %>%
@@ -138,6 +139,67 @@ ped_dummy %>%
   ggplot(aes(x = `Flinders Street Station Underpass`, y = `Flinders St-Elizabeth St (East)`)) +
   geom_miss_point(alpha = 0.6, size = 0.2) +
   coord_fixed(ratio = 1)
+
+## ---- flinders-corr-weekend
+ped_ts %>%
+  filter(
+    Sensor %in% c("Flinders St-Elizabeth St (East)", "Flinders Street Station Underpass")
+  ) %>%
+  select(Sensor, Date_Time, Count) %>%
+  group_by_key() %>%
+  spread(Sensor, Count) %>%
+  mutate(
+    Wday = wday(Date_Time, label = TRUE, week_start = 1),
+    Weekend = ifelse(Wday %in% c("Sat", "Sun"), TRUE, FALSE)
+  ) %>% 
+  ggplot(aes(x = `Flinders Street Station Underpass`, y = `Flinders St-Elizabeth St (East)`)) +
+  geom_miss_point(alpha = 0.6, size = 0.2) +
+  facet_grid(~ Weekend) +
+  coord_fixed(ratio = 1)
+
+## ---- flinders-corr-hours
+ped_ts %>%
+  filter(
+    Sensor %in% c("Flinders St-Elizabeth St (East)", "Flinders Street Station Underpass")
+  ) %>%
+  select(Sensor, Date_Time, Count) %>%
+  group_by_key() %>%
+  spread(Sensor, Count) %>%
+  mutate(Time = hour(Date_Time), Is8 = ifelse(Time %in% 6:8, TRUE, FALSE)) %>% 
+  ggplot(aes(x = `Flinders Street Station Underpass`, y = `Flinders St-Elizabeth St (East)`, colour = Is8)) +
+  geom_point(alpha = 0.6, size = 0.2) +
+  coord_fixed(ratio = 1)
+
+## ---- flinders-corr-hours
+ped_ts %>%
+  filter(
+    Sensor %in% c("Flinders St-Elizabeth St (East)", "Flinders Street Station Underpass")
+  ) %>%
+  select(Sensor, Date_Time, Count) %>%
+  group_by_key() %>%
+  spread(Sensor, Count) %>%
+  mutate(Time = hour(Date_Time)) %>% 
+  ggplot(aes(x = `Flinders Street Station Underpass`, y = `Flinders St-Elizabeth St (East)`)) +
+  geom_miss_point(alpha = 0.6, size = 0.2) +
+  facet_wrap(~ Time, ncol = 4) +
+  coord_fixed(ratio = 1)
+
+## ---- flinders-elizabetsh
+sensors_fct <- as_tibble(ped_ts) %>% 
+  group_by(Sensor) %>% 
+  summarise(.n = sum(is.na(Count))) %>% 
+  mutate(
+    Sensor = as.factor(Sensor) %>% fct_reorder(.n, sum, .desc = TRUE)
+      %>% fct_lump(12, ties.method = "first")
+  ) %>% 
+  pull(Sensor)
+
+ped_ts %>% 
+  filter(Sensor %in% sensors_fct) %>% 
+  mutate(Lag_Count = lag(Count)) %>% 
+  ggplot(aes(x = Count, y = Lag_Count)) +
+  geom_miss_point(alpha = 0.6, size = 0.2) +
+  facet_wrap(~ Sensor, ncol = 4, scales = "free")
 
 ## ---- misc
 ped_dummy %>%

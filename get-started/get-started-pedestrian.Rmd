@@ -29,3 +29,12 @@ knitr::read_chunk("get-started/pedestrian.R")
 
 ```{r flinders-corr}
 ```
+
+```{r flinders-corr-hours}
+```
+
+```{r lagplot, fig.width = 10, fig.height = 10}
+```
+
+```{r acfplot, fig.width = 10, fig.height = 14}
+```

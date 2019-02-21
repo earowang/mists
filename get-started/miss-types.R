@@ -7,11 +7,6 @@ library(rlang)
 library(patchwork)
 set.seed(2019)
 
-tbl <- tibble(xmin = 1:2, xmax = 2:3, group = 1:2)
-ggplot(tbl) +
-  geom_rect(aes(xmin = xmin - 1, xmax = xmax + 1), ymin = -Inf, ymax = Inf) +
-  facet_wrap(~ group, ncol = 1)
-
 ts_airgap <- as_tsibble(tsAirgap)
 ts_NH4 <- as_tsibble(tsNH4) %>% 
   mutate(
@@ -65,18 +60,22 @@ miss_at_runs <- function(.data) {
   )
 }
 
+# miss_at_cycle <- function(.data) {
+#   
+# }
+
 ts_airgap_trend <- miss_at_trend(ts_airgap_full) %>% 
-  mutate(type = "missing at trend") %>% 
-  update_tsibble(key = id(type))
+  mutate(type = "missing at trend", number = 1) %>% 
+  update_tsibble(key = id(number, type))
 ts_airgap_regular <- miss_at_regular(ts_airgap_full) %>% 
-  mutate(type = "missing at regular") %>% 
-  update_tsibble(key = id(type))
+  mutate(type = "missing at regular", number = 2) %>% 
+  update_tsibble(key = id(number, type))
 ts_airgap_occasional <- miss_at_occasional(ts_airgap_full) %>% 
-  mutate(type = "missing at occasional") %>% 
-  update_tsibble(key = id(type))
+  mutate(type = "missing at occasional", number = 3) %>% 
+  update_tsibble(key = id(number, type))
 ts_airgap_runs <- miss_at_runs(ts_airgap_full) %>% 
-  mutate(type = "missing at runs") %>% 
-  update_tsibble(key = id(type))
+  mutate(type = "missing at runs", number = 4) %>% 
+  update_tsibble(key = id(number, type))
 ts_airgap_miss <- 
   rbind(
     ts_airgap_trend, ts_airgap_regular,
@@ -89,7 +88,26 @@ ggplot() +
     aes(xmin = .from - 1, xmax = .to + 1), ymin = -Inf, ymax = Inf,
     data = count_na(ts_airgap_miss, value), alpha = 0.2
   ) +
-  facet_wrap(~ type, ncol = 1, strip.position = "right")
+  facet_wrap(~ type, ncol = 1, strip.position = "right") +
+  theme_bw()
+
+ggplot() +
+  geom_line(aes(x = index, y = value), data = ts_airgap_miss) +
+  geom_rect(
+    aes(xmin = .from - 1, xmax = .to + 1), ymin = -Inf, ymax = Inf,
+    data = count_na(ts_airgap_miss, value), alpha = 0.2, fill = "#e34a33"
+  ) +
+  facet_wrap(~ type, ncol = 1, strip.position = "right") +
+  theme_bw()
+
+ggplot() +
+  geom_line(aes(x = index, y = value), data = ts_airgap_miss) +
+  geom_rect(
+    aes(xmin = .from - 1, xmax = .to + 1), ymin = -Inf, ymax = Inf,
+    data = count_na(ts_airgap_miss, value), alpha = 0.2, fill = "#2b8cbe"
+  ) +
+  facet_wrap(~ type, ncol = 1, strip.position = "right") +
+  theme_bw()
 
 ts_airgap_gap <- count_na(ts_airgap, value)
 
@@ -98,4 +116,5 @@ ggplot() +
   geom_rect(
     aes(xmin = .from - 1, xmax = .to + 1, ymin = -Inf, ymax = Inf),
     data = ts_airgap_gap, alpha = 0.2
-  )
+  ) +
+  theme_bw()

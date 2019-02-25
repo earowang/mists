@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(
   warning = FALSE, message = FALSE, echo = FALSE,
   fig.path = 'figure/', cache.path = 'cache/', fig.align = 'center',
-  fig.show = 'hold', cache = TRUE, external = TRUE, comment = "#>"
+  fig.show = 'hold', cache = FALSE, external = TRUE, comment = "#>"
 )
 knitr::read_chunk("get-started/miss-types.R")
 ```
@@ -17,3 +17,41 @@ knitr::read_chunk("get-started/miss-types.R")
 ## Abstract
 
 It is a daunting task to phrase the established taxonomy of missing data mechanisms in order to provide a practical guide to working with missings of time series. Can missing data speak the language of the data that goes beyond the mechanisms: MCAR, MAR, MNAR? We take a different route to understanding and developing missing types in temporal context with the focus of data. We exploit how the new types of temporal missings can leave the trace in many types of plots so that we can reason about the decisions made for handling and imputing missing values. The work will be implemented in the **mists** package using R.
+
+```{r load}
+```
+
+## Types of temporal missingness
+
+From the decomposition point of view, missingness can be classified into four categories (I feel these categories are not accurate, we can come up with something better):
+
+1. **missing at occasional**: probably "missing at random" is a better alternative, but is messed up with MAR. "missing at random time"? "occasional" merely tells a small proportion of the series is missing. But "missing at random time" can take a `prop` argument to determine what proportion can be missing. short memory, constrast to "missing at runs".
+2. **missing at regular**: missing at a particular season. Do they all have to missing, how about parts of missing at seasons? Missing at every months? missing at every 3 years?
+3. **missing at runs**: missing at run length, probably also "missing at random"? but displaying long memory.
+4. **missing at trend**: missing at increasing/decreasing rate.
+
+Ultimately, missing at mix.
+
+```{r miss-types, fig.height = 7}
+```
+
+How do they display on ACF plots?
+
+```{r miss-types-acf, fig.height = 7}
+```
+
+How do they display on decomposition plots?
+
+```{r miss-types-stl, fig.height = 9}
+```
+
+## Example: airline passengers
+
+```{r airgap, fig.height = 2}
+```
+
+```{r airgap-acf, fig.height = 2}
+```
+
+```{r airgap-stl, fig.height = 6}
+```

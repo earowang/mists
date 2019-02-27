@@ -90,7 +90,7 @@ ggplot() +
   geom_line(aes(x = index, y = value), data = ts_airgap_miss) +
   geom_rect(
     aes(xmin = .from - 1, xmax = .to + 1), ymin = -Inf, ymax = Inf,
-    data = count_na(ts_airgap_miss, value), alpha = 0.2
+    data = count_na(ts_airgap_miss, value), colour = "grey50", fill = "grey50" #, alpha = 0.2
   ) +
   facet_wrap(~ type, ncol = 1) +
   theme_bw()
@@ -148,13 +148,13 @@ ggplot() +
   theme_bw()
 
 ## ---- airgap-acf
-ts_airgap %>% 
-  mutate(dummy = ifelse(is.na(value), 1L, 0L)) %>% 
+ts_airgap %>%
+  mutate(dummy = ifelse(is.na(value), 1L, 0L)) %>%
   ggplot(aes(y = dummy)) +
   geom_acf()
 
 ## ---- airgap-stl
-ts_airgap %>% 
-  mutate(dummy = ifelse(is.na(value), 1L, 0L)) %>% 
+ts_airgap %>%
+  mutate(dummy = ifelse(is.na(value), 1L, 0L)) %>%
   STL(dummy) %>%
   autoplot()

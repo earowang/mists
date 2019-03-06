@@ -96,8 +96,38 @@ ggplot() +
   theme_bw()
 
 ## ---- miss-types-acf
+library(vcd)
 ts_airgap_dummy <- ts_airgap_miss %>%
   mutate(dummy = ifelse(is.na(value), 1L, 0L))
+
+phi_coef <- function(...) {
+  # ref: https://en.wikipedia.org/wiki/Phi_coefficient
+  tab <- table(...)
+  stopifnot(all(dim(tab) == c(2, 2)))
+  nominator <- prod(diag(tab)) - prod(c(tab[1, 2], tab[2, 1]))
+  n1_row <- sum(tab[1, ])
+  n2_row <- sum(tab[2, ])
+  n1_col <- sum(tab[, 1])
+  n2_col <- sum(tab[, 2])
+  denominator <- sqrt(n1_row * n1_col * n2_row * n2_col)
+  nominator / denominator
+}
+
+acf_binary <- function(x, lag_max = NULL) {
+  if (is_null(lag_max)) {
+    lag_max <- floor(10 * log10(length(x)))
+  }
+  purrr::map_dbl(seq_len(lag_max), ~ phi_coef(x, dplyr::lag(x, .x)))
+}
+
+ts_airgap_acf <- ts_airgap_dummy %>% 
+  group_by(type) %>% 
+  group_map(~ tibble(acf = acf_binary(.x$dummy), lag = seq_along(acf)))
+
+ts_airgap_acf %>% 
+  ggplot(aes(x = lag, y = acf)) +
+  geom_col() +
+  facet_wrap(~ type, ncol = 1)
 
 ts_airgap_dummy %>%
   ggplot(aes(y = dummy)) +

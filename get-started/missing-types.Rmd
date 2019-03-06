@@ -16,7 +16,7 @@ knitr::read_chunk("get-started/miss-types.R")
 
 ## Abstract
 
-Can missing values methods speak the language of data, to go beyond the probabilistic taxonomy, MCAR, MAR, MNAR? Yes they can! The naniar package provides a suite of exploratory methods and imputation choices for tidy missing data analysis, that fit neatly into a tidy data workflow. However, temporal data is left behind. This talk will present exploratory methods for temporal missing, equipped with a new data-centric taxonomy. The work will be available in the R package called mists.
+Can missing values methods speak the language of data, to go beyond the probabilistic taxonomy, MCAR, MAR, MNAR? Yes they can! The **naniar** package provides a suite of exploratory methods and imputation choices for tidy missing data analysis, that fit neatly into a tidy data workflow. However, temporal data is left behind. This talk will present exploratory methods for temporal missing, equipped with a new data-centric taxonomy. The work will be available in the R package called **mists**.
 
 ```{r load}
 ```

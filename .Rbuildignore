@@ -7,4 +7,5 @@
 ^README\.Rmd$
 ^mists\.Rproj$
 ^\.Rproj\.user$
-get-started/
+analysis/
+scripts/

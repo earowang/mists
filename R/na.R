@@ -20,7 +20,7 @@ count_na <- function(.data, ...) {
     abort("`count_na()` only accepts one variable.")
   }
   idx <- index(.data)
-  grped_tbl <- tsibble:::as_grouped_df(group_by_key(.data))
+  grped_tbl <- group_by(as_tibble(.data), !!! key(.data))
   lst_out <- summarise(grped_tbl, na = list2(tbl_na(!!! exprs, !! idx)))
   idx_type <- class(lst_out[["na"]][[1]][[".from"]])
   out <- unnest(lst_out, na)

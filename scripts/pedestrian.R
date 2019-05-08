@@ -245,3 +245,12 @@ ped %>%
   filter(Sensor == "Bourke Street Mall (South)") %>%
   ggplot(aes(x = Date_Time, y = Count)) +
   geom_line()
+
+ped %>% 
+  # filter(Sensor == "Alfred Place") %>% 
+  group_by(Sensor) %>% 
+  summarise(na_rle = list(na_rle(Count))) %>% 
+  unnest(na_rle) %>% 
+  filter(rle != "0") %>% 
+  ggplot(aes(x = Sensor, y = n, fill = as.factor(rle))) +
+  geom_col(position = "fill")

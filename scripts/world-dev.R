@@ -17,43 +17,57 @@ world_dev <- raw_dat %>%
 
 vars_too_many_nas <- world_dev %>% 
   miss_var_summary() %>% 
-  filter(pct_miss > 50) %>% 
+  filter(pct_miss >= 60) %>% 
   pull(variable)
 
-world_dev_sub <- world_dev %>% 
-  select(-vars_too_many_nas)
-
-world_dev_ts <- world_dev_sub %>% 
-  as_tsibble(key = `Country Name`, index = Year)
-
-world_dev_ts %>% 
-  filter(`Country Name` == "New Zealand") %>% 
-  select(contains("Urban Population")) %>% 
-  ggplot(aes(x = Year, y = `Urban population growth (annual %)`)) +
-  geom_line() +
-  geom_point()
-
-world_dev_ts %>% 
+# remove variables with 80% missing values
+cols_pass <- world_dev %>% 
   group_by(`Country Name`) %>% 
-  mists::count_na(`Urban population growth (annual %)`)
+  summarise_all(~ sum(is.na(.)) / n()) %>% 
+  mutate_all(~ . >= .8) %>% 
+  summarise_all(~ sum(.) / n()) %>% 
+  select_if(function(x) x < 0.8)
 
-x <- world_dev_sub %>% 
-  group_by(`Country Name`) %>% 
-  summarise(na_rle = list(na_rle(`Urban population growth (annual %)`))) %>% 
-  unnest(na_rle)
-x %>% 
-  filter(rle != 0) %>% 
-  ggplot(aes(x = `Country Name`, y = n, fill = as.factor(rle))) +
-  geom_col(position = "fill")
+intersect(vars_too_many_nas, setdiff(names(world_dev), names(cols_pass))[-1])
 
-sebria <- world_dev_sub %>% 
-  filter(`Country Name` == "Serbia") %>% 
-  select(`Urban population growth (annual %)`) %>% 
-  pull(1)
+world_dev_cols_pass <- world_dev %>% 
+  select(`Country Name`, Year, names(cols_pass))
 
-world_dev_sub %>% 
+# na_sum <- function(...) {
+#   lst <- list(...)
+#   sum(is.na(lst)) / (length(lst) - 2L)
+# }
+#
+# world_dev_cols_pass %>% 
+#   mutate(na_cases_pct = pmap_dbl(., na_sum)) %>% 
+#   slice(1:10) %>% 
+#   pull(na_cases_pct)
+
+countries_pass <- world_dev_cols_pass %>% 
   group_by(`Country Name`) %>% 
-  summarise_all(na_starts_with)
-world_dev_sub %>% 
+  select(-Year) %>% 
+  summarise_all(na_starts_with) %>% 
+  mutate(na_cols_pct = rowSums(select_if(., is.numeric) > 0) / (NCOL(.) - 1)) %>% 
+  filter(na_cols_pct < 0.8) %>% 
+  pull(`Country Name`)
+
+world_dev_countries_pass <- world_dev_cols_pass %>% 
+  filter(`Country Name` %in% countries_pass)
+
+index_pass <- world_dev_countries_pass %>% 
   group_by(`Country Name`) %>% 
-  summarise_all(na_ends_with)
+  select(-Year) %>% 
+  summarise_all(na_starts_with) %>% 
+  mutate(na_index = pmap_dbl(select_if(., is.numeric), function(...) median(c(...)))) %>% 
+  pull(na_index) %>% 
+  floor()
+
+year_pass <- world_dev_countries_pass %>% 
+  group_by(`Country Name`) %>% 
+  summarise(Min_Year = min(Year)) %>% 
+  mutate(Min_Year = Min_Year + index_pass)
+
+world_dev_year_pass <- world_dev_countries_pass %>% 
+  left_join(year_pass, by = "Country Name") %>% 
+  filter(Year >= Min_Year) %>% 
+  select(-Min_Year)

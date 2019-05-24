@@ -80,3 +80,25 @@ na_ends_with <- function(x) {
   na_rle <- rle(na_lgl)
   na_rle$lengths[length(na_rle$lengths)]
 }
+
+phi_coef <- function(...) {
+  # ref: https://en.wikipedia.org/wiki/Phi_coefficient
+  tab <- table(...)
+  if (!all(dim(tab) == c(2, 2))) return(NaN)
+
+  nominator <- prod(diag(tab)) - prod(c(tab[1, 2], tab[2, 1]))
+  n1_row <- sum(tab[1, ])
+  n2_row <- sum(tab[2, ])
+  n1_col <- sum(tab[, 1])
+  n2_col <- sum(tab[, 2])
+  denominator <- sqrt(n1_row * n1_col * n2_row * n2_col)
+  nominator / denominator
+}
+
+acf_binary <- function(x, lag_max = NULL) {
+  if (is_null(lag_max)) {
+    lag_max <- floor(10 * log10(length(x)))
+  }
+  purrr::map_dbl(seq_len(lag_max), ~ phi_coef(x, dplyr::lag(x, .x)))
+}
+

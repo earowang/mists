@@ -3,7 +3,7 @@ library(tidyverse)
 library(tsibble)
 library(patchwork)
 library(naniar)
-library(mists)
+# library(mists)
 library(lubridate)
 library(sugrrants)
 # devtools::load_all(".")
@@ -254,3 +254,10 @@ ped %>%
   filter(rle != "0") %>% 
   ggplot(aes(x = Sensor, y = n, fill = as.factor(rle))) +
   geom_col(position = "fill")
+
+ped %>% 
+  group_by(Sensor) %>% 
+  summarise(na_rle = list(na_rle(Count))) %>% 
+  unnest(na_rle) %>% 
+  filter(rle != "0") %>% 
+  count(Sensor)

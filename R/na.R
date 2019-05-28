@@ -81,6 +81,14 @@ na_ends_with <- function(x) {
   na_rle$lengths[length(na_rle$lengths)]
 }
 
+n_overall_na <- function(x) {
+  sum(is.na(x))
+}
+
+prop_overall_na <- function(x) {
+  mean(is.na(x))
+}
+
 phi_coef <- function(...) {
   # ref: https://en.wikipedia.org/wiki/Phi_coefficient
   tab <- table(...)
@@ -99,6 +107,6 @@ acf_binary <- function(x, lag_max = NULL) {
   if (is_null(lag_max)) {
     lag_max <- floor(10 * log10(length(x)))
   }
-  purrr::map_dbl(seq_len(lag_max), ~ phi_coef(x, dplyr::lag(x, .x)))
+  map_dbl(seq_len(lag_max), ~ phi_coef(x, dplyr::lag(x, .x)))
 }
 

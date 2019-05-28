@@ -11,6 +11,7 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    tsibble,
+    dplyr (>= 0.8.1),
+    tsibble (>= 0.8.0),
     rlang
 RoxygenNote: 6.1.1

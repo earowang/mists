@@ -1,6 +1,6 @@
 library(tidyverse)
 library(tsibble)
-library(naniar)
+library(rlang)
 
 raw_dat <- read_csv("data-raw/world-development-indicators.csv", na = "..",
   n_max = 11935)
@@ -28,63 +28,24 @@ world_dev <- raw_dat %>%
     country_code = factor(country_code, levels = country_code_df$country_code)
   )
 
-n_overall_miss <- function(x) {
-  sum(is.na(x))
-}
+naniar:::miss_prop_summary.default
 
-prop_overall_miss <- function(x) {
-  mean(is.na(x))
-}
+naniar::miss_prop_summary(world_dev)
 
-prop_overall_miss(world_dev)
+prop_overall_na(world_dev)
 
 world_dev_ts <- world_dev %>% 
   as_tsibble(key = country_code, index = year)
 
-# (1) Sweep measured variables by computing na pct within each key and across
-# all keys.
-polish_cols_measures <- function(data, cutoff) {
-  sel_data <- 
-    select_if(
-      summarise_all(as_tibble(data), prop_overall_miss), 
-      function(x) x < cutoff
-    )
-  select(data, !!! names(sel_data))
-}
+wdi_cols_pass <- polish_cols_measures(world_dev_ts, cutoff = 0.8)
+polish_metrics(world_dev_ts, wdi_cols_pass)
 
-# (2) Sweep observations by key based on how many variables are missing
-polish_rows_key <- function(data, cutoff) {
-  key_vars <- key(data)
-  nest_tbl <- group_nest(data, !!! key_vars, .key = "pct_overall_na")
-  key_vals <- filter(mutate(nest_tbl, 
-    "pct_overall_na" := vapply(pct_overall_na, prop_overall_miss, numeric(1))
-  ), pct_overall_na < cutoff)
-  key_df <- select(key_vals, !!! key_vars)
-  right_join(data, key_df, by = key_vars(data))
-}
+wdi_key_pass <- polish_rows_key(world_dev_ts, cutoff = 0.8)
+polish_metrics(world_dev_ts, wdi_key_pass)
 
-# (3) Sweep observations by index based on how many variables are missing
-polish_rows_index <- function(data, na_fun = na_starts_with) {
-  idx_len <- map_int(key_rows(data), length)
-  keyed_nobs <- idx_len * NCOL(data)
-  
-  keyed_data <- group_by(as_tibble(data), !!! key(data))
-  index_pass <- 
-    mutate(
-      group_nest(
-        summarise_all(keyed_data, na_fun), !!! key(data),
-        .key = "..n_na"
-      ),
-      ..n_na = floor(map_dbl(..n_na, sum) / keyed_nobs * idx_len)
-    )
-  full_data <- left_join(data, index_pass, by = key_vars(data))
-  filter_data <- filter(group_by_key(full_data),
-    !! index(data) >= min(!! index(data)) + ..n_na)
-  select(ungroup(filter_data), -..n_na)
-}
+wdi_key_pass <- polish_rows_index(wdi_cols_pass)
+polish_metrics(world_dev_ts, wdi_key_pass)
 
-polish_cols_measures(world_dev_ts, cutoff = 0.8)
-polish_rows_key(world_dev_ts, cutoff = 0.8)
 polish_rows_index(world_dev_ts)
 
 # world_dev %>% 

@@ -7,22 +7,24 @@
 count_na(.data, ...)
 }
 \arguments{
-\item{.data}{A `tbl_ts`.}
+\item{.data}{A \code{tbl_ts}.}
 
-\item{...}{A bare variable that may contain `NA`.}
+\item{...}{A bare variable that may contain \code{NA}.}
 }
 \value{
 A tibble contains:
-* the "key" of the `tbl_ts`
-* ".from": the starting time point of `NA`
-* ".to": the ending time point of `NA`
-* ".n": the number of `NA` during the time period
+\itemize{
+\item the "key" of the \code{tbl_ts}
+\item ".from": the starting time point of \code{NA}
+\item ".to": the ending time point of \code{NA}
+\item ".n": the number of \code{NA} during the time period
+}
 }
 \description{
 Count explicit NA
 }
 \examples{
-pedestrian \%>\% 
-  fill_gaps(.full = TRUE) \%>\% 
+pedestrian \%>\%
+  fill_gaps(.full = TRUE) \%>\%
   count_na(Count)
 }

@@ -169,30 +169,6 @@ accumulate_right <- function(.x, .f, ..., .init) {
   Reduce(f, .x, init = .init, right = TRUE, accumulate = TRUE)
 }
 
-detect <- function(.x, .f, ..., .right = FALSE, .p = is_true) {
-  for (i in index(.x, .right)) {
-    if (.p(.f(.x[[i]], ...))) {
-      return(.x[[i]])
-    }
-  }
-  NULL
-}
-detect_index <- function(.x, .f, ..., .right = FALSE, .p = is_true) {
-  for (i in index(.x, .right)) {
-    if (.p(.f(.x[[i]], ...))) {
-      return(i)
-    }
-  }
-  0L
-}
-index <- function(x, right = FALSE) {
-  idx <- seq_along(x)
-  if (right) {
-    idx <- rev(idx)
-  }
-  idx
-}
-
 imap <- function(.x, .f, ...) {
   map2(.x, vec_index(.x), .f, ...)
 }

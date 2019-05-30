@@ -1,6 +1,4 @@
 library(tidyverse)
-library(tsibble)
-library(rlang)
 
 raw_dat <- read_csv("data-raw/world-development-indicators.csv", na = "..",
   n_max = 11935)
@@ -28,7 +26,9 @@ world_dev <- raw_dat %>%
     country_code = factor(country_code, levels = country_code_df$country_code)
   )
 
-naniar:::miss_prop_summary.default
+na_rle_wdi <- world_dev %>% 
+  group_by(country_code) %>% 
+  summarise_at(vars(3:last_col()), ~ list_of_na_rle(., year))
 
 naniar::miss_prop_summary(world_dev)
 
@@ -46,57 +46,6 @@ polish_metrics(world_dev_ts, wdi_key_pass)
 wdi_key_pass <- polish_rows_index(wdi_cols_pass)
 polish_metrics(world_dev_ts, wdi_key_pass)
 
-polish_rows_index(world_dev_ts)
+polish_rows_index(world_dev_ts, na_fun = na_ends_with)
 
-# world_dev %>% 
-#   group_nest(year, .key = "pct_overall_na") %>% 
-#   mutate(pct_overall_na = map_dbl(pct_overall_na, prop_overall_miss)) %>% 
-#   filter(pct_overall_na < 0.8)
-
-keyed_data <- group_by(world_dev, country_code)
-idx_len <- map_int(group_rows(keyed_data), length)
-keyed_nobs <- idx_len * NCOL(world_dev)
-
-index_pass <- world_dev %>% 
-  group_by(country_code) %>% 
-  summarise_all(na_starts_with) %>% 
-  group_nest(country_code, .key = "..n_na") %>% 
-  mutate(..n_na = floor(map_dbl(..n_na, sum) / keyed_nobs * idx_len))
-
-world_dev %>% 
-  left_join(index_pass, by = "country_code") %>% 
-  group_by(country_code) %>% 
-  filter(year >= min(year) + ..n_na) %>% 
-  select(-..n_na)
-
-world_dev %>% 
-  group_by(country_code) %>% 
-  summarise_all(na_ends_with) %>% 
-  group_nest(country_code, .key = "pct_overall_na") %>% 
-  mutate(pct_overall_na = map_dbl(pct_overall_na, sum) / keyed_nobs)
-
-world_dev_year_pass %>% 
-  group_by(country_code) %>% 
-  summarise_at(vars(3:last_col()), ~ sum(is.na(.)) / n()) %>% 
-  gather("variable", "value", AG.SRF.TOTL.K2:last_col()) %>% 
-  ggplot(aes(x = country_code, y = variable, fill = value)) +
-  geom_tile() +
-  scale_fill_viridis_c() +
-  theme(axis.text.x = element_text(angle = 90))
-
-world_dev_year_pass %>% 
-  group_by(country_code) %>% 
-  summarise_at(vars(3:last_col()), ~ sum(is.na(.)) / n()) %>% 
-  gather("variable", "value", AG.SRF.TOTL.K2:last_col()) %>% 
-  ggplot(aes(x = country_code, y = variable, size = value)) +
-  geom_point(shape = 18)
-
-world_dev_year_pass %>% 
-  gather("variable", "value", AG.LND.FRST.K2:last_col()) %>% 
-  mutate(na_value = ifelse(is.na(value), 1L, 0L)) %>% 
-  group_by(country_code, variable) %>% 
-  summarise(lag1 = acf_binary(na_value, 1)) %>% 
-  ggplot(aes(x = country_code, y = variable, fill = lag1)) +
-  geom_tile() +
-  scale_fill_viridis_c() +
-  theme(axis.text.x = element_text(angle = 90))
+na_rle(world_dev_ts$AG.LND.FRST.K2)

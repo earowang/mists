@@ -9,7 +9,20 @@ library(sugrrants)
 # devtools::load_all(".")
 
 ped <- read_rds("data-raw/ped.rds")
-ped_ts <- as_tsibble(ped, key = Sensor, index = Date_Time, validate = FALSE)
+
+ped %>% 
+  group_by(Sensor) %>% 
+  summarise(na_count = list_of_na_rle(Count, Date_Time))
+
+x <- ped %>% 
+  group_by(Sensor) %>% 
+  summarise(na_count = list_of_na_rle(Count, Date_Time)) %>% 
+  pull(na_count)
+alfred <- x[[1]]
+bimarr <- x[[2]]
+time_unit(interval_pull(alfred$values))
+
+na_rle(alfred$Count, order_by = alfred$Date_Time)
 
 ped_ts %>% 
   index_by(Time) %>% 

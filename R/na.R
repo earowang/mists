@@ -1,5 +1,5 @@
 #' Count explicit NA
-#' 
+#'
 #' @param .data A `tbl_ts`.
 #' @param ... A bare variable that may contain `NA`.
 #'
@@ -11,8 +11,8 @@
 #' * ".to": the ending time point of `NA`
 #' * ".n": the number of `NA` during the time period
 #' @examples
-#' pedestrian %>% 
-#'   fill_gaps(.full = TRUE) %>% 
+#' pedestrian %>%
+#'   fill_gaps(.full = TRUE) %>%
 #'   count_na(Count)
 count_na <- function(.data, ...) {
   exprs <- enexprs(...)
@@ -48,37 +48,22 @@ tbl_na <- function(x, y) {
   }
 }
 
-na_rle <- function(x) {
-  if (!anyNA(x)) {
-    tibble(rle = "0", n = length(x))
+na_starts_with <- function(x) {
+  na_rle <- na_rle_cpp(x)
+  if (na_rle$values[1L]) {
+    na_rle$lengths[1L]
   } else {
-    len_x <- length(x)
-    na_lgl <- is.na(x)
-    na_rle <- rle(na_lgl)
-    lgl_rle <- na_rle$values
-    na_idx <- na_rle$lengths
-    na_freq <- table(na_idx[lgl_rle])
-    na_freq_tbl <- tibble(rle = names(na_freq), n = as.integer(na_freq))
-    new_row <- NROW(na_freq_tbl) + 1L
-    na_freq_tbl[new_row, "rle"] <- "0"
-    na_freq_tbl[new_row, "n"] <- sum(!na_lgl)
-    na_freq_tbl
+    0L
   }
 }
 
-na_starts_with <- function(x) {
-  na_lgl <- is.na(x)
-  if (!na_lgl[1L]) return(0L)
-
-  rle(na_lgl)$lengths[1]
-}
-
 na_ends_with <- function(x) {
-  na_lgl <- is.na(x)
-  if (!na_lgl[length(na_lgl)]) return(0L)
-
-  na_rle <- rle(na_lgl)
-  na_rle$lengths[length(na_rle$lengths)]
+  na_rle <- na_rle_cpp(x)
+  if (tail(na_rle$values, 1L)) {
+    tail(na_rle$lengths, 1L)
+  } else {
+    0L
+  }
 }
 
 n_overall_na <- function(x) {
@@ -109,4 +94,3 @@ acf_binary <- function(x, lag_max = NULL) {
   }
   map_dbl(seq_len(lag_max), ~ phi_coef(x, dplyr::lag(x, .x)))
 }
-

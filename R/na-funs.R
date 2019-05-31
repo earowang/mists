@@ -1,3 +1,4 @@
+#' @export
 na_starts_with <- function(x) {
   na_rle <- na_rle_cpp(x)
   if (na_rle$values[1L]) {
@@ -7,6 +8,7 @@ na_starts_with <- function(x) {
   }
 }
 
+#' @export
 na_ends_with <- function(x) {
   na_rle <- na_rle_cpp(x)
   if (tail(na_rle$values, 1L)) {
@@ -24,6 +26,7 @@ prop_overall_na <- function(x) {
   mean(is.na(x))
 }
 
+#' @export
 phi_coef <- function(...) {
   # ref: https://en.wikipedia.org/wiki/Phi_coefficient
   tab <- table(...)
@@ -38,7 +41,8 @@ phi_coef <- function(...) {
   nominator / denominator
 }
 
-acf_binary <- function(x, lag_max = NULL) {
+#' @export
+na_acf <- function(x, lag_max = NULL) {
   if (is_null(lag_max)) {
     lag_max <- floor(10 * log10(length(x)))
   }

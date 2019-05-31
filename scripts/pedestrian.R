@@ -12,17 +12,39 @@ ped <- read_rds("data-raw/ped.rds")
 
 ped %>% 
   group_by(Sensor) %>% 
-  summarise(na_count = list_of_na_rle(Count, Date_Time))
+  filter(Sensor %in% c("Alfred Place", "Birrarung Marr")) %>% 
+  summarise(na_runs = list_of_na_rle(Count, Date_Time)) %>% 
+  mutate(na_runs = na_rle_lengths(na_runs)) %>% 
+  unnest(na_runs) %>% 
+  ggplot(aes(x = na_runs)) +
+  geom_bar() +
+  scale_x_log10() +
+  facet_grid(Sensor ~ .)
 
 x <- ped %>% 
   group_by(Sensor) %>% 
-  summarise(na_count = list_of_na_rle(Count, Date_Time)) %>% 
-  pull(na_count)
-alfred <- x[[1]]
-bimarr <- x[[2]]
-time_unit(interval_pull(alfred$values))
+  summarise(na_runs = list_of_na_rle(Count, Date_Time)) %>% 
+  pull(na_runs)
 
-na_rle(alfred$Count, order_by = alfred$Date_Time)
+tbl_runs <- as_tibble(table(na_rle_lengths(x[[1]])), .name_repair = ~ c("runs", "n"))
+tbl_runs <- 
+  mutate(
+    tbl_runs, 
+    runs = as.integer(runs), 
+    nobs = n * runs,
+    xlabs = paste(runs, brackets(n), sep = "\n"),
+    x = .5 * c(cumsum(nobs) + cumsum(dplyr::lag(nobs, default = 0)))
+  )
+
+tbl_runs %>% 
+  ggplot(aes(x = x, y = 1, width = nobs)) +
+  geom_bar(stat = "identity", colour = "white") +
+  scale_x_continuous(
+    labels = tbl_runs$xlabs,
+    breaks = tbl_runs$x,
+    minor_breaks = NULL
+  ) +
+  labs(x = "runs [frequency]", y = "")
 
 ped_ts %>% 
   index_by(Time) %>% 

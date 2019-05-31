@@ -30,7 +30,8 @@ na_rle_wdi <- world_dev %>%
   group_by(country_code) %>% 
   summarise_at(vars(3:last_col()), ~ list_of_na_rle(., year))
 
-naniar::miss_prop_summary(world_dev)
+na_rle_wdi$BX.KLT.DINV.CD.WD[1:2]
+class(na_rle_wdi$BX.KLT.DINV.CD.WD)
 
 prop_overall_na(world_dev)
 

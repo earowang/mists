@@ -18,7 +18,7 @@ polish_rows_key <- function(data, cutoff) {
   right_join(data, key_df, by = key_vars(data))
 }
 
-polish_rows_index <- function(data, na_fun = na_starts_with) {
+polish_rows_index <- function(data, cutoff, na_fun = na_starts_with) {
   idx_len <- map_int(key_rows(data), length)
   keyed_nobs <- idx_len * NCOL(data)
   
@@ -27,6 +27,7 @@ polish_rows_index <- function(data, na_fun = na_starts_with) {
   index_pass <- 
     mutate(
       group_nest(na_blocks, !!! key(data), .key = "..n_na"),
+      # ..pct_na = map_dbl(..n_na, sum) / keyed_nobs,
       ..n_na = floor(map_dbl(..n_na, sum) / keyed_nobs * idx_len)
     )
   full_data <- left_join(data, index_pass, by = key_vars(data))

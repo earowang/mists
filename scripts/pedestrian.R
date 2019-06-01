@@ -1,11 +1,5 @@
 ## ---- initial
 library(tidyverse)
-library(tsibble)
-library(patchwork)
-library(naniar)
-# library(mists)
-library(lubridate)
-library(sugrrants)
 # devtools::load_all(".")
 
 ped <- read_rds("data-raw/ped.rds")
@@ -26,25 +20,8 @@ x <- ped %>%
   summarise(na_runs = list_of_na_rle(Count, Date_Time)) %>% 
   pull(na_runs)
 
-tbl_runs <- as_tibble(table(na_rle_lengths(x[[1]])), .name_repair = ~ c("runs", "n"))
-tbl_runs <- 
-  mutate(
-    tbl_runs, 
-    runs = as.integer(runs), 
-    nobs = n * runs,
-    xlabs = paste(runs, brackets(n), sep = "\n"),
-    x = .5 * c(cumsum(nobs) + cumsum(dplyr::lag(nobs, default = 0)))
-  )
-
-tbl_runs %>% 
-  ggplot(aes(x = x, y = 1, width = nobs)) +
-  geom_bar(stat = "identity", colour = "white") +
-  scale_x_continuous(
-    labels = tbl_runs$xlabs,
-    breaks = tbl_runs$x,
-    minor_breaks = NULL
-  ) +
-  labs(x = "runs [frequency]", y = "")
+na_rle_ggspinogram(x = x[[1]])
+na_rle_ggspinogram(x = x[[1]], y = x[[2]])
 
 ped_ts %>% 
   index_by(Time) %>% 

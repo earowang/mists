@@ -55,7 +55,7 @@ restore_interval <- function(new, old) {
 intersect.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)
   y_full <- na_rle_expand(y)
-  res <- semi_join(x_full, y_full, by = "values")
+  res <- arrange(semi_join(x_full, y_full, by = "values"), values)
   tbl_to_na_rle(restore_interval(res, x))
 }
 
@@ -64,7 +64,11 @@ intersect.mists_rle_na <- function(x, y, ...) {
 union.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)
   y_full <- na_rle_expand(y)
-  res <- full_join(x_full, y_full, by = names(x_full))
+  res <- 
+    arrange(
+      distinct(full_join(x_full, y_full, by = names(x_full)), values),
+      values
+    )
   tbl_to_na_rle(restore_interval(res, x))
 }
 
@@ -73,6 +77,6 @@ union.mists_rle_na <- function(x, y, ...) {
 setdiff.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)
   y_full <- na_rle_expand(y)
-  res <- anti_join(x_full, y_full, by = "values")
+  res <- arrange(anti_join(x_full, y_full, by = "values"), values)
   tbl_to_na_rle(restore_interval(res, x))
 }

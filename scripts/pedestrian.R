@@ -24,8 +24,10 @@ x <- na_runs_df$na_runs
 autoplot(x[[1]], size = 2.5)
 autoplot(x, y = na_runs_df$Sensor, size = 2)
 autoplot(as_list_of(x[[1]], x[[2]], intersect(x[[1]], x[[2]])), size = 2)
+autoplot(union(x[[1]], x[[2]]), size = 2)
 autoplot(as_list_of(x[[1]], x[[2]], union(x[[1]], x[[2]])), size = 2)
 autoplot(as_list_of(x[[1]], x[[2]], setdiff(x[[1]], x[[2]])), size = 2)
+autoplot(as_list_of(x[[1]], x[[2]], setdiff(x[[2]], x[[1]])), size = 2)
 
 na_rle_spinogram(x = x[[1]])
 na_rle_spinogram(x = x[[2]])

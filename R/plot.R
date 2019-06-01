@@ -37,7 +37,9 @@ na_rle_spinogram <- function(x, y = NULL) {
       ) +
       labs(x = "runs [frequency]", y = "")
   } else {
-    intersect_xy <- intersect(x, y)
+    x_full <- na_rle_expand(x)
+    y_full <- na_rle_expand(y)
+    intersect_xy <- semi_join(x_full, y_full, by = "values")
     overlaps_xy <- dplyr::count(intersect_xy, lengths)
     frac_intersect <- 
       transmute(

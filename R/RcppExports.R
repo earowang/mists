@@ -5,3 +5,7 @@ na_rle_cpp <- function(x) {
     .Call(`_mists_na_rle_cpp`, x)
 }
 
+continuous_rle_impl <- function(x) {
+    .Call(`_mists_continuous_rle_impl`, x)
+}
+

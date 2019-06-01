@@ -15,6 +15,7 @@ na_rle_expand.mists_rle_na <- function(x, ...) {
     function(.x, .y) seq(.x, by = tunit, length.out = .y))
   rep_lengths <- rep.int(rle_lengths, map_int(full_seq, vec_size))
   full_seq <- do.call("c", full_seq)
+  attr(full_seq, "interval") <- x[["values"]] %@% "interval"
   dplyr::tibble("lengths" = rep_lengths, "values" = full_seq)
 }
 
@@ -36,12 +37,19 @@ na_rle_table <- function(x) {
   )
 }
 
+tbl_to_na_rle <- function(data) {
+  rle_cont <- continuous_rle_impl(data[["values"]])
+  add_len <- mutate(data, lengths = rep.int(cumsum(rle_cont), rle_cont))
+  red_data <- summarise(group_by(add_len, lengths), values = min(values))
+  new_mists_rle_na(as_list(mutate(red_data, lengths = rle_cont)))
+}
+
 #' @importFrom dplyr intersect
 #' @export
 intersect.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)
   y_full <- na_rle_expand(y)
-  semi_join(x_full, y_full, by = "values")
+  tbl_to_na_rle(semi_join(x_full, y_full, by = "values"))
 }
 
 #' @importFrom dplyr union
@@ -49,15 +57,7 @@ intersect.mists_rle_na <- function(x, y, ...) {
 union.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)
   y_full <- na_rle_expand(y)
-  full_join(x_full, y_full, by = names(x_full))
-}
-
-#' @importFrom dplyr union_all
-#' @export
-union_all.mists_rle_na <- function(x, y, ...) {
-  x_full <- na_rle_expand(x)
-  y_full <- na_rle_expand(y)
-  dplyr::bind_rows(x_full, y_full)
+  tbl_to_na_rle(full_join(x_full, y_full, by = names(x_full)))
 }
 
 #' @importFrom dplyr setdiff
@@ -65,5 +65,5 @@ union_all.mists_rle_na <- function(x, y, ...) {
 setdiff.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)
   y_full <- na_rle_expand(y)
-  anti_join(x_full, y_full, by = "values")
+  tbl_to_na_rle(anti_join(x_full, y_full, by = "values"))
 }

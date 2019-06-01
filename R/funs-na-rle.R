@@ -41,12 +41,7 @@ na_rle_table <- function(x) {
 intersect.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)
   y_full <- na_rle_expand(y)
-  res <- 
-    summarise(
-      group_by(semi_join(x_full, y_full, by = "values"), lengths),
-      values = min(values)
-    )
-  new_mists_rle_na(as_list(res))
+  semi_join(x_full, y_full, by = "values")
 }
 
 #' @importFrom dplyr union
@@ -54,12 +49,15 @@ intersect.mists_rle_na <- function(x, y, ...) {
 union.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)
   y_full <- na_rle_expand(y)
-  res <- 
-    summarise(
-      group_by(full_join(x_full, y_full, by = names(x_full)), lengths),
-      values = min(values)
-    )
-  new_mists_rle_na(as_list(res))
+  full_join(x_full, y_full, by = names(x_full))
+}
+
+#' @importFrom dplyr union_all
+#' @export
+union_all.mists_rle_na <- function(x, y, ...) {
+  x_full <- na_rle_expand(x)
+  y_full <- na_rle_expand(y)
+  dplyr::bind_rows(x_full, y_full)
 }
 
 #' @importFrom dplyr setdiff
@@ -67,10 +65,5 @@ union.mists_rle_na <- function(x, y, ...) {
 setdiff.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)
   y_full <- na_rle_expand(y)
-  res <- 
-    summarise(
-      group_by(anti_join(x_full, y_full, by = "values"), lengths),
-      values = min(values)
-    )
-  new_mists_rle_na(as_list(res))
+  anti_join(x_full, y_full, by = "values")
 }

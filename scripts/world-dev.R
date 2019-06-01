@@ -30,8 +30,9 @@ na_rle_wdi <- world_dev %>%
   group_by(country_code) %>% 
   summarise_at(vars(3:last_col()), ~ list_of_na_rle(., year))
 
-na_rle_wdi$BX.KLT.DINV.CD.WD[1:2]
-class(na_rle_wdi$BX.KLT.DINV.CD.WD)
+autoplot(na_rle_wdi$AG.SRF.TOTL.K2, size = 2, shape = 15)
+autoplot(na_rle_wdi$BX.KLT.DINV.CD.WD[[1]], size = 2.5, shape = 15)
+na_rle_expand(na_rle_wdi$AG.SRF.TOTL.K2, y = na_rle_wdi$country_code)
 
 prop_overall_na(world_dev)
 

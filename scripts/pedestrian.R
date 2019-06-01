@@ -21,6 +21,8 @@ na_runs_df <- ped %>%
 
 x <- na_runs_df$na_runs
 
+dplyr::intersect(x[[1]], x[[2]])
+
 na_rle_spinogram(x = x[[1]])
 na_rle_spinogram(x = x[[2]])
 na_rle_spinogram(x = x[[1]], y = x[[2]])
@@ -29,19 +31,6 @@ na_rle_spinogram(x = x[[2]], y = x[[1]])
 autoplot(x[[1]])
 autoplot(x)
 autoplot(na_runs_df$na_runs, y = na_runs_df$Sensor)
-
-y <- unique(ped$Sensor)
-df_full <- dplyr::bind_rows(map2(x, y, 
-    function(.x, .y) mutate(na_rle_expand(.x), y = .y)))
-
-ggplot(df_full, aes(x = values, y = y)) +
-  geom_point(shape = 15)
-
-x_full <- na_rle_expand(x[[1]])
-y_full <- na_rle_expand(x[[2]])
-
-autoplot(x[[1]])
-autoplot(x[[2]])
 
 ped_ts %>% 
   index_by(Time) %>% 

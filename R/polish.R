@@ -27,8 +27,8 @@ polish_rows_index <- function(data, cutoff, na_fun = na_starts_with) {
   index_pass <- 
     mutate(
       group_nest(na_blocks, !!! key(data), .key = "..n_na"),
-      # ..pct_na = map_dbl(..n_na, sum) / keyed_nobs,
-      ..n_na = floor(map_dbl(..n_na, sum) / keyed_nobs * idx_len)
+      ..pct_na = map_dbl(..n_na, sum) / keyed_nobs,
+      ..n_na = floor(..pct_na * idx_len)
     )
   full_data <- left_join(data, index_pass, by = key_vars(data))
   grped_data <- group_by_key(full_data)

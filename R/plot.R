@@ -1,19 +1,21 @@
+#' @export
 autoplot.mists_rle_na <- function(object, ...) {
   data <- na_rle_expand(object)
-  ggplot(data, aes(x = values, y = 1)) +
-    geom_point(shape = 15, ...) +
+  ggplot(data, aes(x = values, y = 1, group = lengths)) +
+    geom_line(...) +
+    geom_point(data = filter(data, lengths == 1), ...) +
     labs(x = vec_ptype_full(data$values), y = "") +
     scale_y_continuous(breaks = 1, minor_breaks = NULL) +
     theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
 }
 
+#' @export
 autoplot.mists_list_of_rle_na <- function(object, y = seq_along(object), ...) {
-  stopifnot(vec_size(object) != vec_size(y))
-  df_full <- dplyr::bind_rows(map2(object, y, 
-      function(.x, .y) mutate(na_rle_expand(.x), y = .y)))
-  ggplot(df_full, aes(x = values, y = y)) +
-    geom_point(shape = 15, ...) +
-    labs(x = vec_ptype_full(df_full$values), y = "")
+  data <- mutate(na_rle_expand(object, y = y), group = paste0(y, lengths))
+  ggplot(data, aes(x = values, y = y, group = group)) +
+    geom_line(...) +
+    geom_point(data = filter(data, lengths == 1), ...) +
+    labs(x = vec_ptype_full(data$values), y = "")
 }
 
 #' @export
@@ -35,7 +37,7 @@ na_rle_spinogram <- function(x, y = NULL) {
       ) +
       labs(x = "runs [frequency]", y = "")
   } else {
-    intersect_xy <- intersect.mist_rle_na(x, y)
+    intersect_xy <- na_rle_table(intersect(x, y))
     overlaps_xy <- dplyr::count(intersect_xy, lengths)
     frac_intersect <- 
       transmute(

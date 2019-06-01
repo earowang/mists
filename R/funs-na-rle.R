@@ -1,5 +1,13 @@
 #' @export
-na_rle_expand <- function(x) {
+na_rle_expand <- function(x, ...) {
+  UseMethod("na_rle_expand")
+}
+
+#' @export
+na_rle_expand.mists_rle_na <- function(x, ...) {
+  if (is_empty(x)) {
+    return(dplyr::tibble("lengths" = integer(0), "values" = integer(0)))
+  }
   rle_lengths <- na_rle_lengths(x)
   rle_values <- na_rle_values(x)
   tunit <- time_unit(rle_values %@% "interval")
@@ -8,6 +16,16 @@ na_rle_expand <- function(x) {
   rep_lengths <- rep.int(rle_lengths, map_int(full_seq, vec_size))
   full_seq <- do.call("c", full_seq)
   dplyr::tibble("lengths" = rep_lengths, "values" = full_seq)
+}
+
+#' @export
+na_rle_expand.mists_list_of_rle_na <- function(x, ...) {
+  qs <- enquos(..., .named = TRUE)
+  y <- eval_tidy(qs[[1]])
+  stopifnot(vec_size(object) == vec_size(y))
+  dplyr::bind_rows(
+    map2(x, y, function(.x, .y) mutate(na_rle_expand(.x), !! names(qs) := .y))
+  )
 }
 
 #' @export
@@ -20,32 +38,39 @@ na_rle_table <- function(x) {
 
 #' @importFrom dplyr intersect
 #' @export
-intersect.mist_rle_na <- function(x, y, ...) {
+intersect.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)
   y_full <- na_rle_expand(y)
-  semi_join(x_full, y_full, by = "values")
+  res <- 
+    summarise(
+      group_by(semi_join(x_full, y_full, by = "values"), lengths),
+      values = min(values)
+    )
+  new_mists_rle_na(as_list(res))
 }
 
 #' @importFrom dplyr union
 #' @export
-union.mist_rle_na <- function(x, y, ...) {
+union.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)
   y_full <- na_rle_expand(y)
-  full_join(x_full, y_full, by = names(x_full))
-}
-
-#' @importFrom dplyr union_all
-#' @export
-union_all.mist_rle_na <- function(x, y, ...) {
-  x_full <- na_rle_expand(x)
-  y_full <- na_rle_expand(y)
-  dplyr::bind_rows(x_full, y_full)
+  res <- 
+    summarise(
+      group_by(full_join(x_full, y_full, by = names(x_full)), lengths),
+      values = min(values)
+    )
+  new_mists_rle_na(as_list(res))
 }
 
 #' @importFrom dplyr setdiff
 #' @export
-setdiff.mist_rle_na <- function(x, y, ...) {
+setdiff.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)
   y_full <- na_rle_expand(y)
-  anti_join(x_full, y_full, by = "values")
+  res <- 
+    summarise(
+      group_by(anti_join(x_full, y_full, by = "values"), lengths),
+      values = min(values)
+    )
+  new_mists_rle_na(as_list(res))
 }

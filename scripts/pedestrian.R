@@ -20,18 +20,17 @@ na_runs_df <- ped %>%
   summarise(na_runs = list_of_na_rle(Count, Date_Time))
 
 x <- na_runs_df$na_runs
-attr(na_rle_expand(x[[1]])$values, "interval")
-intersect(x[[1]], x[[2]])
-autoplot(as_list_of(x[[1]], x[[2]], intersect(x[[1]], x[[2]])))
-union(x[[1]], x[[2]])
+
+autoplot(x[[1]], size = 2.5)
+autoplot(x, y = na_runs_df$Sensor, size = 2)
+autoplot(as_list_of(x[[1]], x[[2]], intersect(x[[1]], x[[2]])), size = 2)
+autoplot(as_list_of(x[[1]], x[[2]], union(x[[1]], x[[2]])), size = 2)
+autoplot(as_list_of(x[[1]], x[[2]], setdiff(x[[1]], x[[2]])), size = 2)
+
 na_rle_spinogram(x = x[[1]])
 na_rle_spinogram(x = x[[2]])
 na_rle_spinogram(x = x[[1]], y = x[[2]])
 na_rle_spinogram(x = x[[2]], y = x[[1]])
-
-autoplot(x[[1]])
-autoplot(x)
-autoplot(na_runs_df$na_runs, y = na_runs_df$Sensor)
 
 ped_ts %>% 
   index_by(Time) %>% 

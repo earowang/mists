@@ -1,9 +1,14 @@
+distinct_groups <- function(x) {
+  rle_cont <- continuous_rle_impl(x)
+  rep.int(cumsum(rle_cont), rle_cont)
+}
+
 #' @export
 autoplot.mists_rle_na <- function(object, ...) {
-  data <- na_rle_expand(object)
-  ggplot(data, aes(x = values, y = 1, group = lengths)) +
+  data <- mutate(na_rle_expand(object), group = distinct_groups(values))
+  ggplot(data, aes(x = values, y = 1, group = group)) +
     geom_line(...) +
-    geom_point(data = filter(data, lengths == 1), ...) +
+    geom_point(data = filter(data, lengths == 1), shape = 4, ...) +
     labs(x = vec_ptype_full(data$values), y = "") +
     scale_y_continuous(breaks = 1, minor_breaks = NULL) +
     theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
@@ -11,10 +16,14 @@ autoplot.mists_rle_na <- function(object, ...) {
 
 #' @export
 autoplot.mists_list_of_rle_na <- function(object, y = seq_along(object), ...) {
-  data <- mutate(na_rle_expand(object, y = y), group = paste0(y, lengths))
+  data <- 
+    ungroup(mutate(
+      group_by(na_rle_expand(object, y = y), y), 
+      group = paste(y, distinct_groups(values), sep = "-")
+    ))
   ggplot(data, aes(x = values, y = y, group = group)) +
     geom_line(...) +
-    geom_point(data = filter(data, lengths == 1), ...) +
+    geom_point(data = filter(data, lengths == 1), shape = 4, ...) +
     labs(x = vec_ptype_full(data$values), y = "")
 }
 

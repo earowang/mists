@@ -15,15 +15,15 @@ na_rle_expand.mists_rle_na <- function(x, ...) {
     function(.x, .y) seq(.x, by = tunit, length.out = .y))
   rep_lengths <- rep.int(rle_lengths, map_int(full_seq, vec_size))
   full_seq <- do.call("c", full_seq)
-  attr(full_seq, "interval") <- x[["values"]] %@% "interval"
-  dplyr::tibble("lengths" = rep_lengths, "values" = full_seq)
+  res <- dplyr::tibble("lengths" = rep_lengths, "values" = full_seq)
+  restore_interval(res, x)
 }
 
 #' @export
 na_rle_expand.mists_list_of_rle_na <- function(x, ...) {
   qs <- enquos(..., .named = TRUE)
   y <- eval_tidy(qs[[1]])
-  stopifnot(vec_size(object) == vec_size(y))
+  stopifnot(vec_size(x) == vec_size(y))
   dplyr::bind_rows(
     map2(x, y, function(.x, .y) mutate(na_rle_expand(.x), !! names(qs) := .y))
   )
@@ -41,7 +41,13 @@ tbl_to_na_rle <- function(data) {
   rle_cont <- continuous_rle_impl(data[["values"]])
   add_len <- mutate(data, lengths = rep.int(cumsum(rle_cont), rle_cont))
   red_data <- summarise(group_by(add_len, lengths), values = min(values))
+  red_data <- restore_interval(red_data, data)
   new_mists_rle_na(as_list(mutate(red_data, lengths = rle_cont)))
+}
+
+restore_interval <- function(new, old) {
+  attr(new$values, "interval") <- attr(old$values, "interval")
+  new
 }
 
 #' @importFrom dplyr intersect
@@ -49,7 +55,8 @@ tbl_to_na_rle <- function(data) {
 intersect.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)
   y_full <- na_rle_expand(y)
-  tbl_to_na_rle(semi_join(x_full, y_full, by = "values"))
+  res <- semi_join(x_full, y_full, by = "values")
+  tbl_to_na_rle(restore_interval(res, x))
 }
 
 #' @importFrom dplyr union
@@ -57,7 +64,8 @@ intersect.mists_rle_na <- function(x, y, ...) {
 union.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)
   y_full <- na_rle_expand(y)
-  tbl_to_na_rle(full_join(x_full, y_full, by = names(x_full)))
+  res <- full_join(x_full, y_full, by = names(x_full))
+  tbl_to_na_rle(restore_interval(res, x))
 }
 
 #' @importFrom dplyr setdiff
@@ -65,5 +73,6 @@ union.mists_rle_na <- function(x, y, ...) {
 setdiff.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)
   y_full <- na_rle_expand(y)
-  tbl_to_na_rle(anti_join(x_full, y_full, by = "values"))
+  res <- anti_join(x_full, y_full, by = "values")
+  tbl_to_na_rle(restore_interval(res, x))
 }

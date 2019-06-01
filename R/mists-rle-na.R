@@ -102,6 +102,15 @@ list_of_na_rle <- function(x, index_by = NULL, interval = NULL) {
 }
 
 #' @export
+as_list_of.mists_rle_na <- function(x, ...) {
+  new_list_of(
+    list(x, ...),
+    ptype = list(),
+    class = "mists_list_of_rle_na"
+  )
+}
+
+#' @export
 vec_ptype_abbr.mists_list_of_rle_na <- function(x) {
   "list<rle<NA>>"
 }

@@ -14,7 +14,8 @@ country_code_df <- raw_dat %>%
   mutate(country_code = fct_infreq(country_code))
 series_code_df <- raw_dat %>% 
   distinct(`Series Name`, `Series Code`) %>% 
-  rename_all(janitor::make_clean_names)
+  rename_all(janitor::make_clean_names) %>% 
+  mutate(series_code = janitor::make_clean_names)
 world_dev <- raw_dat %>% 
   gather(key = "Year", value = "value", `1969 [YR1969]`:last_col()) %>% 
   rename_all(janitor::make_clean_names) %>% 
@@ -24,7 +25,8 @@ world_dev <- raw_dat %>%
   spread(key = series_code, value = value) %>% 
   mutate(
     country_code = factor(country_code, levels = country_code_df$country_code)
-  )
+  ) %>% 
+  rename_all(janitor::make_clean_names)
 
 na_rle_wdi <- world_dev %>% 
   group_by(country_code) %>% 

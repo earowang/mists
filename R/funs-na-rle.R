@@ -1,3 +1,5 @@
+globalVariables(c("n"))
+
 #' Shift run length encoding <`NA`>
 #'
 #' @param x An object returned by [`na_rle()`] or [`list_of_na_rle()`].
@@ -104,6 +106,7 @@ tunit <- function(values) {
 #' Set operations for run length encoding <`NA`>
 #'
 #' @param x,y Objects returned by [`na_rle()`].
+#' @inheritParams dplyr::intersect
 #'
 #' @rdname mists-set-op
 #' @examples
@@ -113,10 +116,8 @@ tunit <- function(values) {
 #' union(x, y)
 #' setdiff(x, y)
 #' setdiff(y, x)
-#' @importFrom dplyr intersect
 #' @method intersect mists_rle_na
 #' @export
-#' @export intersect.mists_rle_na
 intersect.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)[, "values"]
   y_full <- na_rle_expand(y)[, "values"]
@@ -125,10 +126,8 @@ intersect.mists_rle_na <- function(x, y, ...) {
 }
 
 #' @rdname mists-set-op
-#' @importFrom dplyr union
 #' @method union mists_rle_na
 #' @export
-#' @export union.mists_rle_na
 union.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)[, "values"]
   y_full <- na_rle_expand(y)[, "values"]
@@ -137,10 +136,8 @@ union.mists_rle_na <- function(x, y, ...) {
 }
 
 #' @rdname mists-set-op
-#' @importFrom dplyr setdiff
 #' @method setdiff mists_rle_na
 #' @export
-#' @export setdiff.mists_rle_na
 setdiff.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)[, "values"]
   y_full <- na_rle_expand(y)[, "values"]

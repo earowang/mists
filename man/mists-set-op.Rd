@@ -14,6 +14,8 @@
 }
 \arguments{
 \item{x, y}{Objects returned by \code{\link[=na_rle]{na_rle()}}.}
+
+\item{...}{other arguments passed on to methods}
 }
 \description{
 Set operations for run length encoding <\code{NA}>

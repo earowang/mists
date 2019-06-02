@@ -20,6 +20,9 @@ na_rle_spinogram(x, y = NULL)
 Autoplot and spinogram for run length encoding <\code{NA}>
 }
 \examples{
+if (!requireNamespace("nycflights13", quietly = TRUE)) {
+  stop("Please install the nycflights13 package to run these following examples.")
+}
 library(dplyr, warn.conflicts = FALSE)
 na_runs_wind <- nycflights13::weather \%>\% 
   group_by(origin) \%>\% 
@@ -27,6 +30,11 @@ na_runs_wind <- nycflights13::weather \%>\%
 
 autoplot(na_runs_wind$wind_dir[[1]])
 autoplot(na_runs_wind$wind_dir, na_runs_wind$origin)
+autoplot(
+  vctrs::as_list_of(na_runs_wind$wind_dir[[2]], na_runs_wind$wind_gust[[2]]),
+  y = paste(c("wind_dir", "wind_gust"), "JFK", sep = "@"),
+  size = 2.5
+)
 na_rle_spinogram(na_runs_wind$wind_dir[[1]])
 na_rle_spinogram(na_runs_wind$wind_dir[[1]], na_runs_wind$wind_gust[[1]])
 na_rle_spinogram(na_runs_wind$wind_dir[[1]], na_runs_wind$wind_dir[[3]])

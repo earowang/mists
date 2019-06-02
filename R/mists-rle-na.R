@@ -93,25 +93,6 @@ list_of_na_rle <- function(x = double(), index_by = seq_along(x),
   )
 }
 
-#' @method as_list_of mists_rle_na
-#' @export
-#' @export as_list_of.mists_rle_na
-as_list_of.mists_rle_na <- function(x, ...) {
-  # ToDo: must be a homogeneous list: i.e. same interval
-  new_list_of(
-    list(x, ...),
-    ptype = list(),
-    class = "mists_list_of_rle_na"
-  )
-}
-
-#' @method vec_cast.list mists_rle_na
-#' @export
-#' @export vec_cast.list.mists_rle_na
-vec_cast.list.mists_rle_na <- function(x, to) {
-  as_list_of(x)
-}
-
 new_mists_rle_na <- function(x) {
   mists_rle_na_assert(x)
   new_vctr(x, class = c("mists_rle_na"))
@@ -126,48 +107,4 @@ mists_rle_na_assert <- function(x) {
 #' @export
 length.mists_rle_na <- function(x) { # for displaying the size of runs
   length(x$lengths)
-}
-
-#' @method obj_print_data mists_rle_na
-#' @export
-#' @export obj_print_data.mists_rle_na
-obj_print_data.mists_rle_na <- function(x, ...) {
-  over10 <- length(x) > 10
-  cat(
-    "$lengths:", angle_brackets(vec_ptype_abbr(x$lengths)), 
-    if (over10) ellipsis(x$lengths[1:10]) else x$lengths, "\n"
-  )
-  cat(
-    "$values :", angle_brackets(vec_ptype_abbr(x$values)),
-    if (over10) ellipsis(format(x$values[1:10])) else format(x$values)
-  )
-  invisible(x)
-}
-
-#' @method vec_ptype_full mists_rle_na
-#' @export
-#' @export vec_ptype_full.mists_rle_na
-vec_ptype_full.mists_rle_na <- function(x) {
-  "Run Length Encoding <NA>"
-}
-
-#' @method vec_ptype_abbr mists_rle_na
-#' @export
-#' @export vec_ptype_abbr.mists_rle_na
-vec_ptype_abbr.mists_rle_na <- function(x) {
-  "rle<NA>"
-}
-
-#' @method vec_ptype_abbr mists_list_of_rle_na
-#' @export
-#' @export vec_ptype_abbr.mists_list_of_rle_na
-vec_ptype_abbr.mists_list_of_rle_na <- function(x) {
-  "list<rle<NA>>"
-}
-
-#' @method vec_ptype_full mists_list_of_rle_na
-#' @export
-#' @export vec_ptype_full.mists_list_of_rle_na
-vec_ptype_full.mists_list_of_rle_na <- function(x) {
-  "list_of<Run Length Encoding <NA>>"
 }

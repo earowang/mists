@@ -1,3 +1,5 @@
+globalVariables(c("n_na", "pct_overall_na"))
+
 polish_cols_measures <- function(data, cutoff) {
   stopifnot(is_tsibble(data))
   prop_na_by_vars <- summarise_all(as_tibble(data), prop_overall_na)

@@ -1,3 +1,5 @@
+globalVariables(c("values", "group", "n", "nobs", "frac", "n.x", "overlap"))
+
 distinct_groups <- function(x) {
   rle_cont <- continuous_rle_impl(x, tunit(x))
   rep.int(cumsum(rle_cont), rle_cont)
@@ -10,9 +12,9 @@ distinct_groups <- function(x) {
 #'
 #' @rdname mists-plot
 #' @examples
-# if (!requireNamespace("nycflights13", quietly = TRUE)) {
-#   stop("Please install the nycflights13 package to run these following examples.")
-# }
+#' if (!requireNamespace("nycflights13", quietly = TRUE)) {
+#'   stop("Please install the nycflights13 package to run these following examples.")
+#' }
 #' library(dplyr, warn.conflicts = FALSE)
 #' na_runs_wind <- nycflights13::weather %>% 
 #'   group_by(origin) %>% 
@@ -20,12 +22,15 @@ distinct_groups <- function(x) {
 #' 
 #' autoplot(na_runs_wind$wind_dir[[1]])
 #' autoplot(na_runs_wind$wind_dir, na_runs_wind$origin)
-#' @importFrom ggplot2 autoplot
+#' autoplot(
+#'   vctrs::as_list_of(na_runs_wind$wind_dir[[2]], na_runs_wind$wind_gust[[2]]),
+#'   y = paste(c("wind_dir", "wind_gust"), "JFK", sep = "@"),
+#'   size = 2.5
+#' )
 #' @method autoplot mists_rle_na
 #' @export
-#' @export autoplot.mists_rle_na
 autoplot.mists_rle_na <- function(object, ...) {
-  data <- mutate(na_rle_expand(object), group = distinct_groups(values))
+  data <- mutate(na_rle_expand(object), "group" := distinct_groups(values))
   ggplot(data, aes(x = values, y = 1, group = group)) +
     geom_line(...) +
     geom_point(data = filter(data, lengths == 1), shape = 4, ...) +
@@ -36,12 +41,11 @@ autoplot.mists_rle_na <- function(object, ...) {
 
 #' @method autoplot mists_list_of_rle_na
 #' @export
-#' @export autoplot.mists_list_of_rle_na
 autoplot.mists_list_of_rle_na <- function(object, y = seq_along(object), ...) {
   data <- 
     ungroup(mutate(
       group_by(na_rle_expand(object, y = y), y), 
-      group = paste(y, distinct_groups(values), sep = "-")
+      "group" := paste(y, distinct_groups(values), sep = "-")
     ))
   ggplot(data, aes(x = values, y = y, group = group)) +
     geom_line(...) +
@@ -80,7 +84,7 @@ na_rle_spinogram <- function(x, y = NULL) {
     frac_intersect <- 
       transmute(
         inner_join(overlaps_xy, na_runs_x, by = "lengths"),
-        lengths, frac = n.x / nobs, overlap = TRUE
+        lengths, "frac" := n.x / nobs, "overlap" := TRUE
       )
     frac_diff <- mutate(frac_intersect, frac = 1 - frac, overlap = FALSE)
     frac_xy <- bind_rows(frac_intersect, frac_diff)

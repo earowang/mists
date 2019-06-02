@@ -7,7 +7,7 @@
 #' na_starts_with(c(rep(NA, 4), 10:1, NA))
 #' @export
 na_starts_with <- function(x) {
-  na_rle <- na_rle_cpp(x)
+  na_rle <- na_rle_impl(x)
   if (na_rle$values[1L]) {
     na_rle$lengths[1L]
   } else {
@@ -20,7 +20,7 @@ na_starts_with <- function(x) {
 #' na_ends_with(c(rep(NA, 4), 10:1, NA))
 #' @export
 na_ends_with <- function(x) {
-  na_rle <- na_rle_cpp(x)
+  na_rle <- na_rle_impl(x)
   if (tail(na_rle$values, 1L)) {
     tail(na_rle$lengths, 1L)
   } else {

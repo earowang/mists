@@ -1,3 +1,7 @@
+na_rle_impl <- function(x) {
+  rle(is.na(x))
+}
+
 #' Run lengths encoding for missing values (`NA`)
 #'
 #' @param x A vector.
@@ -39,7 +43,7 @@ na_rle <- function(x = double(), index_by = seq_along(x), interval = NULL) {
   # 2. abort if not an interval class when `interval` is supplied
   if (is_null(interval)) int <- interval_pull(index_by) else int <- interval
 
-  res <- na_rle_cpp(x)
+  res <- na_rle_impl(x)
   from <- c(1L, head(cumsum(res$lengths), -1L) + 1L)[res$values]
   values <- index_by[ord][from]
   attr(values, "interval") <- int

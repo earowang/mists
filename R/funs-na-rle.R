@@ -73,7 +73,9 @@ interval_restore <- function(x, to) {
 }
 
 #' @importFrom dplyr intersect
+#' @method intersect mists_rle_na
 #' @export
+#' @export intersect.mists_rle_na
 intersect.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)[, "values"]
   y_full <- na_rle_expand(y)[, "values"]
@@ -82,7 +84,9 @@ intersect.mists_rle_na <- function(x, y, ...) {
 }
 
 #' @importFrom dplyr union
+#' @method union mists_rle_na
 #' @export
+#' @export union.mists_rle_na
 union.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)[, "values"]
   y_full <- na_rle_expand(y)[, "values"]
@@ -91,7 +95,9 @@ union.mists_rle_na <- function(x, y, ...) {
 }
 
 #' @importFrom dplyr setdiff
+#' @method setdiff mists_rle_na
 #' @export
+#' @export setdiff.mists_rle_na
 setdiff.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)[, "values"]
   y_full <- na_rle_expand(y)[, "values"]

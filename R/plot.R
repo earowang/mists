@@ -4,7 +4,9 @@ distinct_groups <- function(x) {
 }
 
 #' @importFrom ggplot2 autoplot
+#' @method autoplot mists_rle_na
 #' @export
+#' @export autoplot.mists_rle_na
 autoplot.mists_rle_na <- function(object, ...) {
   data <- mutate(na_rle_expand(object), group = distinct_groups(values))
   ggplot(data, aes(x = values, y = 1, group = group)) +
@@ -15,7 +17,9 @@ autoplot.mists_rle_na <- function(object, ...) {
     theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
 }
 
+#' @method autoplot mists_list_of_rle_na
 #' @export
+#' @export autoplot.mists_list_of_rle_na
 autoplot.mists_list_of_rle_na <- function(object, y = seq_along(object), ...) {
   data <- 
     ungroup(mutate(

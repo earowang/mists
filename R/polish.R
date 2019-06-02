@@ -21,25 +21,26 @@ polish_rows_key <- function(data, cutoff) {
 polish_rows_index <- function(data, cutoff, na_fun = na_starts_with) {
   idx_len <- map_int(key_rows(data), length)
   keyed_nobs <- idx_len * NCOL(data)
-  
+
   keyed_data <- new_grouped_df(data, groups = key_data(data))
   na_blocks <- summarise_all(keyed_data, na_fun)
-  index_pass <- 
+  add_prop_na <- 
     mutate(
-      group_nest(na_blocks, !!! key(data), .key = "..n_na"),
-      ..pct_na = map_dbl(..n_na, sum) / keyed_nobs,
-      ..n_na = floor(..pct_na * idx_len)
+      group_nest(na_blocks, !!! key(data), .key = "n_na"),
+      "pct_overall_na" := map_dbl(n_na, sum) / keyed_nobs,
+      "n_na" := floor(pct_overall_na * idx_len)
     )
+  index_pass <- filter(add_prop_na, pct_overall_na < cutoff)
   full_data <- left_join(data, index_pass, by = key_vars(data))
   grped_data <- group_by_key(full_data)
   if (is_true(all.equal(na_fun, na_starts_with))) {
     filter_data <- filter(grped_data,
-      !! index(data) >= min(!! index(data)) + ..n_na)
+      !! index(data) >= min(!! index(data)) + n_na)
   } else if (is_true(all.equal(na_fun, na_ends_with))) {
     filter_data <- filter(grped_data,
-      !! index(data) <= max(!! index(data)) - ..n_na)
+      !! index(data) <= max(!! index(data)) - n_na)
   }
-  select(ungroup(filter_data), -..n_na)
+  select(ungroup(filter_data), -n_na, -pct_overall_na)
 }
 
 polish_metrics <- function(before, after) {

@@ -16,7 +16,7 @@ na_rle_expand.mists_rle_na <- function(x, ...) {
   rep_lengths <- rep.int(rle_lengths, map_int(full_seq, vec_size))
   full_seq <- do.call("c", full_seq)
   res <- dplyr::tibble("lengths" = rep_lengths, "values" = full_seq)
-  restore_interval(res, x)
+  interval_restore(res, x)
 }
 
 #' @export
@@ -38,16 +38,19 @@ na_rle_table <- function(x) {
 }
 
 tbl_to_na_rle <- function(data) {
-  rle_cont <- continuous_rle_impl(data[["values"]])
+  vals <- data[["values"]]
+  if (is_empty(vals)) return(na_rle()) # should also find "lenghts" type
+
+  rle_cont <- continuous_rle_impl(vals)
   add_len <- mutate(data, lengths = rep.int(cumsum(rle_cont), rle_cont))
   red_data <- summarise(group_by(add_len, lengths), values = min(values))
-  red_data <- restore_interval(red_data, data)
+  red_data <- interval_restore(red_data, data)
   new_mists_rle_na(as_list(mutate(red_data, lengths = rle_cont)))
 }
 
-restore_interval <- function(new, old) {
-  attr(new$values, "interval") <- attr(old$values, "interval")
-  new
+interval_restore <- function(x, to) {
+  attr(x$values, "interval") <- attr(to$values, "interval")
+  x
 }
 
 #' @importFrom dplyr intersect
@@ -56,7 +59,7 @@ intersect.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)[, "values"]
   y_full <- na_rle_expand(y)[, "values"]
   res <- intersect(x_full, y_full) # dplyr::intersect for data frame
-  tbl_to_na_rle(restore_interval(res, x))
+  tbl_to_na_rle(interval_restore(res, x))
 }
 
 #' @importFrom dplyr union
@@ -65,7 +68,7 @@ union.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)[, "values"]
   y_full <- na_rle_expand(y)[, "values"]
   res <- arrange(union(x_full, y_full), values)
-  tbl_to_na_rle(restore_interval(res, x))
+  tbl_to_na_rle(interval_restore(res, x))
 }
 
 #' @importFrom dplyr setdiff
@@ -74,5 +77,5 @@ setdiff.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)[, "values"]
   y_full <- na_rle_expand(y)[, "values"]
   res <- setdiff(x_full, y_full)
-  tbl_to_na_rle(restore_interval(res, x))
+  tbl_to_na_rle(interval_restore(res, x))
 }

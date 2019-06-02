@@ -20,6 +20,7 @@ na_runs_df <- ped %>%
   summarise(na_runs = list_of_na_rle(Count, Date_Time))
 
 x <- na_runs_df$na_runs
+purrr::reduce(x[1:7], intersect)
 
 autoplot(x[[1]], size = 2.5)
 autoplot(x, y = na_runs_df$Sensor, size = 2)

@@ -30,24 +30,19 @@ na_rle_wdi <- world_dev %>%
   group_by(country_code) %>% 
   summarise_at(vars(3:last_col()), ~ list_of_na_rle(., year))
 
-autoplot(na_rle_wdi$AG.SRF.TOTL.K2, size = 2, shape = 15)
-autoplot(na_rle_wdi$BX.KLT.DINV.CD.WD[[1]], size = 2.5, shape = 15)
-na_rle_expand(na_rle_wdi$AG.SRF.TOTL.K2, y = na_rle_wdi$country_code)
+autoplot(na_rle_wdi$AG.SRF.TOTL.K2, size = 2)
+autoplot(na_rle_wdi$BX.KLT.DINV.CD.WD[[1]], size = 2.5)
 
 prop_overall_na(world_dev)
 
 world_dev_ts <- world_dev %>% 
   as_tsibble(key = country_code, index = year)
 
-wdi_cols_pass <- polish_cols_measures(world_dev_ts, cutoff = 0.8)
+wdi_cols_pass <- polish_cols_measures(world_dev_ts, cutoff = .8)
 polish_metrics(world_dev_ts, wdi_cols_pass)
 
-wdi_key_pass <- polish_rows_key(world_dev_ts, cutoff = 0.8)
+wdi_key_pass <- polish_rows_key(world_dev_ts, cutoff = .8)
 polish_metrics(world_dev_ts, wdi_key_pass)
 
-wdi_key_pass <- polish_rows_index(wdi_cols_pass)
-polish_metrics(world_dev_ts, wdi_key_pass)
-
-polish_rows_index(world_dev_ts, na_fun = na_ends_with)
-
-na_rle(world_dev_ts$AG.LND.FRST.K2)
+wdi_idx_pass <- polish_rows_index(world_dev_ts, cutoff = 0.8)
+polish_metrics(world_dev_ts, wdi_idx_pass)

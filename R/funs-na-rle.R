@@ -53,30 +53,26 @@ restore_interval <- function(new, old) {
 #' @importFrom dplyr intersect
 #' @export
 intersect.mists_rle_na <- function(x, y, ...) {
-  x_full <- na_rle_expand(x)
-  y_full <- na_rle_expand(y)
-  res <- arrange(semi_join(x_full, y_full, by = "values"), values)
+  x_full <- na_rle_expand(x)[, "values"]
+  y_full <- na_rle_expand(y)[, "values"]
+  res <- intersect(x_full, y_full) # dplyr::intersect for data frame
   tbl_to_na_rle(restore_interval(res, x))
 }
 
 #' @importFrom dplyr union
 #' @export
 union.mists_rle_na <- function(x, y, ...) {
-  x_full <- na_rle_expand(x)
-  y_full <- na_rle_expand(y)
-  res <- 
-    arrange(
-      distinct(full_join(x_full, y_full, by = names(x_full)), values),
-      values
-    )
+  x_full <- na_rle_expand(x)[, "values"]
+  y_full <- na_rle_expand(y)[, "values"]
+  res <- arrange(union(x_full, y_full), values)
   tbl_to_na_rle(restore_interval(res, x))
 }
 
 #' @importFrom dplyr setdiff
 #' @export
 setdiff.mists_rle_na <- function(x, y, ...) {
-  x_full <- na_rle_expand(x)
-  y_full <- na_rle_expand(y)
-  res <- arrange(anti_join(x_full, y_full, by = "values"), values)
+  x_full <- na_rle_expand(x)[, "values"]
+  y_full <- na_rle_expand(y)[, "values"]
+  res <- setdiff(x_full, y_full)
   tbl_to_na_rle(restore_interval(res, x))
 }

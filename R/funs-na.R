@@ -1,3 +1,10 @@
+#' Helpers for missing values
+#'
+#' @param x A vector.
+#'
+#' @rdname mists-na-helpers
+#' @examples
+#' na_starts_with(c(rep(NA, 4), 10:1, NA))
 #' @export
 na_starts_with <- function(x) {
   na_rle <- na_rle_cpp(x)
@@ -8,6 +15,9 @@ na_starts_with <- function(x) {
   }
 }
 
+#' @rdname mists-na-helpers
+#' @examples
+#' na_ends_with(c(rep(NA, 4), 10:1, NA))
 #' @export
 na_ends_with <- function(x) {
   na_rle <- na_rle_cpp(x)

@@ -4,10 +4,9 @@ using namespace std;
 
 // Run length ecoding for continuous values
 // [[Rcpp::export]]
-IntegerVector continuous_rle_impl(NumericVector x) {
+IntegerVector continuous_rle_impl(NumericVector x, double c) {
   NumericVector vec_diff = diff(x);
   LogicalVector vec_lgl(x.size());
-  double c = min(vec_diff);
   for (int i = 0; i < vec_diff.size(); i++) {
     if (vec_diff[i] == c) {
       vec_lgl[i + 1] = vec_lgl[i];

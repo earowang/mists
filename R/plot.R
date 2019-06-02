@@ -1,5 +1,5 @@
 distinct_groups <- function(x) {
-  rle_cont <- continuous_rle_impl(x)
+  rle_cont <- continuous_rle_impl(x, tunit(x$values))
   rep.int(cumsum(rle_cont), rle_cont)
 }
 

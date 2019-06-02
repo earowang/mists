@@ -5,6 +5,7 @@
 #' @import rlang
 #' @import vctrs
 #' @importFrom tsibble is_tsibble key key_vars key_data key_rows index
+#' @importFrom tsibble interval_pull time_unit
 #' @importFrom dplyr distinct mutate transmute new_grouped_df group_nest
 #' @importFrom dplyr arrange filter bind_rows bind_cols
 #' @importFrom dplyr right_join left_join anti_join inner_join semi_join

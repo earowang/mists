@@ -17,20 +17,21 @@ BEGIN_RCPP
 END_RCPP
 }
 // continuous_rle_impl
-IntegerVector continuous_rle_impl(NumericVector x);
-RcppExport SEXP _mists_continuous_rle_impl(SEXP xSEXP) {
+IntegerVector continuous_rle_impl(NumericVector x, double c);
+RcppExport SEXP _mists_continuous_rle_impl(SEXP xSEXP, SEXP cSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(continuous_rle_impl(x));
+    Rcpp::traits::input_parameter< double >::type c(cSEXP);
+    rcpp_result_gen = Rcpp::wrap(continuous_rle_impl(x, c));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
     {"_mists_na_rle_cpp", (DL_FUNC) &_mists_na_rle_cpp, 1},
-    {"_mists_continuous_rle_impl", (DL_FUNC) &_mists_continuous_rle_impl, 1},
+    {"_mists_continuous_rle_impl", (DL_FUNC) &_mists_continuous_rle_impl, 2},
     {NULL, NULL, 0}
 };
 

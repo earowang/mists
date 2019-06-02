@@ -1,13 +1,37 @@
+#' Run lengths encoding for missing values (`NA`)
+#'
+#' @param x A vector.
+#' @param index_by A vector of the same length as `x`.
+#' @param interval if `NULL`, determined by the greatest common denominator;
+#' otherwise a supplied "interval" class.
+#' 
+#' @return A named list of
+#' * `lengths`: the lengths of `NA` runs
+#' * `values`: the starting indices of runs
+#'
+#' @rdname na-rle
+#' @examples
+#' df <- data.frame(year = 2000:2019, temp = sample(0:30, size = 10))
+#' df[c(1, 6, 13:16, 19), "temp"] <- NA
+#' 
+#' na_rle(df$temp) # indexed by the default positions
+#' (x <- na_rle(df$temp, index_by = df$year)) # indexed by a variable
+#' 
+#' na_rle_lengths(x)
+#' na_rle_values(x)
+#' 
+#' library(dplyr, warn.conflicts = FALSE)
+#' # list_of_na_rle() is useful when working with tabular data
+#' as_tibble(df) %>% 
+#'   summarise(na_runs = list_of_na_rle(temp, year))
 #' @export
-na_rle <- function(x = double(), index_by = NULL, interval = NULL) {
+na_rle <- function(x = double(), index_by = seq_along(x), interval = NULL) {
+  stopifnot(vec_size(x) == vec_size(index_by))
   if (has_length(x, 0)) {
     # ToDo: if !is_null(index_by) values takes an empty index_by obj
     return(new_mists_rle_na(list(lengths = integer(), values = integer())))
   }
 
-  if (is_null(index_by)) {
-    index_by <- seq_along(x)
-  }
   ord <- order(index_by)
   x <- x[ord]
   # ToDo:
@@ -22,6 +46,7 @@ na_rle <- function(x = double(), index_by = NULL, interval = NULL) {
   new_mists_rle_na(list(lengths = res$lengths[res$values], values = values))
 }
 
+#' @rdname na-rle
 #' @export
 na_rle_lengths <- function(x) {
   UseMethod("na_rle_lengths")
@@ -37,6 +62,7 @@ na_rle_lengths.mists_list_of_rle_na <- function(x) {
   map(x, na_rle_lengths)
 }
 
+#' @rdname na-rle
 #' @export
 na_rle_values <- function(x) {
   UseMethod("na_rle_values")
@@ -52,6 +78,7 @@ na_rle_values.mists_list_of_rle_na <- function(x) {
   map(x, na_rle_values)
 }
 
+#' @rdname na-rle
 #' @export
 list_of_na_rle <- function(x, index_by = NULL, interval = NULL) {
   new_list_of(
@@ -61,7 +88,9 @@ list_of_na_rle <- function(x, index_by = NULL, interval = NULL) {
   )
 }
 
+#' @method as_list_of mists_rle_na
 #' @export
+#' @export as_list_of.mists_rle_na
 as_list_of.mists_rle_na <- function(x, ...) {
   new_list_of(
     list(x, ...),

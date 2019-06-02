@@ -36,3 +36,4 @@
 These functions are the extensions that allow mists objects to
 work with vctrs.
 }
+\keyword{internal}

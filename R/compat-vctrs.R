@@ -13,6 +13,7 @@
 NULL
 
 #' @rdname vctrs-compat
+#' @keywords internal
 #' @method as_list_of mists_rle_na
 #' @export
 #' @export as_list_of.mists_rle_na
@@ -26,6 +27,7 @@ as_list_of.mists_rle_na <- function(x, ...) {
 }
 
 #' @rdname vctrs-compat
+#' @keywords internal
 #' @method vec_cast.list mists_rle_na
 #' @export
 #' @export vec_cast.list.mists_rle_na
@@ -34,6 +36,7 @@ vec_cast.list.mists_rle_na <- function(x, to) {
 }
 
 #' @rdname vctrs-compat
+#' @keywords internal
 #' @method obj_print_data mists_rle_na
 #' @export
 #' @export obj_print_data.mists_rle_na
@@ -51,6 +54,7 @@ obj_print_data.mists_rle_na <- function(x, ...) {
 }
 
 #' @rdname vctrs-compat
+#' @keywords internal
 #' @method vec_ptype_full mists_rle_na
 #' @export
 #' @export vec_ptype_full.mists_rle_na
@@ -59,6 +63,7 @@ vec_ptype_full.mists_rle_na <- function(x) {
 }
 
 #' @rdname vctrs-compat
+#' @keywords internal
 #' @method vec_ptype_abbr mists_rle_na
 #' @export
 #' @export vec_ptype_abbr.mists_rle_na
@@ -67,6 +72,7 @@ vec_ptype_abbr.mists_rle_na <- function(x) {
 }
 
 #' @rdname vctrs-compat
+#' @keywords internal
 #' @method vec_ptype_abbr mists_list_of_rle_na
 #' @export
 #' @export vec_ptype_abbr.mists_list_of_rle_na
@@ -75,6 +81,7 @@ vec_ptype_abbr.mists_list_of_rle_na <- function(x) {
 }
 
 #' @rdname vctrs-compat
+#' @keywords internal
 #' @method vec_ptype_full mists_list_of_rle_na
 #' @export
 #' @export vec_ptype_full.mists_list_of_rle_na

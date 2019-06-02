@@ -32,14 +32,14 @@ na_rle_impl <- function(x) {
 na_rle <- function(x = double(), index_by = seq_along(x), interval = NULL) {
   stopifnot(vec_size(x) == vec_size(index_by))
   if (has_length(x, 0)) {
-    # ToDo: if !is_null(index_by) values takes an empty index_by obj
-    return(new_mists_rle_na(list(lengths = integer(), values = integer())))
+    values <- index_by[0L]
+    attr(values, "interval") <- new_interval()
+    return(new_mists_rle_na(list(lengths = integer(), values = values)))
   }
 
   ord <- order(index_by)
   x <- x[ord]
   # ToDo:
-  # 1. abort unknown/irregular interval
   # 2. abort if not an interval class when `interval` is supplied
   if (is_null(interval)) int <- interval_pull(index_by) else int <- interval
 

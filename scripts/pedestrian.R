@@ -4,23 +4,23 @@ library(tidyverse)
 
 ped <- read_rds("data-raw/ped.rds")
 
-ped %>% 
-  group_by(Sensor) %>% 
-  filter(Sensor %in% c("Alfred Place", "Birrarung Marr")) %>% 
-  summarise(na_runs = list_of_na_rle(Count, Date_Time)) %>% 
-  mutate(na_runs = na_rle_lengths(na_runs)) %>% 
-  unnest(na_runs) %>% 
+ped %>%
+  group_by(Sensor) %>%
+  filter(Sensor %in% c("Alfred Place", "Birrarung Marr")) %>%
+  summarise(na_runs = list_of_na_rle(Count, Date_Time)) %>%
+  mutate(na_runs = na_rle_lengths(na_runs)) %>%
+  unnest(na_runs) %>%
   ggplot(aes(x = na_runs)) +
   geom_bar() +
   scale_x_log10() +
   facet_grid(Sensor ~ .)
 
-na_runs_df <- ped %>% 
-  group_by(Sensor) %>% 
+na_runs_df <- ped %>%
+  group_by(Sensor) %>%
   summarise(na_runs = list_of_na_rle(Count, Date_Time))
 
 x <- na_runs_df$na_runs
-purrr::reduce(x[1:7], intersect)
+purrr::reduce(x, intersect)
 na_rle_shift(x[[1]], n = -1)
 na_rle_shift(x)
 
@@ -30,7 +30,7 @@ autoplot(x[[1]], size = 2.5)
 autoplot(x, y = na_runs_df$Sensor, size = 2)
 autoplot(as_list_of(
   x[[1]],
-  x[[2]], 
+  x[[2]],
   intersect(x[[1]], x[[2]]),
   intersect(x[[2]], x[[1]]),
   union(x[[1]], x[[2]]),
@@ -43,17 +43,17 @@ na_rle_spinogram(x = x[[2]])
 na_rle_spinogram(x = x[[1]], y = x[[2]])
 na_rle_spinogram(x = x[[2]], y = x[[1]])
 
-ped_ts %>% 
-  index_by(Time) %>% 
-  summarise(n_miss = sum(is.na(Count)) / n()) %>% 
+ped_ts %>%
+  index_by(Time) %>%
+  summarise(n_miss = sum(is.na(Count)) / n()) %>%
   ggplot(aes(x = Time, y = n_miss)) +
   geom_line() +
   geom_point() +
   scale_y_continuous(labels = scales::percent)
 
-ped_ts %>% 
-  index_by(Wday = wday(Date, label = TRUE, week_start = 1)) %>% 
-  summarise(n_miss = sum(is.na(Count)) / n()) %>% 
+ped_ts %>%
+  index_by(Wday = wday(Date, label = TRUE, week_start = 1)) %>%
+  summarise(n_miss = sum(is.na(Count)) / n()) %>%
   ggplot(aes(x = Wday, y = n_miss)) +
   geom_line(group = 1) +
   geom_point() +
@@ -278,18 +278,18 @@ ped %>%
   ggplot(aes(x = Date_Time, y = Count)) +
   geom_line()
 
-ped %>% 
-  # filter(Sensor == "Alfred Place") %>% 
-  group_by(Sensor) %>% 
-  summarise(na_rle = list(na_rle(Count))) %>% 
-  unnest(na_rle) %>% 
-  filter(rle != "0") %>% 
+ped %>%
+  # filter(Sensor == "Alfred Place") %>%
+  group_by(Sensor) %>%
+  summarise(na_rle = list(na_rle(Count))) %>%
+  unnest(na_rle) %>%
+  filter(rle != "0") %>%
   ggplot(aes(x = Sensor, y = n, fill = as.factor(rle))) +
   geom_col(position = "fill")
 
-ped %>% 
-  group_by(Sensor) %>% 
-  summarise(na_rle = list(na_rle(Count))) %>% 
-  unnest(na_rle) %>% 
-  filter(rle != "0") %>% 
+ped %>%
+  group_by(Sensor) %>%
+  summarise(na_rle = list(na_rle(Count))) %>%
+  unnest(na_rle) %>%
+  filter(rle != "0") %>%
   count(Sensor)

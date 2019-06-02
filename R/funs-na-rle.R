@@ -1,7 +1,7 @@
 #' Shift run length encoding <`NA`>
 #'
 #' @param x An object returned by [`na_rle()`] or [`list_of_na_rle()`].
-#' @param n A positive integer shift the starting indices forward, and negative
+#' @param n A positive integer shifts the starting indices forward, and negative
 #' backward.
 #'
 #' @examples
@@ -66,9 +66,10 @@ na_rle_expand.mists_list_of_rle_na <- function(x, ...) {
   qs <- enquos(..., .named = TRUE)
   y <- eval_tidy(qs[[1]])
   stopifnot(vec_size(x) == vec_size(y))
-  bind_rows(
+  res <- bind_rows(
     map2(x, y, function(.x, .y) mutate(na_rle_expand(.x), !! names(qs) := .y))
   )
+  interval_restore(res, x[[1L]])
 }
 
 #' @rdname mists-na-rle-tbl

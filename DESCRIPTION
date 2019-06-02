@@ -28,3 +28,5 @@ Language: en-GB
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
+Suggests: 
+    nycflights13

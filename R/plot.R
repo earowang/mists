@@ -1,8 +1,25 @@
 distinct_groups <- function(x) {
-  rle_cont <- continuous_rle_impl(x, tunit(x$values))
+  rle_cont <- continuous_rle_impl(x, tunit(x))
   rep.int(cumsum(rle_cont), rle_cont)
 }
 
+#' Autoplot and spinogram for run length encoding <`NA`>
+#'
+#' @inheritParams ggplot2::autoplot
+#' @param x,y Objects returned by [`na_rle()`].
+#'
+#' @rdname mists-plot
+#' @examples
+# if (!requireNamespace("nycflights13", quietly = TRUE)) {
+#   stop("Please install the nycflights13 package to run these following examples.")
+# }
+#' library(dplyr, warn.conflicts = FALSE)
+#' na_runs_wind <- nycflights13::weather %>% 
+#'   group_by(origin) %>% 
+#'   summarise_at(vars(contains("wind")), ~ list_of_na_rle(., time_hour))
+#' 
+#' autoplot(na_runs_wind$wind_dir[[1]])
+#' autoplot(na_runs_wind$wind_dir, na_runs_wind$origin)
 #' @importFrom ggplot2 autoplot
 #' @method autoplot mists_rle_na
 #' @export
@@ -32,6 +49,11 @@ autoplot.mists_list_of_rle_na <- function(object, y = seq_along(object), ...) {
     labs(x = vec_ptype_full(data$values), y = "")
 }
 
+#' @rdname mists-plot
+#' @examples
+#' na_rle_spinogram(na_runs_wind$wind_dir[[1]])
+#' na_rle_spinogram(na_runs_wind$wind_dir[[1]], na_runs_wind$wind_gust[[1]])
+#' na_rle_spinogram(na_runs_wind$wind_dir[[1]], na_runs_wind$wind_dir[[3]])
 #' @export
 na_rle_spinogram <- function(x, y = NULL) {
   na_runs_x <- na_rle_table(x)

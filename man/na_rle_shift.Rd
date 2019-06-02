@@ -9,7 +9,7 @@ na_rle_shift(x, n = 1L)
 \arguments{
 \item{x}{An object returned by \code{\link[=na_rle]{na_rle()}} or \code{\link[=list_of_na_rle]{list_of_na_rle()}}.}
 
-\item{n}{A positive integer shift the starting indices forward, and negative
+\item{n}{A positive integer shifts the starting indices forward, and negative
 backward.}
 }
 \description{

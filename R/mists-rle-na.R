@@ -37,7 +37,7 @@ na_rle <- function(x = double(), index_by = seq_along(x), interval = NULL) {
     return(new_mists_rle_na(list(lengths = integer(), values = values)))
   }
 
-  if (vec_duplicated_any(index_by)) {
+  if (vec_duplicate_any(index_by)) {
     abort("`index_by` only takes unique values.")
   }
   ord <- order(index_by)

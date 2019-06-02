@@ -32,8 +32,7 @@ autoplot(na_runs_wind$wind_dir[[1]])
 autoplot(na_runs_wind$wind_dir, na_runs_wind$origin)
 autoplot(
   vctrs::as_list_of(na_runs_wind$wind_dir[[2]], na_runs_wind$wind_gust[[2]]),
-  y = paste(c("wind_dir", "wind_gust"), "JFK", sep = "@"),
-  size = 2.5
+  y = paste(c("wind_dir", "wind_gust"), "JFK", sep = "@")
 )
 na_rle_spinogram(na_runs_wind$wind_dir[[1]])
 na_rle_spinogram(na_runs_wind$wind_dir[[1]], na_runs_wind$wind_gust[[1]])

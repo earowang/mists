@@ -25,16 +25,21 @@ distinct_groups <- function(x) {
 #' autoplot(na_runs_wind$wind_dir, na_runs_wind$origin)
 #' autoplot(
 #'   vctrs::as_list_of(na_runs_wind$wind_dir[[2]], na_runs_wind$wind_gust[[2]]),
-#'   y = paste(c("wind_dir", "wind_gust"), "JFK", sep = "@"),
-#'   size = 2.5
+#'   y = paste(c("wind_dir", "wind_gust"), "JFK", sep = "@")
 #' )
 #' @method autoplot mists_rle_na
 #' @export
 autoplot.mists_rle_na <- function(object, ...) {
   data <- mutate(na_rle_expand(object), "group" := distinct_groups(values))
-  ggplot(data, aes(x = values, y = 1, group = group)) +
+  ends <- 
+    summarise(
+      group_by(data, group), 
+      start = min(values), end = max(values)
+    )
+  ggplot(data = data, aes(x = values, y = 1, group = group)) +
     geom_line(...) +
-    geom_point(data = filter(data, lengths == 1), shape = 4, ...) +
+    geom_point(data = ends, aes(x = start), ...) +
+    geom_point(data = ends, aes(x = end), ...) +
     labs(x = vec_ptype_full(data$values), y = "") +
     scale_y_continuous(breaks = 1, minor_breaks = NULL) +
     theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
@@ -48,9 +53,15 @@ autoplot.mists_list_of_rle_na <- function(object, y = seq_along(object), ...) {
       group_by(na_rle_expand(object, y = y), y), 
       "group" := paste(y, distinct_groups(values), sep = "-")
     ))
+  ends <- 
+    summarise(
+      group_by(data, y, group), 
+      start = min(values), end = max(values)
+    )
   ggplot(data, aes(x = values, y = y, group = group)) +
     geom_line(...) +
-    geom_point(data = filter(data, lengths == 1), shape = 4, ...) +
+    geom_point(data = ends, aes(x = start), ...) +
+    geom_point(data = ends, aes(x = end), ...) +
     labs(x = vec_ptype_full(data$values), y = "")
 }
 

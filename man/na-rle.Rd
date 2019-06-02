@@ -5,6 +5,7 @@
 \alias{na_rle_lengths}
 \alias{na_rle_values}
 \alias{list_of_na_rle}
+\alias{as_list_of.mists_rle_na}
 \title{Run lengths encoding for missing values (\code{NA})}
 \usage{
 na_rle(x = double(), index_by = seq_along(x), interval = NULL)
@@ -15,6 +16,8 @@ na_rle_values(x)
 
 list_of_na_rle(x = double(), index_by = seq_along(x),
   interval = NULL)
+
+\method{as_list_of}{mists_rle_na}(x, ...)
 }
 \arguments{
 \item{x}{A vector.}
@@ -22,7 +25,7 @@ list_of_na_rle(x = double(), index_by = seq_along(x),
 \item{index_by}{A vector of the same length as \code{x}.}
 
 \item{interval}{if \code{NULL}, determined by the greatest common denominator;
-otherwise a supplied "interval" class.}
+otherwise a supplied "interval" class. See \code{?tsibble::tsibble} for details.}
 }
 \value{
 A named list of

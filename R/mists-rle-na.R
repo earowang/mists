@@ -7,7 +7,7 @@ na_rle_impl <- function(x) {
 #' @param x A vector.
 #' @param index_by A vector of the same length as `x`.
 #' @param interval if `NULL`, determined by the greatest common denominator;
-#' otherwise a supplied "interval" class.
+#' otherwise a supplied "interval" class. See `?tsibble::tsibble` for details.
 #' 
 #' @return A named list of
 #' * `lengths`: the lengths of `NA` runs
@@ -37,11 +37,19 @@ na_rle <- function(x = double(), index_by = seq_along(x), interval = NULL) {
     return(new_mists_rle_na(list(lengths = integer(), values = values)))
   }
 
+  if (vec_duplicated_any(index_by)) {
+    abort("`index_by` only takes unique values.")
+  }
   ord <- order(index_by)
   x <- x[ord]
-  # ToDo:
-  # 2. abort if not an interval class when `interval` is supplied
-  if (is_null(interval)) int <- interval_pull(index_by) else int <- interval
+  if (is_null(interval)) {
+    int <- interval_pull(index_by) 
+  } else {
+    if (!inherits(interval, "interval")) {
+      abort("`interval` must be class interval.")
+    }
+    int <- interval
+  }
 
   res <- na_rle_impl(x)
   from <- c(1L, head(cumsum(res$lengths), -1L) + 1L)[res$values]
@@ -88,6 +96,19 @@ list_of_na_rle <- function(x = double(), index_by = seq_along(x),
   interval = NULL) {
   new_list_of(
     list(na_rle(x, index_by = index_by, interval = interval)),
+    ptype = list(),
+    class = "mists_list_of_rle_na"
+  )
+}
+
+#' @rdname na-rle
+#' @method as_list_of mists_rle_na
+#' @export
+#' @export as_list_of.mists_rle_na
+as_list_of.mists_rle_na <- function(x, ...) {
+  # ToDo: must be a homogeneous list: i.e. same interval
+  new_list_of(
+    list(x, ...),
     ptype = list(),
     class = "mists_list_of_rle_na"
   )

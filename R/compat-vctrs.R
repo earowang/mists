@@ -14,20 +14,6 @@ NULL
 
 #' @rdname vctrs-compat
 #' @keywords internal
-#' @method as_list_of mists_rle_na
-#' @export
-#' @export as_list_of.mists_rle_na
-as_list_of.mists_rle_na <- function(x, ...) {
-  # ToDo: must be a homogeneous list: i.e. same interval
-  new_list_of(
-    list(x, ...),
-    ptype = list(),
-    class = "mists_list_of_rle_na"
-  )
-}
-
-#' @rdname vctrs-compat
-#' @keywords internal
 #' @method vec_cast.list mists_rle_na
 #' @export
 #' @export vec_cast.list.mists_rle_na

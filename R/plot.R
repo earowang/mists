@@ -5,9 +5,10 @@ distinct_groups <- function(x) {
   rep.int(cumsum(rle_cont), rle_cont)
 }
 
-#' Autoplot and spinogram for run length encoding <`NA`>
+#' Range plot and spinogram for runs of missings
 #'
 #' @inheritParams ggplot2::autoplot
+#' @param ... Individual aesthetics passed to `geom_line()` and `geom_point()`.
 #' @param x,y Objects returned by [`na_rle()`].
 #'
 #' @rdname mists-plot

@@ -3,7 +3,7 @@
 \name{autoplot.mists_rle_na}
 \alias{autoplot.mists_rle_na}
 \alias{na_rle_spinogram}
-\title{Autoplot and spinogram for run length encoding <\code{NA}>}
+\title{Range plot and spinogram for runs of missings}
 \usage{
 \method{autoplot}{mists_rle_na}(object, ...)
 
@@ -12,12 +12,12 @@ na_rle_spinogram(x, y = NULL)
 \arguments{
 \item{object}{an object, whose class will determine the behaviour of autoplot}
 
-\item{...}{other arguments passed to specific methods}
+\item{...}{Individual aesthetics passed to \code{geom_line()} and \code{geom_point()}.}
 
 \item{x, y}{Objects returned by \code{\link[=na_rle]{na_rle()}}.}
 }
 \description{
-Autoplot and spinogram for run length encoding <\code{NA}>
+Range plot and spinogram for runs of missings
 }
 \examples{
 if (!requireNamespace("nycflights13", quietly = TRUE)) {

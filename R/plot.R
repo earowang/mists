@@ -29,20 +29,8 @@ distinct_groups <- function(x) {
 #' )
 #' @method autoplot mists_rle_na
 #' @export
-autoplot.mists_rle_na <- function(object, ...) {
-  data <- mutate(na_rle_expand(object), "group" := distinct_groups(values))
-  ends <- 
-    summarise(
-      group_by(data, group), 
-      start = min(values), end = max(values)
-    )
-  ggplot(data = data, aes(x = values, y = 1, group = group)) +
-    geom_line(...) +
-    geom_point(data = ends, aes(x = start), ...) +
-    geom_point(data = ends, aes(x = end), ...) +
-    labs(x = vec_ptype_full(data$values), y = "") +
-    scale_y_continuous(breaks = 1, minor_breaks = NULL) +
-    theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
+autoplot.mists_rle_na <- function(object, y = seq_along(object), ...) {
+  autoplot.mists_list_of_rle_na(as_list_of(object))
 }
 
 #' @method autoplot mists_list_of_rle_na

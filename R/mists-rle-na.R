@@ -106,7 +106,6 @@ list_of_na_rle <- function(x = double(), index_by = seq_along(x),
 #' @export
 #' @export as_list_of.mists_rle_na
 as_list_of.mists_rle_na <- function(x, ...) {
-  # ToDo: must be a homogeneous list: i.e. same interval
   new_list_of(
     list(x, ...),
     ptype = list(),

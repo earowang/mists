@@ -5,7 +5,7 @@
 \alias{na_rle_spinogram}
 \title{Range plot and spinogram for runs of missings}
 \usage{
-\method{autoplot}{mists_rle_na}(object, ...)
+\method{autoplot}{mists_rle_na}(object, y = seq_along(object), ...)
 
 na_rle_spinogram(x, y = NULL)
 }

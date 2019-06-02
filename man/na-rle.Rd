@@ -13,7 +13,8 @@ na_rle_lengths(x)
 
 na_rle_values(x)
 
-list_of_na_rle(x, index_by = NULL, interval = NULL)
+list_of_na_rle(x = double(), index_by = seq_along(x),
+  interval = NULL)
 }
 \arguments{
 \item{x}{A vector.}

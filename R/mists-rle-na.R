@@ -84,7 +84,8 @@ na_rle_values.mists_list_of_rle_na <- function(x) {
 
 #' @rdname na-rle
 #' @export
-list_of_na_rle <- function(x, index_by = NULL, interval = NULL) {
+list_of_na_rle <- function(x = double(), index_by = seq_along(x),
+  interval = NULL) {
   new_list_of(
     list(na_rle(x, index_by = index_by, interval = interval)),
     ptype = list(),
@@ -102,6 +103,13 @@ as_list_of.mists_rle_na <- function(x, ...) {
     ptype = list(),
     class = "mists_list_of_rle_na"
   )
+}
+
+#' @method vec_cast.list mists_rle_na
+#' @export
+#' @export vec_cast.list.mists_rle_na
+vec_cast.list.mists_rle_na <- function(x, to) {
+  as_list_of(x)
 }
 
 new_mists_rle_na <- function(x) {

@@ -21,6 +21,10 @@ na_runs_df <- ped %>%
 
 x <- na_runs_df$na_runs
 purrr::reduce(x[1:7], intersect)
+na_rle_shift(x[[1]], n = -1)
+na_rle_shift(x)
+
+x[[1]]$values - time_unit(x[[1]]$values %@% "interval")
 
 autoplot(x[[1]], size = 2.5)
 autoplot(x, y = na_runs_df$Sensor, size = 2)

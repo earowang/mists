@@ -1,4 +1,23 @@
 #' @export
+na_rle_shift <- function(x, n = 1L) {
+  if (n == 0) return(x)
+  UseMethod("na_rle_shift")
+}
+
+#' @export
+na_rle_shift.mists_rle_na <- function(x, n = 1L) {
+  rle_values <- na_rle_values(x)
+  tunit <- time_unit(rle_values %@% "interval")
+  x$values <- rle_values + sign(n) * tunit
+  x
+}
+
+#' @export
+na_rle_shift.mists_list_of_rle_na <- function(x, n = 1L) {
+  map(x, na_rle_shift.mists_rle_na, n = n)
+}
+
+#' @export
 na_rle_expand <- function(x, ...) {
   UseMethod("na_rle_expand")
 }
@@ -39,7 +58,7 @@ na_rle_table <- function(x) {
 
 tbl_to_na_rle <- function(data) {
   vals <- data[["values"]]
-  if (is_empty(vals)) return(na_rle()) # should also find "lenghts" type
+  if (is_empty(vals)) return(na_rle()) # should also find "lengths" type
 
   rle_cont <- continuous_rle_impl(vals)
   add_len <- mutate(data, lengths = rep.int(cumsum(rle_cont), rle_cont))

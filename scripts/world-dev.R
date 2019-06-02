@@ -46,3 +46,6 @@ polish_metrics(world_dev_ts, wdi_key_pass)
 
 wdi_idx_pass <- polish_rows_index(world_dev_ts, cutoff = 0.8)
 polish_metrics(world_dev_ts, wdi_idx_pass)
+
+wdi_idx_pass2 <- polish_rows_index(world_dev_ts, cutoff = 0.8, na_fun = na_ends_with)
+polish_metrics(world_dev_ts, wdi_idx_pass2)

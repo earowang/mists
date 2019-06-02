@@ -63,5 +63,5 @@ polish_metrics <- function(before, after) {
     n_na <- n_overall_na(removed_rows) + n_overall_na(removed_cols)
     prop_na <- n_na / removed_nobs
   }
-  c(prop_na = prop_na, prop_removed = removed_nobs / before_nobs)
+  c(prop_nonna = 1 - prop_na, prop_removed = removed_nobs / before_nobs)
 }

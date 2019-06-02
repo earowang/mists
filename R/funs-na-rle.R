@@ -25,7 +25,7 @@ na_rle_expand <- function(x, ...) {
 #' @export
 na_rle_expand.mists_rle_na <- function(x, ...) {
   if (is_empty(x)) {
-    return(dplyr::tibble("lengths" = integer(0), "values" = integer(0)))
+    return(tibble("lengths" = integer(0), "values" = integer(0)))
   }
   rle_lengths <- na_rle_lengths(x)
   rle_values <- na_rle_values(x)
@@ -34,7 +34,7 @@ na_rle_expand.mists_rle_na <- function(x, ...) {
     function(.x, .y) seq(.x, by = tunit, length.out = .y))
   rep_lengths <- rep.int(rle_lengths, map_int(full_seq, vec_size))
   full_seq <- do.call("c", full_seq)
-  res <- dplyr::tibble("lengths" = rep_lengths, "values" = full_seq)
+  res <- tibble("lengths" = rep_lengths, "values" = full_seq)
   interval_restore(res, x)
 }
 
@@ -43,7 +43,7 @@ na_rle_expand.mists_list_of_rle_na <- function(x, ...) {
   qs <- enquos(..., .named = TRUE)
   y <- eval_tidy(qs[[1]])
   stopifnot(vec_size(x) == vec_size(y))
-  dplyr::bind_rows(
+  bind_rows(
     map2(x, y, function(.x, .y) mutate(na_rle_expand(.x), !! names(qs) := .y))
   )
 }
@@ -51,7 +51,7 @@ na_rle_expand.mists_list_of_rle_na <- function(x, ...) {
 #' @export
 na_rle_table <- function(x) {
   mutate(
-    dplyr::count(dplyr::tibble(lengths = na_rle_lengths(x)), lengths),
+    count(tibble(lengths = na_rle_lengths(x)), lengths),
     nobs = n * lengths
   )
 }

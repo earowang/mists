@@ -3,6 +3,7 @@ distinct_groups <- function(x) {
   rep.int(cumsum(rle_cont), rle_cont)
 }
 
+#' @importFrom ggplot2 autoplot
 #' @export
 autoplot.mists_rle_na <- function(object, ...) {
   data <- mutate(na_rle_expand(object), group = distinct_groups(values))
@@ -49,14 +50,14 @@ na_rle_spinogram <- function(x, y = NULL) {
     x_full <- na_rle_expand(x)
     y_full <- na_rle_expand(y)
     intersect_xy <- semi_join(x_full, y_full, by = "values")
-    overlaps_xy <- dplyr::count(intersect_xy, lengths)
+    overlaps_xy <- count(intersect_xy, lengths)
     frac_intersect <- 
       transmute(
         inner_join(overlaps_xy, na_runs_x, by = "lengths"),
         lengths, frac = n.x / nobs, overlap = TRUE
       )
     frac_diff <- mutate(frac_intersect, frac = 1 - frac, overlap = FALSE)
-    frac_xy <- dplyr::bind_rows(frac_intersect, frac_diff)
+    frac_xy <- bind_rows(frac_intersect, frac_diff)
     na_runs_xy <- mutate(
       left_join(na_runs_x, frac_xy, by = "lengths"),
       overlap = ifelse(is.na(frac), FALSE, overlap),

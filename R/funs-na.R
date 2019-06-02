@@ -26,7 +26,6 @@ prop_overall_na <- function(x) {
   mean(is.na(x))
 }
 
-#' @export
 phi_coef <- function(...) {
   # ref: https://en.wikipedia.org/wiki/Phi_coefficient
   tab <- table(...)
@@ -41,7 +40,6 @@ phi_coef <- function(...) {
   nominator / denominator
 }
 
-#' @export
 na_acf <- function(x, lag_max = NULL) {
   if (is_null(lag_max)) {
     lag_max <- floor(10 * log10(length(x)))

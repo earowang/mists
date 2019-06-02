@@ -1,20 +1,21 @@
 Package: mists
-Title: Missingness of time series
+Title: Missingness of temporal data
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Earo",
            family = "Wang",
            role = c("aut", "cre"),
            email = "earo.wang@gmail.com")
-Description: What the package does (one paragraph).
+Description: Provides 1d, 2d, and visual methods for exploring, polishing, and
+    visualising temporal missingness.
 License: GPL-3
 Imports: 
     dplyr (>= 0.8.1),
+    ggplot2,
     Rcpp,
     rlang,
     tsibble (>= 0.8.0),
-    vctrs,
-    ggplot2
+    vctrs
 LinkingTo: 
     Rcpp (>= 0.12.0)
 VignetteBuilder: 

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://pkg.earo.me/mists/index.html</loc>
+  </url>
+  <url>
+    <loc>https://pkg.earo.me/mists/reference/mists-na-helpers.html</loc>
+  </url>
+  <url>
+    <loc>https://pkg.earo.me/mists/reference/mists-na-rle-tbl.html</loc>
+  </url>
+  <url>
+    <loc>https://pkg.earo.me/mists/reference/mists-package.html</loc>
+  </url>
+  <url>
+    <loc>https://pkg.earo.me/mists/reference/mists-plot.html</loc>
+  </url>
+  <url>
+    <loc>https://pkg.earo.me/mists/reference/mists-set-op.html</loc>
+  </url>
+  <url>
+    <loc>https://pkg.earo.me/mists/reference/na-rle.html</loc>
+  </url>
+  <url>
+    <loc>https://pkg.earo.me/mists/reference/na_rle_shift.html</loc>
+  </url>
+  <url>
+    <loc>https://pkg.earo.me/mists/reference/reexports.html</loc>
+  </url>
+  <url>
+    <loc>https://pkg.earo.me/mists/reference/vctrs-compat.html</loc>
+  </url>
+  <url>
+    <loc>https://pkg.earo.me/mists/reference/wdi.html</loc>
+  </url>
+</urlset>

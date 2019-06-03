@@ -29,8 +29,8 @@ distinct_groups <- function(x) {
 #' )
 #' @method autoplot mists_rle_na
 #' @export
-autoplot.mists_rle_na <- function(object, y = seq_along(object), ...) {
-  autoplot.mists_list_of_rle_na(as_list_of(object))
+autoplot.mists_rle_na <- function(object, y = as.factor(1L), ...) {
+  autoplot.mists_list_of_rle_na(as_list_of(object), y = y)
 }
 
 #' @method autoplot mists_list_of_rle_na

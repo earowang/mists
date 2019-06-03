@@ -32,8 +32,8 @@ na_rle_impl <- function(x) {
 na_rle <- function(x = double(), index_by = seq_along(x), interval = NULL) {
   stopifnot(vec_size(x) == vec_size(index_by))
   if (has_length(x, 0)) {
-    values <- index_by[0L]
-    attr(values, "interval") <- new_interval()
+    values <- index_by
+    attr(values, "interval") <- interval_pull(index_by)
     return(new_mists_rle_na(list(lengths = integer(), values = values)))
   }
 

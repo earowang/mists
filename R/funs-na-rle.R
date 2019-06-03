@@ -108,6 +108,7 @@ tunit <- function(values) {
 #' @param x,y Objects returned by [`na_rle()`].
 #' @inheritParams dplyr::intersect
 #'
+#' @name set-op
 #' @rdname mists-set-op
 #' @examples
 #' (x <- na_rle(c(1, NA, NA, 4:7, NA, NA, 10:15, NA)))

@@ -11,6 +11,7 @@ distinct_groups <- function(x) {
 #' @param ... Individual aesthetics passed to `geom_line()` and `geom_point()`.
 #' @param x,y Objects returned by [`na_rle()`].
 #'
+#' @name mists-plot
 #' @rdname mists-plot
 #' @examples
 #' if (!requireNamespace("nycflights13", quietly = TRUE)) {

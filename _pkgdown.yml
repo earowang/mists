@@ -1,0 +1,42 @@
+url: https://pkg.earo.me/mists
+
+template:
+  params:
+    bootswatch: cosmo
+
+authors:
+  Earo Wang:
+    href: https://earo.me
+
+reference:
+- title: Run length encoding <NA>
+  contents:
+    - na_rle
+    - na_rle_shift
+    - na_rle_expand
+
+- title: Set operations
+  contents:
+    - set-op
+
+- title: Range plots and spinoplots
+  contents:
+    - mists-plot
+
+- title: Helpers
+  contents:
+    - na_starts_with
+    - na_ends_with
+
+- title: Data
+  contents:
+    - wdi
+
+navbar:
+  type: default
+  left:
+  - text: Reference
+    href: reference/index.html
+  right:
+  - icon: fa-github fa-lg
+    href: https://github.com/earowang/mists

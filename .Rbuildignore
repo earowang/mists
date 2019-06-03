@@ -8,3 +8,4 @@
 ^mists\.Rproj$
 ^\.Rproj\.user$
 ^tags$
+^pkgdown$

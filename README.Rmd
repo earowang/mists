@@ -7,8 +7,8 @@ output: github_document
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE, message = FALSE, warning = FALSE,
-  comment = "#>",
-  fig.path = "man/figures/README-", dpi = 300
+  comment = "#>", fig.align = "center",
+  fig.path = "man/figures/README-", dpi = 120
 )
 ```
 # mists
@@ -51,7 +51,7 @@ na_runs_wind <- nycflights13::weather %>%
 na_runs_wind
 ```
 
-## Range plots and extended spinograms
+## Range plots and extended spinoplots
 
 How are those missings distributed and associated with others? 
 
@@ -59,8 +59,8 @@ How are those missings distributed and associated with others?
 autoplot(na_runs_wind$wind_dir, na_runs_wind$origin, shape = 4)
 ```
 
-```{r spinogram, fig.width = 4, fig.height = 3}
-na_rle_spinogram(na_runs_wind$wind_dir[[1]], na_runs_wind$wind_gust[[1]])
+```{r spinoplot, fig.width = 4, fig.height = 3}
+na_rle_spinoplot(na_runs_wind$wind_dir[[1]], na_runs_wind$wind_gust[[1]])
 ```
 
 ## Data polishing

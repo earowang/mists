@@ -2,12 +2,12 @@
 % Please edit documentation in R/plot.R
 \name{autoplot.mists_rle_na}
 \alias{autoplot.mists_rle_na}
-\alias{na_rle_spinogram}
-\title{Range plot and spinogram for runs of missings}
+\alias{na_rle_spinoplot}
+\title{Range plot and spinoplot for runs of missings}
 \usage{
-\method{autoplot}{mists_rle_na}(object, y = seq_along(object), ...)
+\method{autoplot}{mists_rle_na}(object, y = as.factor(1L), ...)
 
-na_rle_spinogram(x, y = NULL)
+na_rle_spinoplot(x, y = NULL)
 }
 \arguments{
 \item{object}{an object, whose class will determine the behaviour of autoplot}
@@ -17,7 +17,7 @@ na_rle_spinogram(x, y = NULL)
 \item{x, y}{Objects returned by \code{\link[=na_rle]{na_rle()}}.}
 }
 \description{
-Range plot and spinogram for runs of missings
+Range plot and spinoplot for runs of missings
 }
 \examples{
 if (!requireNamespace("nycflights13", quietly = TRUE)) {
@@ -34,7 +34,7 @@ autoplot(
   vctrs::as_list_of(na_runs_wind$wind_dir[[2]], na_runs_wind$wind_gust[[2]]),
   y = paste(c("wind_dir", "wind_gust"), "JFK", sep = "@")
 )
-na_rle_spinogram(na_runs_wind$wind_dir[[1]])
-na_rle_spinogram(na_runs_wind$wind_dir[[1]], na_runs_wind$wind_gust[[1]])
-na_rle_spinogram(na_runs_wind$wind_dir[[1]], na_runs_wind$wind_dir[[3]])
+na_rle_spinoplot(na_runs_wind$wind_dir[[1]])
+na_rle_spinoplot(na_runs_wind$wind_dir[[1]], na_runs_wind$wind_gust[[1]])
+na_rle_spinoplot(na_runs_wind$wind_dir[[1]], na_runs_wind$wind_dir[[3]])
 }

@@ -62,7 +62,7 @@ na_runs_wind
 #> 3 LGA              [138]             [0]           [670]
 ```
 
-## Range plots and extended spinograms
+## Range plots and extended spinoplots
 
 How are those missings distributed and associated with
 others?
@@ -71,13 +71,13 @@ others?
 autoplot(na_runs_wind$wind_dir, na_runs_wind$origin, shape = 4)
 ```
 
-![](man/figures/README-autoplot-1.png)<!-- -->
+<img src="man/figures/README-autoplot-1.png" style="display: block; margin: auto;" />
 
 ``` r
-na_rle_spinogram(na_runs_wind$wind_dir[[1]], na_runs_wind$wind_gust[[1]])
+na_rle_spinoplot(na_runs_wind$wind_dir[[1]], na_runs_wind$wind_gust[[1]])
 ```
 
-![](man/figures/README-spinogram-1.png)<!-- -->
+<img src="man/figures/README-spinoplot-1.png" style="display: block; margin: auto;" />
 
 ## Data polishing
 

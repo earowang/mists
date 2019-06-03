@@ -38,10 +38,10 @@ autoplot(as_list_of(
   setdiff(x[[2]], x[[1]])
 ), size = 2)
 
-na_rle_spinogram(x = x[[1]])
-na_rle_spinogram(x = x[[2]])
-na_rle_spinogram(x = x[[1]], y = x[[2]])
-na_rle_spinogram(x = x[[2]], y = x[[1]])
+na_rle_spinoplot(x = x[[1]])
+na_rle_spinoplot(x = x[[2]])
+na_rle_spinoplot(x = x[[1]], y = x[[2]])
+na_rle_spinoplot(x = x[[2]], y = x[[1]])
 
 ped_ts %>%
   index_by(Time) %>%

@@ -5,7 +5,7 @@ distinct_groups <- function(x) {
   rep.int(cumsum(rle_cont), rle_cont)
 }
 
-#' Range plot and spinogram for runs of missings
+#' Range plot and spinoplot for runs of missings
 #'
 #' @inheritParams ggplot2::autoplot
 #' @param ... Individual aesthetics passed to `geom_line()` and `geom_point()`.
@@ -55,11 +55,11 @@ autoplot.mists_list_of_rle_na <- function(object, y = seq_along(object), ...) {
 
 #' @rdname mists-plot
 #' @examples
-#' na_rle_spinogram(na_runs_wind$wind_dir[[1]])
-#' na_rle_spinogram(na_runs_wind$wind_dir[[1]], na_runs_wind$wind_gust[[1]])
-#' na_rle_spinogram(na_runs_wind$wind_dir[[1]], na_runs_wind$wind_dir[[3]])
+#' na_rle_spinoplot(na_runs_wind$wind_dir[[1]])
+#' na_rle_spinoplot(na_runs_wind$wind_dir[[1]], na_runs_wind$wind_gust[[1]])
+#' na_rle_spinoplot(na_runs_wind$wind_dir[[1]], na_runs_wind$wind_dir[[3]])
 #' @export
-na_rle_spinogram <- function(x, y = NULL) {
+na_rle_spinoplot <- function(x, y = NULL) {
   na_runs_x <- na_rle_table(x)
   na_runs_x <- 
     mutate(

@@ -7,6 +7,4 @@
 ^README\.Rmd$
 ^mists\.Rproj$
 ^\.Rproj\.user$
-analysis/
-scripts/
 ^tags$

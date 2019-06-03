@@ -1,14 +1,16 @@
 Package: mists
-Title: Missingness of temporal data
+Title: Missingness of Temporal Data
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Earo",
            family = "Wang",
            role = c("aut", "cre"),
            email = "earo.wang@gmail.com")
-Description: Provides 1d, 2d, and visual methods for exploring,
-    polishing, and visualising temporal missingness.
+Description: Provides 1d, 2d, and visual methods for exploring, polishing, and
+    visualising temporal missingness.
 License: GPL-3
+URL: https://pkg.earo.me/mists
+BugReports: https://github.com/earowang/mists/issues
 Depends:
     R (>= 3.2.0)
 Imports: 

@@ -71,13 +71,13 @@ others?
 autoplot(na_runs_wind$wind_dir, na_runs_wind$origin, shape = 4)
 ```
 
-<img src="man/figures/README-autoplot-1.png" width="100%" />
+![](man/figures/README-autoplot-1.png)<!-- -->
 
 ``` r
 na_rle_spinogram(na_runs_wind$wind_dir[[1]], na_runs_wind$wind_gust[[1]])
 ```
 
-<img src="man/figures/README-spinogram-1.png" width="100%" />
+![](man/figures/README-spinogram-1.png)<!-- -->
 
 ## Data polishing
 

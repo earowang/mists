@@ -5,6 +5,10 @@
 
 <!-- badges: start -->
 
+[![Travis build
+status](https://travis-ci.org/earowang/mists.svg?branch=master)](https://travis-ci.org/earowang/mists)
+[![Codecov test
+coverage](https://codecov.io/gh/earowang/mists/branch/master/graph/badge.svg)](https://codecov.io/gh/earowang/mists?branch=master)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/mists)](https://cran.r-project.org/package=mists)
 [![Lifecycle:

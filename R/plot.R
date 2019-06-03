@@ -1,4 +1,5 @@
-globalVariables(c("values", "group", "n", "nobs", "frac", "n.x", "overlap"))
+globalVariables(c("values", "group", "n", "nobs", "frac", "n.x", "overlap",
+  "start", "end"))
 
 distinct_groups <- function(x) {
   rle_cont <- continuous_rle_impl(x, tunit(x))
@@ -45,7 +46,7 @@ autoplot.mists_list_of_rle_na <- function(object, y = seq_along(object), ...) {
   ends <- 
     summarise(
       group_by(data, y, group), 
-      start = min(values), end = max(values)
+      "start" := min(values), "end" := max(values)
     )
   ggplot(data, aes(x = values, y = y, group = group)) +
     geom_line(...) +

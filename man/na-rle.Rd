@@ -26,6 +26,8 @@ list_of_na_rle(x = double(), index_by = seq_along(x),
 
 \item{interval}{if \code{NULL}, determined by the greatest common denominator;
 otherwise a supplied "interval" class. See \code{?tsibble::tsibble} for details.}
+
+\item{...}{Vectors to coerce.}
 }
 \value{
 A named list of

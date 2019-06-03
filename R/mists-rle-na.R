@@ -8,6 +8,7 @@ na_rle_impl <- function(x) {
 #' @param index_by A vector of the same length as `x`.
 #' @param interval if `NULL`, determined by the greatest common denominator;
 #' otherwise a supplied "interval" class. See `?tsibble::tsibble` for details.
+#' @inheritParams vctrs::as_list_of
 #' 
 #' @return A named list of
 #' * `lengths`: the lengths of `NA` runs
@@ -119,7 +120,7 @@ new_mists_rle_na <- function(x) {
 }
 
 mists_rle_na_assert <- function(x) {
-  if (is_false(is_bare_list(x) && has_name(x, c("lengths", "values")))) {
+  if (is_false(is_bare_list(x) && all(has_name(x, c("lengths", "values"))))) {
     abort("Run length encoding must be a named list with `lengths` and `values`.")
   }
 }

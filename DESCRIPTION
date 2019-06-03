@@ -22,7 +22,8 @@ Imports:
     vctrs
 Suggests: 
     knitr,
-    nycflights13
+    nycflights13,
+    covr
 LinkingTo: 
     Rcpp (>= 0.12.0)
 VignetteBuilder: 

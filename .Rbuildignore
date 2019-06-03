@@ -9,3 +9,5 @@
 ^\.Rproj\.user$
 ^tags$
 ^pkgdown$
+^\.travis\.yml$
+^codecov\.yml$

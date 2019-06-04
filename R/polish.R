@@ -1,13 +1,13 @@
 globalVariables(c("n_na", "pct_overall_na"))
 
-polish_cols_measures <- function(data, cutoff) {
+na_polish_cols_measures <- function(data, cutoff) {
   stopifnot(is_tsibble(data))
   prop_na_by_vars <- summarise_all(as_tibble(data), prop_overall_na)
   sel_data <- select_if(prop_na_by_vars, function(x) x < cutoff)
   select(data, !!! names(sel_data))
 }
 
-polish_rows_key <- function(data, cutoff) {
+na_polish_rows_key <- function(data, cutoff) {
   key_vars <- key(data)
   keyed_data <- new_grouped_df(data, groups = key_data(data))
   add_prop_na <- 
@@ -20,7 +20,7 @@ polish_rows_key <- function(data, cutoff) {
   right_join(data, key_df, by = key_vars(data))
 }
 
-polish_rows_index <- function(data, cutoff, na_fun = na_starts_with) {
+na_polish_rows_index <- function(data, cutoff, na_fun = na_starts_with) {
   idx_len <- map_int(key_rows(data), length)
   keyed_nobs <- idx_len * NCOL(data)
 
@@ -45,7 +45,7 @@ polish_rows_index <- function(data, cutoff, na_fun = na_starts_with) {
   select(ungroup(filter_data), -n_na, -pct_overall_na)
 }
 
-polish_metrics <- function(before, after) {
+na_polish_metrics <- function(before, after) {
   stopifnot(dim(before) >= dim(after))
   before <- as_tibble(before)
   before_nobs <- NROW(before) * NCOL(before)
@@ -65,5 +65,5 @@ polish_metrics <- function(before, after) {
     n_na <- n_overall_na(removed_rows) + n_overall_na(removed_cols)
     prop_na <- n_na / removed_nobs
   }
-  c(prop_nonna = 1 - prop_na, prop_removed = removed_nobs / before_nobs)
+  c(prop_na = prop_na, prop_removed = removed_nobs / before_nobs)
 }

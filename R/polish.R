@@ -1,5 +1,14 @@
 globalVariables(c("n_na", "pct_overall_na"))
 
+#' Data polishing for missing values in tsibble
+#'
+#' @param data A tsibble.
+#' @param cutoff A number between 0 and 1. Rows/cols will be kept, if the
+#' proportion of overall missings is less than the cutoff.
+#'
+#' @details
+#' The proportion of overall missings is defined as the number of `NA` divided
+#' by the number of **measurements** (i.e. excluding key and index)
 na_polish_cols_measures <- function(data, cutoff) {
   stopifnot(is_tsibble(data))
   prop_na_by_vars <- summarise_all(as_tibble(data), prop_overall_na)
@@ -9,7 +18,8 @@ na_polish_cols_measures <- function(data, cutoff) {
 
 na_polish_rows_key <- function(data, cutoff) {
   key_vars <- key(data)
-  keyed_data <- new_grouped_df(data, groups = key_data(data))
+  non_idx_data <- as_tibble(data)[, setdiff(names(data), index_var(data))]
+  keyed_data <- new_grouped_df(non_idx_data, groups = key_data(data))
   add_prop_na <- 
     mutate(
       group_nest(keyed_data, .key = "pct_overall_na"),
@@ -23,8 +33,10 @@ na_polish_rows_key <- function(data, cutoff) {
 na_polish_rows_index <- function(data, cutoff, na_fun = na_starts_with) {
   idx_len <- map_int(key_rows(data), length)
   keyed_nobs <- idx_len * NCOL(data)
+  non_idx_data <- as_tibble(data)[, setdiff(names(data), index_var(data))]
 
-  keyed_data <- new_grouped_df(data, groups = key_data(data))
+  non_idx_data <- as_tibble(data)[, non_idx]
+  keyed_data <- new_grouped_df(, groups = key_data(data))
   na_blocks <- summarise_all(keyed_data, na_fun)
   add_prop_na <- 
     mutate(
@@ -67,3 +79,7 @@ na_polish_metrics <- function(before, after) {
   }
   c(prop_na = prop_na, prop_removed = removed_nobs / before_nobs)
 }
+
+# na_polish_auto <- function(data, n_pass = 1L) {
+#   
+# }

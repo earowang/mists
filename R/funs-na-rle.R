@@ -26,7 +26,7 @@ na_rle_shift.mists_rle_na <- function(x, n = 1L) {
 
 #' @export
 na_rle_shift.mists_list_of_rle_na <- function(x, n = 1L) {
-  map(x, na_rle_shift.mists_rle_na, n = n)
+  as_list_of(map(x, na_rle_shift.mists_rle_na, n = n))
 }
 
 #' Expand and count run length encoding <`NA`>
@@ -84,10 +84,11 @@ na_rle_table <- function(x) {
 }
 
 tbl_to_na_rle <- function(data) {
-  vals <- data[["values"]]
-  if (is_empty(vals)) return(na_rle()) # should also find "lengths" type
+  if (is_empty(data)) {
+    return(na_rle(x = data[["values"]], index_by = data[["lengths"]]))
+  }
 
-  rle_cont <- continuous_rle_impl(vals, tunit(vals))
+  rle_cont <- continuous_rle_impl(data[["values"]], tunit(data[["values"]]))
   add_len <- mutate(data, lengths = rep.int(cumsum(rle_cont), rle_cont))
   red_data <- summarise(group_by(add_len, lengths), values = min(values))
   red_data <- interval_restore(red_data, data)
@@ -105,7 +106,7 @@ tunit <- function(values) {
 
 #' Set operations for run length encoding <`NA`>
 #'
-#' @param x,y Objects returned by [`na_rle()`].
+#' @param x,y Objects returned by [`na_rle()`] or [`list_of_na_rle()`].
 #' @inheritParams dplyr::intersect
 #'
 #' @name set-op
@@ -126,6 +127,12 @@ intersect.mists_rle_na <- function(x, y, ...) {
   tbl_to_na_rle(interval_restore(res, x))
 }
 
+#' @method intersect mists_list_of_rle_na
+#' @export
+intersect.mists_list_of_rle_na <- function(x, y, ...) {
+  as_list_of(map2(x, y, intersect.mists_rle_na, ...))
+}
+
 #' @rdname mists-set-op
 #' @method union mists_rle_na
 #' @export
@@ -136,6 +143,12 @@ union.mists_rle_na <- function(x, y, ...) {
   tbl_to_na_rle(interval_restore(res, x))
 }
 
+#' @method union mists_list_of_rle_na
+#' @export
+union.mists_list_of_rle_na <- function(x, y, ...) {
+  as_list_of(map2(x, y, union.mists_rle_na, ...))
+}
+
 #' @rdname mists-set-op
 #' @method setdiff mists_rle_na
 #' @export
@@ -144,4 +157,10 @@ setdiff.mists_rle_na <- function(x, y, ...) {
   y_full <- na_rle_expand(y)[, "values"]
   res <- setdiff(x_full, y_full)
   tbl_to_na_rle(interval_restore(res, x))
+}
+
+#' @method setdiff mists_list_of_rle_na
+#' @export
+setdiff.mists_list_of_rle_na <- function(x, y, ...) {
+  as_list_of(map2(x, y, setdiff.mists_rle_na, ...))
 }

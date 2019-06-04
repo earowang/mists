@@ -14,7 +14,7 @@
 \method{setdiff}{mists_rle_na}(x, y, ...)
 }
 \arguments{
-\item{x, y}{Objects returned by \code{\link[=na_rle]{na_rle()}}.}
+\item{x, y}{Objects returned by \code{\link[=na_rle]{na_rle()}} or \code{\link[=list_of_na_rle]{list_of_na_rle()}}.}
 
 \item{...}{other arguments passed on to methods}
 }

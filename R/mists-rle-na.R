@@ -72,7 +72,7 @@ na_rle_lengths.mists_rle_na <- function(x) {
 
 #' @export
 na_rle_lengths.mists_list_of_rle_na <- function(x) {
-  map(x, na_rle_lengths)
+  as_list_of(map(x, na_rle_lengths))
 }
 
 #' @rdname na-rle
@@ -88,7 +88,7 @@ na_rle_values.mists_rle_na <- function(x) {
 
 #' @export
 na_rle_values.mists_list_of_rle_na <- function(x) {
-  map(x, na_rle_values)
+  as_list_of(map(x, na_rle_values))
 }
 
 #' @rdname na-rle

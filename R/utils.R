@@ -20,6 +20,10 @@ backticks <- function(x) {
   paste0("`", x, "`")
 }
 
+parenthesis <- function(x) {
+  paste0("(", x, ")")
+}
+
 brackets <- function(x) {
   paste0("[", x, "]")
 }

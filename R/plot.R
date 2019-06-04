@@ -96,6 +96,7 @@ na_rle_spinoplot <- function(data, x, y = NULL, facets, ...) {
   facets <- enquo(facets)
   lst_na_rle_x <- eval_tidy(x, data = data)
   facets_vals <- as.factor(eval_tidy(facets, data = data))
+  xlab <- paste("runs [frequency]", parenthesis(as_label(x)))
   
   na_runs_x <- 
     bind_rows(map2(
@@ -129,9 +130,10 @@ na_rle_spinoplot <- function(data, x, y = NULL, facets, ...) {
         minor_breaks = NULL
       ) +
       facet_wrap(~ facets, scales = 'free_x', ...) + 
-      labs(x = "runs [frequency]", y = "")
+      labs(x = xlab, y = "")
   } else {
     lst_na_rle_y <- eval_tidy(y, data = data)
+    ylab <- paste("proportion of overlaps", parenthesis(as_label(y)))
     x_full <- na_rle_expand(lst_na_rle_x, facets = facets_vals)
     y_full <- na_rle_expand(lst_na_rle_y, facets = facets_vals)
     intersect_xy <- semi_join(x_full, y_full, by = c("values", "facets"))
@@ -169,6 +171,6 @@ na_rle_spinoplot <- function(data, x, y = NULL, facets, ...) {
         minor_breaks = NULL
       ) +
       facet_wrap(~ facets, scales = 'free_x', ...) + 
-      labs(x = "runs [frequency]", y = "proportion of overlaps")
+      labs(x = xlab, y = ylab)
   }
 }

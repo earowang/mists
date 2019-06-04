@@ -32,7 +32,7 @@ distinct_groups <- function(x) {
 #' @method autoplot mists_rle_na
 #' @export
 autoplot.mists_rle_na <- function(object, y = as.factor(1L), ...) {
-  autoplot.mists_list_of_rle_na(as_list_of(object), y = y)
+  autoplot.mists_list_of_rle_na(as_list_of(object), y = y, ...)
 }
 
 #' @method autoplot mists_list_of_rle_na
@@ -49,25 +49,33 @@ autoplot.mists_list_of_rle_na <- function(object, y = seq_along(object), ...) {
       "start" := min(values), "end" := max(values)
     )
   unique_grp <- filter(count(data, group), n == 1)[["group"]]
-  data <- filter(data, group != unique_grp)
+  rngs <- filter(data, !(group %in% unique_grp))
 
-  # # separate params for geom_line and geom_point from ...
-  # param_list <- list2(...)
-  # if (has_length(param_list, 0)) {
-  #   line_param <- point_param <- list()
-  # } else {
-  #   names_param <- names(param_list)
-  #   line_all <- c(GeomLine$aesthetics(), GeomLine$parameters(TRUE))
-  #   point_all <- c(GeomPoint$aesthetics(), GeomPoint$parameters(TRUE))
-  #   line_param <- param_list[which(names_param %in% line_all)]
-  #   point_param <- param_list[which(names_param %in% point_all)]
-  # }
+  # separate params for geom_line and geom_point from ...
+  params_list <- list2(...)
+  if (has_length(params_list, 0)) {
+    line_params <- point_params <- list2()
+  } else {
+    names_params <- names(params_list)
+    line_all <- c(GeomLine$aesthetics(), GeomLine$paramseters(TRUE))
+    point_all <- c(GeomPoint$aesthetics(), GeomPoint$paramseters(TRUE))
+    line_params <- params_list[which(names_params %in% line_all)]
+    point_params <- params_list[which(names_params %in% point_all)]
+  }
 
-  ggplot(data, aes(x = values, y = y, group = group)) +
-    geom_line(...) +
-    geom_point(data = ends, aes(x = start), ...) +
-    geom_point(data = ends, aes(x = end), ...) +
-    labs(x = vec_ptype_full(data$values), y = "")
+  plot <- ggplot()
+  line_params$data <- rngs
+  line_params$mapping <- aes(x = values, y = y, group = group)
+  line_params$inherit.aes <- FALSE
+  plot <- plot + do.call(geom_line, line_params)
+
+  point_params$data <- ends
+  point_params$inherit.aes <- FALSE
+  point_params$mapping <- aes(x = start, y = y)
+  plot <- plot + do.call(geom_point, point_params)
+  point_params$mapping <- aes(x = end, y = y)
+  plot <- plot + do.call(geom_point, point_params)
+  plot + labs(x = vec_ptype_full(data$values), y = "")
 }
 
 #' @rdname mists-plot

@@ -78,7 +78,8 @@ autoplot(na_runs_wind$wind_dir, na_runs_wind$origin, shape = 4)
 <img src="man/figures/README-autoplot-1.png" style="display: block; margin: auto;" />
 
 ``` r
-na_rle_spinoplot(na_runs_wind$wind_dir[[1]], na_runs_wind$wind_gust[[1]])
+na_runs_wind %>% 
+  na_rle_spinoplot(x = wind_dir, y = wind_gust, facets = origin)
 ```
 
 <img src="man/figures/README-spinoplot-1.png" style="display: block; margin: auto;" />

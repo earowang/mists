@@ -8,14 +8,21 @@
 \usage{
 \method{autoplot}{mists_rle_na}(object, y = as.factor(1L), ...)
 
-na_rle_spinoplot(x, y = NULL)
+na_rle_spinoplot(data, x, y = NULL, facets, ...)
 }
 \arguments{
 \item{object}{an object, whose class will determine the behaviour of autoplot}
 
-\item{...}{Individual aesthetics passed to \code{geom_line()} and \code{geom_point()}.}
+\item{...}{\itemize{
+\item \code{autoplot()}: individual aesthetics passed to \code{geom_line()} and \code{geom_point()}.
+\item \code{na_rle_spinoplot()}: extras passed to \code{facet_wrap()}.
+}}
 
-\item{x, y}{Objects returned by \code{\link[=na_rle]{na_rle()}}.}
+\item{data}{A data frame that contains \code{\link[=list_of_na_rle]{list_of_na_rle()}}.}
+
+\item{x, y}{A bare variable contains \code{\link[=list_of_na_rle]{list_of_na_rle()}} mapped to x and y.}
+
+\item{facets}{A facetting variable.}
 }
 \description{
 Range plot and spinoplot for runs of missings
@@ -35,7 +42,8 @@ autoplot(
   vctrs::as_list_of(na_runs_wind$wind_dir[[2]], na_runs_wind$wind_gust[[2]]),
   y = paste(c("wind_dir", "wind_gust"), "JFK", sep = "@")
 )
-na_rle_spinoplot(na_runs_wind$wind_dir[[1]])
-na_rle_spinoplot(na_runs_wind$wind_dir[[1]], na_runs_wind$wind_gust[[1]])
-na_rle_spinoplot(na_runs_wind$wind_dir[[1]], na_runs_wind$wind_dir[[3]])
+na_runs_wind \%>\%
+  na_rle_spinoplot(x = wind_dir, facets = origin)
+na_runs_wind \%>\%
+  na_rle_spinoplot(x = wind_dir, y = wind_gust, facets = origin)
 }

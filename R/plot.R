@@ -8,9 +8,13 @@ distinct_groups <- function(x) {
 
 #' Range plot and spinoplot for runs of missings
 #'
+#' @param data A data frame that contains [`list_of_na_rle()`].
 #' @inheritParams ggplot2::autoplot
-#' @param ... Individual aesthetics passed to `geom_line()` and `geom_point()`.
-#' @param x,y Objects returned by [`na_rle()`].
+#' @param ...
+#' * `autoplot()`: individual aesthetics passed to `geom_line()` and `geom_point()`.
+#' * `na_rle_spinoplot()`: extras passed to `facet_wrap()`.
+#' @param x,y A bare variable contains [`list_of_na_rle()`] mapped to x and y.
+#' @param facets A facetting variable.
 #'
 #' @name mists-plot
 #' @rdname mists-plot
@@ -80,51 +84,94 @@ autoplot.mists_list_of_rle_na <- function(object, y = seq_along(object), ...) {
 
 #' @rdname mists-plot
 #' @examples
-#' na_rle_spinoplot(na_runs_wind$wind_dir[[1]])
-#' na_rle_spinoplot(na_runs_wind$wind_dir[[1]], na_runs_wind$wind_gust[[1]])
-#' na_rle_spinoplot(na_runs_wind$wind_dir[[1]], na_runs_wind$wind_dir[[3]])
+#' na_runs_wind %>%
+#'   na_rle_spinoplot(x = wind_dir, facets = origin)
+#' na_runs_wind %>%
+#'   na_rle_spinoplot(x = wind_dir, y = wind_gust, facets = origin)
 #' @export
-na_rle_spinoplot <- function(x, y = NULL) {
-  na_runs_x <- na_rle_table(x)
+na_rle_spinoplot <- function(data, x, y = NULL, facets, ...) {
+  # credits to @coolbutuseless
+  # the custom breaks could not be possible without this post
+  # https://coolbutuseless.github.io/2019/03/07/custom-axis-breaks-on-facetted-ggplot/
+  stopifnot(is.data.frame(data))
+  x <- enquo(x)
+  y <- enquo(y)
+  facets <- enquo(facets)
+  lst_na_rle_x <- eval_tidy(x, data = data)
+  facets_vals <- as.factor(eval_tidy(facets, data = data))
+  
+  na_runs_x <- 
+    bind_rows(map2(
+      lst_na_rle_x, facets_vals, 
+      function(.x, .y) mutate(na_rle_table(.x), "facets" := .y)
+    ))
   na_runs_x <- 
     mutate(
-      na_runs_x, 
+      group_by(na_runs_x, facets), 
       xlabs = paste(lengths, brackets(n), sep = "\n"),
       x = .5 * c(cumsum(nobs) + cumsum(dplyr::lag(nobs, default = 0)))
     )
-  if (is_null(y)) {
+
+  count_scale <- count_label <- 0
+  label_x <- function(x) {
+    count_label <<- count_label + 1L
+    which_facet <- levels(na_runs_x$facets)[count_label]
+    filter(na_runs_x, facets == which_facet)[["xlabs"]]
+  }
+  scale_x <- function(x) {
+    count_scale <<- count_scale + 1L
+    which_facet <- levels(na_runs_x$facets)[count_scale]
+    filter(na_runs_x, facets == which_facet)[["x"]]
+  }
+  if (quo_is_null(y)) {
     ggplot(na_runs_x, aes(x = x, y = 1, width = nobs)) +
       geom_bar(stat = "identity", colour = "white") +
       scale_x_continuous(
-        labels = na_runs_x$xlabs,
-        breaks = na_runs_x$x,
+        labels = label_x,
+        breaks = scale_x,
         minor_breaks = NULL
       ) +
+      facet_wrap(~ facets, scales = 'free_x', ...) + 
       labs(x = "runs [frequency]", y = "")
   } else {
-    x_full <- na_rle_expand(x)
-    y_full <- na_rle_expand(y)
-    intersect_xy <- semi_join(x_full, y_full, by = "values")
-    overlaps_xy <- count(intersect_xy, lengths)
+    lst_na_rle_y <- eval_tidy(y, data = data)
+    x_full <- na_rle_expand(lst_na_rle_x, facets = facets_vals)
+    y_full <- na_rle_expand(lst_na_rle_y, facets = facets_vals)
+    intersect_xy <- semi_join(x_full, y_full, by = c("values", "facets"))
+    overlaps_xy <- count(intersect_xy, lengths, facets)
     frac_intersect <- 
       transmute(
-        inner_join(overlaps_xy, na_runs_x, by = "lengths"),
-        lengths, "frac" := n.x / nobs, "overlap" := TRUE
+        group_by(
+          inner_join(overlaps_xy, na_runs_x, by = c("lengths", "facets")),
+          lengths, facets
+        ),
+        "frac" := n.x / nobs, "overlap" := TRUE
       )
-    frac_diff <- mutate(frac_intersect, frac = 1 - frac, overlap = FALSE)
+    frac_diff <- 
+      mutate(
+        group_by(frac_intersect, facets), 
+        frac = 1 - frac, overlap = FALSE
+      )
     frac_xy <- bind_rows(frac_intersect, frac_diff)
-    na_runs_xy <- mutate(
-      left_join(na_runs_x, frac_xy, by = "lengths"),
-      overlap = ifelse(is.na(frac), FALSE, overlap),
-      frac = ifelse(is.na(frac), 1, frac)
-    )
+    grped_x <- 
+        group_by(
+          left_join(na_runs_x, frac_xy, by = c("lengths", "facets")), 
+          facets
+        )
+    na_runs_xy <- 
+      mutate(
+        grped_x,
+        "overlap" := ifelse(is.na(frac), FALSE, overlap),
+        "frac" := ifelse(is.na(frac), 1, frac)
+      )
     ggplot(na_runs_xy, aes(x = x, y = frac, width = nobs, fill = overlap)) +
       geom_bar(stat = "identity", colour = "white") +
       scale_x_continuous(
-        labels = na_runs_x$xlabs,
-        breaks = na_runs_x$x,
+        labels = label_x,
+        breaks = scale_x,
         minor_breaks = NULL
       ) +
+      facet_wrap(~ facets, scales = 'free_x', ...) + 
       labs(x = "runs [frequency]", y = "proportion of overlaps")
   }
 }

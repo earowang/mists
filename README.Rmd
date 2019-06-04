@@ -6,7 +6,7 @@ output: github_document
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE, message = FALSE, warning = FALSE,
+  collapse = TRUE, message = FALSE,
   comment = "#>", fig.align = "center",
   fig.path = "man/figures/README-", dpi = 120
 )
@@ -61,8 +61,9 @@ How are those missings distributed and associated with others?
 autoplot(na_runs_wind$wind_dir, na_runs_wind$origin, shape = 4)
 ```
 
-```{r spinoplot, fig.width = 4, fig.height = 3}
-na_rle_spinoplot(na_runs_wind$wind_dir[[1]], na_runs_wind$wind_gust[[1]])
+```{r spinoplot, fig.height = 3}
+na_runs_wind %>% 
+  na_rle_spinoplot(x = wind_dir, y = wind_gust, facets = origin)
 ```
 
 ## Data polishing

@@ -15,7 +15,7 @@
 #' @importFrom dplyr tibble as_tibble
 #' @importFrom ggplot2 ggplot geom_line geom_point geom_bar aes
 #' @importFrom ggplot2 scale_x_continuous scale_y_continuous theme labs
-#' @importFrom ggplot2 element_blank GeomLine GeomPoint
+#' @importFrom ggplot2 element_blank GeomLine GeomPoint facet_wrap
 "_PACKAGE"
 
 ## usethis namespace: start

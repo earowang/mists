@@ -48,6 +48,21 @@ autoplot.mists_list_of_rle_na <- function(object, y = seq_along(object), ...) {
       group_by(data, y, group), 
       "start" := min(values), "end" := max(values)
     )
+  unique_grp <- filter(count(data, group), n == 1)[["group"]]
+  data <- filter(data, group != unique_grp)
+
+  # # separate params for geom_line and geom_point from ...
+  # param_list <- list2(...)
+  # if (has_length(param_list, 0)) {
+  #   line_param <- point_param <- list()
+  # } else {
+  #   names_param <- names(param_list)
+  #   line_all <- c(GeomLine$aesthetics(), GeomLine$parameters(TRUE))
+  #   point_all <- c(GeomPoint$aesthetics(), GeomPoint$parameters(TRUE))
+  #   line_param <- param_list[which(names_param %in% line_all)]
+  #   point_param <- param_list[which(names_param %in% point_all)]
+  # }
+
   ggplot(data, aes(x = values, y = y, group = group)) +
     geom_line(...) +
     geom_point(data = ends, aes(x = start), ...) +

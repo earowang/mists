@@ -68,11 +68,11 @@ na_runs_wind
 
 ## Range plots and extended spinoplots
 
-How are those missings distributed and associated with
-others?
+How are those missings distributed and associated with others?
 
 ``` r
-autoplot(na_runs_wind$wind_dir, na_runs_wind$origin, shape = 4)
+na_runs_wind %>% 
+  na_rle_rangeplot(x = wind_dir, y = origin, shape = 4)
 ```
 
 <img src="man/figures/README-autoplot-1.png" style="display: block; margin: auto;" />

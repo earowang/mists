@@ -27,24 +27,21 @@ distinct_groups <- function(x) {
 #'   group_by(origin) %>% 
 #'   summarise_at(vars(contains("wind")), ~ list_of_na_rle(., time_hour))
 #' 
-#' autoplot(na_runs_wind$wind_dir[[1]])
-#' autoplot(na_runs_wind$wind_dir, na_runs_wind$origin)
-#' autoplot(
-#'   vctrs::as_list_of(na_runs_wind$wind_dir[[2]], na_runs_wind$wind_gust[[2]]),
-#'   y = paste(c("wind_dir", "wind_gust"), "JFK", sep = "@")
-#' )
-#' @method autoplot mists_rle_na
+#' na_runs_wind %>% 
+#'   na_rle_rangeplot(wind_dir, origin, shape = 4)
 #' @export
-autoplot.mists_rle_na <- function(object, y = as.factor(1L), ...) {
-  autoplot.mists_list_of_rle_na(as_list_of(object), y = y, ...)
-}
-
-#' @method autoplot mists_list_of_rle_na
-#' @export
-autoplot.mists_list_of_rle_na <- function(object, y = seq_along(object), ...) {
+na_rle_rangeplot <- function(data, x, y = NULL, ...) {
+  stopifnot(is.data.frame(data))
+  x <- eval_tidy(enquo(x), data = data)
+  y <- enquo(y)
+  if (quo_is_null(y)) {
+    y <- as.factor(seq_len(vec_size(data)))
+  } else {
+    y <- eval_tidy(y, data = data)
+  }
   data <- 
     ungroup(mutate(
-      group_by(na_rle_expand(object, y = y), y), 
+      group_by(na_rle_expand(x, y = y), y), 
       "group" := paste(y, distinct_groups(values), sep = "-")
     ))
   ends <- 

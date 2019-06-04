@@ -3,7 +3,6 @@
 \docType{import}
 \name{reexports}
 \alias{reexports}
-\alias{autoplot}
 \alias{intersect}
 \alias{union}
 \alias{setdiff}
@@ -15,7 +14,5 @@ below to see their documentation.
 
 \describe{
   \item{dplyr}{\code{\link[dplyr]{intersect}}, \code{\link[dplyr]{union}}, \code{\link[dplyr]{setdiff}}}
-
-  \item{ggplot2}{\code{\link[ggplot2]{autoplot}}}
 }}
 

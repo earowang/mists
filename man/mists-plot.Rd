@@ -2,25 +2,23 @@
 % Please edit documentation in R/plot.R
 \name{mists-plot}
 \alias{mists-plot}
-\alias{autoplot.mists_rle_na}
+\alias{na_rle_rangeplot}
 \alias{na_rle_spinoplot}
 \title{Range plot and spinoplot for runs of missings}
 \usage{
-\method{autoplot}{mists_rle_na}(object, y = as.factor(1L), ...)
+na_rle_rangeplot(data, x, y = NULL, ...)
 
 na_rle_spinoplot(data, x, y = NULL, facets, ...)
 }
 \arguments{
-\item{object}{an object, whose class will determine the behaviour of autoplot}
+\item{data}{A data frame that contains \code{\link[=list_of_na_rle]{list_of_na_rle()}}.}
+
+\item{x, y}{A bare variable contains \code{\link[=list_of_na_rle]{list_of_na_rle()}} mapped to x and y.}
 
 \item{...}{\itemize{
 \item \code{autoplot()}: individual aesthetics passed to \code{geom_line()} and \code{geom_point()}.
 \item \code{na_rle_spinoplot()}: extras passed to \code{facet_wrap()}.
 }}
-
-\item{data}{A data frame that contains \code{\link[=list_of_na_rle]{list_of_na_rle()}}.}
-
-\item{x, y}{A bare variable contains \code{\link[=list_of_na_rle]{list_of_na_rle()}} mapped to x and y.}
 
 \item{facets}{A facetting variable.}
 }
@@ -36,12 +34,8 @@ na_runs_wind <- nycflights13::weather \%>\%
   group_by(origin) \%>\% 
   summarise_at(vars(contains("wind")), ~ list_of_na_rle(., time_hour))
 
-autoplot(na_runs_wind$wind_dir[[1]])
-autoplot(na_runs_wind$wind_dir, na_runs_wind$origin)
-autoplot(
-  vctrs::as_list_of(na_runs_wind$wind_dir[[2]], na_runs_wind$wind_gust[[2]]),
-  y = paste(c("wind_dir", "wind_gust"), "JFK", sep = "@")
-)
+na_runs_wind \%>\% 
+  na_rle_rangeplot(wind_dir, origin, shape = 4)
 na_runs_wind \%>\%
   na_rle_spinoplot(x = wind_dir, facets = origin)
 na_runs_wind \%>\%

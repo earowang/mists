@@ -8,7 +8,7 @@ globalVariables(c("n_na", "pct_overall_na"))
 #'
 #' @details
 #' The proportion of overall missings is defined as the number of `NA` divided
-#' by the number of **measurements** (i.e. excluding key and index)
+#' by the number of **measurements** (i.e. excluding key and index).
 na_polish_cols_measures <- function(data, cutoff) {
   stopifnot(is_tsibble(data))
   prop_na_by_vars <- summarise_all(as_tibble(data), prop_overall_na)
@@ -35,7 +35,6 @@ na_polish_rows_index <- function(data, cutoff, na_fun = na_starts_with) {
   keyed_nobs <- idx_len * NCOL(data)
   non_idx_data <- as_tibble(data)[, setdiff(names(data), index_var(data))]
 
-  non_idx_data <- as_tibble(data)[, non_idx]
   keyed_data <- new_grouped_df(, groups = key_data(data))
   na_blocks <- summarise_all(keyed_data, na_fun)
   add_prop_na <- 

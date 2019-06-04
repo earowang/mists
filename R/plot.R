@@ -57,8 +57,8 @@ autoplot.mists_list_of_rle_na <- function(object, y = seq_along(object), ...) {
     line_params <- point_params <- list2()
   } else {
     names_params <- names(params_list)
-    line_all <- c(GeomLine$aesthetics(), GeomLine$paramseters(TRUE))
-    point_all <- c(GeomPoint$aesthetics(), GeomPoint$paramseters(TRUE))
+    line_all <- c(GeomLine$aesthetics(), GeomLine$parameters(TRUE))
+    point_all <- c(GeomPoint$aesthetics(), GeomPoint$parameters(TRUE))
     line_params <- params_list[which(names_params %in% line_all)]
     point_params <- params_list[which(names_params %in% point_all)]
   }

@@ -11,8 +11,8 @@ distinct_groups <- function(x) {
 #' @param data A data frame that contains [`list_of_na_rle()`].
 #' @inheritParams ggplot2::autoplot
 #' @param ...
-#' * `autoplot()`: individual aesthetics passed to `geom_line()` and `geom_point()`.
-#' * `na_rle_spinoplot()`: extras passed to `facet_wrap()`.
+#' * `na_rle_rangeplot()`: passed to `geom_line()` and `geom_point()`.
+#' * `na_rle_spinoplot()`: passed to `facet_wrap()`.
 #' @param x,y A bare variable contains [`list_of_na_rle()`] mapped to x and y.
 #' @param facets A facetting variable.
 #'
@@ -86,7 +86,7 @@ na_rle_rangeplot <- function(data, x, y = NULL, ...) {
 #' na_runs_wind %>%
 #'   na_rle_spinoplot(x = wind_dir, y = wind_gust, facets = origin)
 #' @export
-na_rle_spinoplot <- function(data, x, y = NULL, facets, ...) {
+na_rle_spinoplot <- function(data, x, y = NULL, facets = NULL, ...) {
   # credits to @coolbutuseless
   # the custom breaks could not be possible without this post
   # https://coolbutuseless.github.io/2019/03/07/custom-axis-breaks-on-facetted-ggplot/
@@ -95,7 +95,11 @@ na_rle_spinoplot <- function(data, x, y = NULL, facets, ...) {
   y <- enquo(y)
   facets <- enquo(facets)
   lst_na_rle_x <- eval_tidy(x, data = data)
-  facets_vals <- as.factor(eval_tidy(facets, data = data))
+  if (quo_is_null(facets)) {
+    facets_vals <- as.factor(seq_along(lst_na_rle_x))
+  } else {
+    facets_vals <- as.factor(eval_tidy(facets, data = data))
+  }
   xlab <- paste("runs [frequency]", parenthesis(as_label(x)))
   
   na_runs_x <- 

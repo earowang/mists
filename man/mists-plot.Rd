@@ -8,7 +8,7 @@
 \usage{
 na_rle_rangeplot(data, x, y = NULL, ...)
 
-na_rle_spinoplot(data, x, y = NULL, facets, ...)
+na_rle_spinoplot(data, x, y = NULL, facets = NULL, ...)
 }
 \arguments{
 \item{data}{A data frame that contains \code{\link[=list_of_na_rle]{list_of_na_rle()}}.}
@@ -16,8 +16,8 @@ na_rle_spinoplot(data, x, y = NULL, facets, ...)
 \item{x, y}{A bare variable contains \code{\link[=list_of_na_rle]{list_of_na_rle()}} mapped to x and y.}
 
 \item{...}{\itemize{
-\item \code{autoplot()}: individual aesthetics passed to \code{geom_line()} and \code{geom_point()}.
-\item \code{na_rle_spinoplot()}: extras passed to \code{facet_wrap()}.
+\item \code{na_rle_rangeplot()}: passed to \code{geom_line()} and \code{geom_point()}.
+\item \code{na_rle_spinoplot()}: passed to \code{facet_wrap()}.
 }}
 
 \item{facets}{A facetting variable.}

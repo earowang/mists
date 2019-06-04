@@ -111,8 +111,9 @@
 <p>How are those missings distributed and associated with others?</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/autoplot">autoplot</a></span>(na_runs_wind<span class="op">$</span>wind_dir, na_runs_wind<span class="op">$</span>origin, <span class="dt">shape =</span> <span class="dv">4</span>)</a></code></pre></div>
 <p><img src="reference/figures/README-autoplot-1.png" width="875" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="reference/mists-plot.html">na_rle_spinoplot</a></span>(na_runs_wind<span class="op">$</span>wind_dir[[<span class="dv">1</span>]], na_runs_wind<span class="op">$</span>wind_gust[[<span class="dv">1</span>]])</a></code></pre></div>
-<p><img src="reference/figures/README-spinoplot-1.png" width="480" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">na_runs_wind <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/mists-plot.html">na_rle_spinoplot</a></span>(<span class="dt">x =</span> wind_dir, <span class="dt">y =</span> wind_gust, <span class="dt">facets =</span> origin)</a></code></pre></div>
+<p><img src="reference/figures/README-spinoplot-1.png" width="875" style="display: block; margin: auto;"></p>
 </div>
 <div id="data-polishing" class="section level2">
 <h2 class="hasAnchor">

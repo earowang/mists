@@ -93,11 +93,62 @@ na_polish_auto <- function(data, cutoff, tol = .1, quiet = FALSE) {
     tol0 <- pass_metrics[[1]] * pass_metrics[[3]]
     before <- data
     if (!quiet) {
-      cli_report(pass(), lst_funs, round(tol0, digits = 2))
+      cli_report(pass(), names(lst_funs), round(tol0, digits = 3))
     }
   }
 
   data
+}
+
+na_polish_auto_trace <- function(data, cutoff, tol = .1, quiet = FALSE) {
+  before <- data
+  tol0 <- 1
+  pass <- counter()
+
+  lst_funs <- na_polish_steps()
+  results <- list()
+  while (tol0 > tol) {
+    step_metrics <- # carry out individual steps to determine the order
+      map_dbl(lst_funs, function(.f) {
+        metrics <- na_polish_metrics(data, .f(data, cutoff = cutoff))
+        metrics[[1]] * metrics[[3]]
+      })
+
+    lst_funs <- lst_funs[order(step_metrics)]
+    # a full pass
+    step_na <- step_removed <- double(4L)
+    for (i in seq_along(lst_funs)) {
+      data0 <- data
+      data <- lst_funs[[i]](data, cutoff = cutoff)
+      tmp_metrics <- na_polish_metrics(data0, data)
+      step_na[i] <- tmp_metrics[[1]]
+      step_removed[i] <- tmp_metrics[[3]]
+      step_metrics[i] <- step_na[i] * step_removed[i]
+    }
+    pass_metrics <- na_polish_metrics(before, data)
+    tol0 <- pass_metrics[[1]] * pass_metrics[[3]]
+    before <- data
+    fmt_steps <- 
+      sprintf(
+        "%s: {strong %.3f * %.3f = %.3f}", 
+        names(lst_funs), step_na, step_removed, step_metrics
+      )
+    p <- pass()
+    results[[p]] <- 
+      tibble(
+        pass = p,
+        step = names(lst_funs),
+        prop_na = step_na,
+        prop_removed = step_removed,
+        step_metric = step_metrics,
+        pass_metric = tol0
+      )
+    if (!quiet) {
+      cli_report(p, fmt_steps, round(tol0, digits = 3))
+    }
+  }
+
+  bind_rows(results)
 }
 
 na_polish_metrics <- function(before, after) {
@@ -164,6 +215,6 @@ cli_report <- function(npass, step_fun, metric) {
   }
   cliapp::start_app(theme = cliapp::simple_theme())
   cliapp::cli_h1(paste("Pass", npass))
-  cliapp::cli_ol(names(step_fun))
+  cliapp::cli_ol(step_fun)
   cliapp::cli_alert_success(metric)
 }

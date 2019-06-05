@@ -116,9 +116,9 @@
 <a class="sourceLine" id="cb5-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/mists-plot.html">na_rle_spinoplot</a></span>(<span class="dt">x =</span> wind_dir, <span class="dt">y =</span> wind_gust, <span class="dt">facets =</span> origin)</a></code></pre></div>
 <p><img src="reference/figures/README-spinoplot-1.png" width="875" style="display: block; margin: auto;"></p>
 </div>
-<div id="data-polishing" class="section level2">
+<div id="missing-data-polishing" class="section level2">
 <h2 class="hasAnchor">
-<a href="#data-polishing" class="anchor"></a>Data polishing</h2>
+<a href="#missing-data-polishing" class="anchor"></a>Missing data polishing</h2>
 <p>Data polishing isn’t data cleaning. Where shall we start tidy data analysis if too many missings spread across variables and observations?</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">wdi_ts &lt;-<span class="st"> </span>wdi <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span>tsibble<span class="op">::</span><span class="kw"><a href="https://tsibble.tidyverts.org/reference/as-tsibble.html">as_tsibble</a></span>(<span class="dt">key =</span> country_code, <span class="dt">index =</span> year)</a>

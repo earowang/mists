@@ -2,13 +2,23 @@ globalVariables(c("n_na", "pct_overall_na"))
 
 #' Data polishing for missing values in tsibble
 #'
-#' @param data A tsibble.
-#' @param cutoff A number between 0 and 1. Rows/cols will be kept, if the
+#' @param data,before,after A tsibble.
+#' @param cutoff A numeric between 0 and 1. Rows/cols will be kept, if the
 #' proportion of overall missings is less than the cutoff.
+#' @param na_fun Either [`na_starts_with`] or [`na_ends_with`].
+#' @param tol A tolerence value as stopping rule.
+#' @param quiet Report metrics along the way of the automatic polishing.
 #'
 #' @details
 #' The proportion of overall missings is defined as the number of `NA` divided
 #' by the number of **measurements** (i.e. excluding key and index).
+#' @rdname mists-polish
+#' @export
+#' @examples
+#' library(tsibble, warn.conflicts = FALSE)
+#' wdi_ts <- as_tsibble(wdi, key = country_code, index = year)
+#' wdi_after <- na_polish_auto(wdi_ts, cutoff = .8)
+#' na_polish_metrics(wdi_ts, wdi_after)
 na_polish_measures <- function(data, cutoff) {
   na_polish_assert(data, cutoff)
   prop_na_by_vars <- summarise_all(as_tibble(data), prop_overall_na)
@@ -16,6 +26,8 @@ na_polish_measures <- function(data, cutoff) {
   select(data, !!! names(sel_data))
 }
 
+#' @rdname mists-polish
+#' @export
 na_polish_key <- function(data, cutoff) {
   na_polish_assert(data, cutoff)
   key_vars <- key(data)
@@ -31,6 +43,8 @@ na_polish_key <- function(data, cutoff) {
   right_join(data, key_df, by = key_vars(data))
 }
 
+#' @rdname mists-polish
+#' @export
 na_polish_index <- function(data, cutoff, na_fun = na_starts_with) {
   na_polish_assert(data, cutoff)
   idx_len <- map_int(key_rows(data), length)
@@ -58,6 +72,8 @@ na_polish_index <- function(data, cutoff, na_fun = na_starts_with) {
   select(ungroup(filter_data), -n_na, -pct_overall_na)
 }
 
+#' @rdname mists-polish
+#' @export
 na_polish_index2 <- function(data, cutoff) {
   na_polish_index(data, cutoff, na_fun = na_ends_with)
 }
@@ -71,16 +87,21 @@ na_polish_steps <- function() {
   )
 }
 
+#' @rdname mists-polish
+#' @export
 na_polish_auto <- function(data, cutoff, tol = .1, quiet = FALSE) {
   na_polish_auto_impl(data, cutoff, tol, quiet, expect = "data")
 }
 
+#' @rdname mists-polish
+#' @export
 na_polish_auto_trace <- function(data, cutoff, tol = .1, quiet = FALSE) {
   na_polish_auto_impl(data, cutoff, tol, quiet, expect = "report")
 }
 
 na_polish_auto_impl <- function(data, cutoff, tol = .1, quiet = FALSE,
   expect = "data") {
+  stopifnot(tol >= 0 && tol <= 1)
   before <- data
   tol0 <- 1
   pass <- counter()
@@ -138,6 +159,8 @@ na_polish_auto_impl <- function(data, cutoff, tol = .1, quiet = FALSE,
   }
 }
 
+#' @rdname mists-polish
+#' @export
 na_polish_metrics <- function(before, after) {
   stopifnot(is_tsibble(before) && is_tsibble(after))
   stopifnot(dim(before) >= dim(after))
@@ -151,18 +174,14 @@ na_polish_metrics <- function(before, after) {
   nobs_na <- nobs_removed <- nrows_removed <- ncols_removed <- 0L
   if ((cols_rm <- NCOL(before) > NCOL(after))) { # cols removed
     removed_cols <- select(bf, setdiff(names(before), names(after)))
-    ncols_removed <- NCOL(removed_cols)
-    nrows_removed <- NROW(removed_cols)
-    nobs_removed <- nrows_removed * ncols_removed
+    nobs_removed <- NROW(removed_cols) * NCOL(removed_cols)
     nobs_na <- n_overall_na(removed_cols)
     prop_na <- prop_overall_na(removed_cols)
   }
   if ((rows_rm <- NROW(before) > NROW(after))) { # rows removed
     removed_rows <- as_tibble(anti_join(before, after, by = names(after)))
     removed_rows <- select(removed_rows, !!! mvars)
-    ncols_removed <- NCOL(removed_rows)
-    nrows_removed <- NROW(removed_rows)
-    nobs_removed <- nrows_removed * ncols_removed
+    nobs_removed <- NROW(removed_rows) * NCOL(removed_rows)
     nobs_na <- n_overall_na(removed_rows)
     prop_na <- prop_overall_na(removed_rows)
   }
@@ -179,8 +198,8 @@ na_polish_metrics <- function(before, after) {
     nobs_na = nobs_na,
     prop_removed = nobs_removed / nobs_bf,
     nobs_removed = nobs_removed,
-    nrows_removed = nrows_removed,
-    ncols_removed = ncols_removed
+    nrows_removed = NROW(before) - NROW(after),
+    ncols_removed = NCOL(before) - NCOL(after)
   )
 }
 

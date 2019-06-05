@@ -57,7 +57,7 @@ na_runs_wind
 
 How are those missings distributed and associated with others? 
 
-```{r autoplot, fig.height = 2}
+```{r rangeplot, fig.height = 2}
 na_runs_wind %>% 
   na_rle_rangeplot(x = wind_dir, y = origin, shape = 4)
 ```
@@ -69,7 +69,15 @@ na_runs_wind %>%
 
 ## Data polishing
 
-Data polishing isn't data cleaning.
+Data polishing isn't data cleaning. Where shall we start tidy data analysis if too many missings spread across variables and observations?
+
+```{r polish}
+wdi_ts <- wdi %>% 
+  tsibble::as_tsibble(key = country_code, index = year)
+wdi_after <- na_polish_auto(wdi_ts, cutoff = .8)
+na_polish_metrics(wdi_ts, wdi_after)
+```
+
 
 ## Related work
 

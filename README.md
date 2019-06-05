@@ -75,7 +75,7 @@ na_runs_wind %>%
   na_rle_rangeplot(x = wind_dir, y = origin, shape = 4)
 ```
 
-<img src="man/figures/README-autoplot-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-rangeplot-1.png" style="display: block; margin: auto;" />
 
 ``` r
 na_runs_wind %>% 
@@ -86,7 +86,19 @@ na_runs_wind %>%
 
 ## Data polishing
 
-Data polishing isn’t data cleaning.
+Data polishing isn’t data cleaning. Where shall we start tidy data
+analysis if too many missings spread across variables and observations?
+
+``` r
+wdi_ts <- wdi %>% 
+  tsibble::as_tsibble(key = country_code, index = year)
+wdi_after <- na_polish_auto(wdi_ts, cutoff = .8)
+na_polish_metrics(wdi_ts, wdi_after)
+#> # A tibble: 1 x 6
+#>   prop_na nobs_na prop_removed nobs_removed nrows_removed ncols_removed
+#>     <dbl>   <int>        <dbl>        <int>         <int>         <int>
+#> 1   0.645  225737        0.587       350006          5486             9
+```
 
 ## Related work
 

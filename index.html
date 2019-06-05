@@ -111,7 +111,7 @@
 <p>How are those missings distributed and associated with others?</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">na_runs_wind <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/mists-plot.html">na_rle_rangeplot</a></span>(<span class="dt">x =</span> wind_dir, <span class="dt">y =</span> origin, <span class="dt">shape =</span> <span class="dv">4</span>)</a></code></pre></div>
-<p><img src="reference/figures/README-autoplot-1.png" width="875" style="display: block; margin: auto;"></p>
+<p><img src="reference/figures/README-rangeplot-1.png" width="875" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">na_runs_wind <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/mists-plot.html">na_rle_spinoplot</a></span>(<span class="dt">x =</span> wind_dir, <span class="dt">y =</span> wind_gust, <span class="dt">facets =</span> origin)</a></code></pre></div>
 <p><img src="reference/figures/README-spinoplot-1.png" width="875" style="display: block; margin: auto;"></p>
@@ -119,7 +119,31 @@
 <div id="data-polishing" class="section level2">
 <h2 class="hasAnchor">
 <a href="#data-polishing" class="anchor"></a>Data polishing</h2>
-<p>Data polishing isn’t data cleaning.</p>
+<p>Data polishing isn’t data cleaning. Where shall we start tidy data analysis if too many missings spread across variables and observations?</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">wdi_ts &lt;-<span class="st"> </span>wdi <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span>tsibble<span class="op">::</span><span class="kw"><a href="https://tsibble.tidyverts.org/reference/as-tsibble.html">as_tsibble</a></span>(<span class="dt">key =</span> country_code, <span class="dt">index =</span> year)</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">wdi_after &lt;-<span class="st"> </span><span class="kw"><a href="reference/mists-polish.html">na_polish_auto</a></span>(wdi_ts, <span class="dt">cutoff =</span> <span class="fl">.8</span>)</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; Error in processx_conn_write(con, str, sep, encoding) : </span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; Error in processx_conn_write(con, str, sep, encoding) : </span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; Error in processx_conn_write(con, str, sep, encoding) : </span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; Error in processx_conn_write(con, str, sep, encoding) : </span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt; Error in processx_conn_write(con, str, sep, encoding) : </span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</span></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; Error in processx_conn_write(con, str, sep, encoding) : </span></a>
+<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</span></a>
+<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt; Error in processx_conn_write(con, str, sep, encoding) : </span></a>
+<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</span></a>
+<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#&gt; Error in processx_conn_write(con, str, sep, encoding) : </span></a>
+<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</span></a>
+<a class="sourceLine" id="cb6-20" data-line-number="20"><span class="kw"><a href="reference/mists-polish.html">na_polish_metrics</a></span>(wdi_ts, wdi_after)</a>
+<a class="sourceLine" id="cb6-21" data-line-number="21"><span class="co">#&gt; # A tibble: 1 x 6</span></a>
+<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="co">#&gt;   prop_na nobs_na prop_removed nobs_removed nrows_removed ncols_removed</span></a>
+<a class="sourceLine" id="cb6-23" data-line-number="23"><span class="co">#&gt;     &lt;dbl&gt;   &lt;int&gt;        &lt;dbl&gt;        &lt;int&gt;         &lt;int&gt;         &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb6-24" data-line-number="24"><span class="co">#&gt; 1   0.645  225737        0.587       350006          5486             9</span></a></code></pre></div>
 </div>
 <div id="related-work" class="section level2">
 <h2 class="hasAnchor">

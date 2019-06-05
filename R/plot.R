@@ -153,7 +153,7 @@ na_rle_spinoplot <- function(data, x, y = NULL, facets = NULL, ...) {
     frac_diff <- 
       mutate(
         group_by(frac_intersect, facets), 
-        frac = 1 - frac, overlap = FALSE
+        "frac" := 1 - frac, "overlap" := FALSE
       )
     frac_xy <- bind_rows(frac_intersect, frac_diff)
     grped_x <- 

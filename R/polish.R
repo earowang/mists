@@ -9,16 +9,17 @@ globalVariables(c("n_na", "pct_overall_na"))
 #' @details
 #' The proportion of overall missings is defined as the number of `NA` divided
 #' by the number of **measurements** (i.e. excluding key and index).
-na_polish_cols_measures <- function(data, cutoff) {
-  stopifnot(is_tsibble(data))
+na_polish_measures <- function(data, cutoff) {
+  na_polish_assert(data, cutoff)
   prop_na_by_vars <- summarise_all(as_tibble(data), prop_overall_na)
   sel_data <- select_if(prop_na_by_vars, function(x) x < cutoff)
   select(data, !!! names(sel_data))
 }
 
-na_polish_rows_key <- function(data, cutoff) {
+na_polish_key <- function(data, cutoff) {
+  na_polish_assert(data, cutoff)
   key_vars <- key(data)
-  non_idx_data <- as_tibble(data)[, setdiff(names(data), index_var(data))]
+  non_idx_data <- select(as_tibble(data), setdiff(names(data), index_var(data)))
   keyed_data <- new_grouped_df(non_idx_data, groups = key_data(data))
   add_prop_na <- 
     mutate(
@@ -30,12 +31,13 @@ na_polish_rows_key <- function(data, cutoff) {
   right_join(data, key_df, by = key_vars(data))
 }
 
-na_polish_rows_index <- function(data, cutoff, na_fun = na_starts_with) {
+na_polish_index <- function(data, cutoff, na_fun = na_starts_with) {
+  na_polish_assert(data, cutoff)
   idx_len <- map_int(key_rows(data), length)
   keyed_nobs <- idx_len * NCOL(data)
-  non_idx_data <- as_tibble(data)[, setdiff(names(data), index_var(data))]
+  non_idx_data <- select(as_tibble(data), setdiff(names(data), index_var(data)))
 
-  keyed_data <- new_grouped_df(, groups = key_data(data))
+  keyed_data <- new_grouped_df(data, groups = key_data(data))
   na_blocks <- summarise_all(keyed_data, na_fun)
   add_prop_na <- 
     mutate(
@@ -57,28 +59,55 @@ na_polish_rows_index <- function(data, cutoff, na_fun = na_starts_with) {
 }
 
 na_polish_metrics <- function(before, after) {
+  stopifnot(is_tsibble(before) && is_tsibble(after))
   stopifnot(dim(before) >= dim(after))
-  before <- as_tibble(before)
-  before_nobs <- NROW(before) * NCOL(before)
+  stopifnot(index_var(before) == index_var(after))
+  stopifnot(key_vars(before) == key_vars(after))
+
+  mvars <- measures(before)
+  bf <- select(as_tibble(before), !!! mvars)
+  nobs_bf <- NROW(bf) * NCOL(bf)
+  prop_na <- prop_removed <- 0
+  nobs_na <- nobs_removed <- nrows_removed <- ncols_removed <- 0L
   if ((cols_rm <- NCOL(before) > NCOL(after))) { # cols removed
-    removed_cols <- select(before, setdiff(names(before), names(after)))
-    removed_nobs <- NROW(removed_cols) * NCOL(removed_cols)
+    removed_cols <- select(bf, setdiff(names(before), names(after)))
+    ncols_removed <- NCOL(removed_cols)
+    nrows_removed <- NROW(removed_cols)
+    nobs_removed <- nrows_removed * ncols_removed
+    nobs_na <- n_overall_na(removed_cols)
     prop_na <- prop_overall_na(removed_cols)
   }
   if ((rows_rm <- NROW(before) > NROW(after))) { # rows removed
-    removed_rows <- anti_join(before, after, by = names(after))
-    removed_nobs <- NROW(removed_rows) * NCOL(removed_rows)
+    removed_rows <- as_tibble(anti_join(before, after, by = names(after)))
+    removed_rows <- select(removed_rows, !!! mvars)
+    ncols_removed <- NCOL(removed_rows)
+    nrows_removed <- NROW(removed_cols)
+    nobs_removed <- nrows_removed * ncols_removed
+    nobs_na <- n_overall_na(removed_rows)
     prop_na <- prop_overall_na(removed_rows)
   }
   if (cols_rm && rows_rm) {
-    removed_rows <- select(removed_rows, intersect(names(before), names(after)))
-    removed_nobs <- before_nobs - NCOL(after) * NROW(after)
-    n_na <- n_overall_na(removed_rows) + n_overall_na(removed_cols)
-    prop_na <- n_na / removed_nobs
+    af <- select(as_tibble(after), !!! measures(after))
+    removed_rows <- # rm double counted cols part
+      select(removed_rows, intersect(names(bf), names(af)))
+    nobs_removed <- nobs_bf - NCOL(af) * NROW(af)
+    nobs_na <- n_overall_na(removed_rows) + n_overall_na(removed_cols)
+    prop_na <- nobs_na / nobs_removed
   }
-  c(prop_na = prop_na, prop_removed = removed_nobs / before_nobs)
+  tibble(
+    prop_na = prop_na,
+    nobs_na = nobs_na,
+    prop_removed = nobs_removed / nobs_bf,
+    nobs_removed = nobs_removed,
+    nrows_removed = nrows_removed,
+    ncols_removed = ncols_removed
+  )
 }
 
 # na_polish_auto <- function(data, n_pass = 1L) {
 #   
 # }
+
+na_polish_assert <- function(data, cutoff) {
+  stopifnot(is_tsibble(data) && (cutoff >= 0 && cutoff <= 1))
+}

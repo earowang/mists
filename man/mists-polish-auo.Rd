@@ -3,7 +3,7 @@
 \name{na_polish_auto}
 \alias{na_polish_auto}
 \alias{na_polish_auto_trace}
-\title{Automatic data polishing for missing values in tsibble}
+\title{Automate missing data polishing for tsibble}
 \usage{
 na_polish_auto(data, cutoff, tol = 0.1, quiet = FALSE)
 
@@ -20,7 +20,7 @@ proportion of overall missings is less than the cutoff.}
 \item{quiet}{Report metrics along the way of the automatic polishing.}
 }
 \description{
-Automatic data polishing for missing values in tsibble
+Automate missing data polishing for tsibble
 }
 \examples{
 library(tsibble, warn.conflicts = FALSE)

@@ -1,6 +1,6 @@
 globalVariables(c("n_na", "pct_overall_na"))
 
-#' Data polishing for missing values in tsibble
+#' Missing data polishing for tsibble
 #'
 #' @param data A tsibble.
 #' @param cutoff A numeric between 0 and 1. Rows/cols will be kept, if the
@@ -82,7 +82,7 @@ na_polish_steps <- function() {
   )
 }
 
-#' Automatic data polishing for missing values in tsibble
+#' Automate missing data polishing for tsibble
 #'
 #' @inheritParams na_polish_measures
 #' @param tol A tolerence value as stopping rule.
@@ -165,7 +165,7 @@ na_polish_auto_impl <- function(data, cutoff, tol = .1, quiet = FALSE,
   }
 }
 
-#' Polishing metrics
+#' Metrics for missing data polishing
 #'
 #' @param before,after A tsibble.
 #' @export

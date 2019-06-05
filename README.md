@@ -84,7 +84,7 @@ na_runs_wind %>%
 
 <img src="man/figures/README-spinoplot-1.png" style="display: block; margin: auto;" />
 
-## Data polishing
+## Missing data polishing
 
 Data polishing isn’t data cleaning. Where shall we start tidy data
 analysis if too many missings spread across variables and observations?

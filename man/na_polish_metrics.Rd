@@ -2,7 +2,7 @@
 % Please edit documentation in R/polish.R
 \name{na_polish_metrics}
 \alias{na_polish_metrics}
-\title{Polishing metrics}
+\title{Metrics for missing data polishing}
 \usage{
 na_polish_metrics(before, after)
 }
@@ -10,5 +10,5 @@ na_polish_metrics(before, after)
 \item{before, after}{A tsibble.}
 }
 \description{
-Polishing metrics
+Metrics for missing data polishing
 }

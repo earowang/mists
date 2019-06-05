@@ -67,7 +67,7 @@ na_runs_wind %>%
   na_rle_spinoplot(x = wind_dir, y = wind_gust, facets = origin)
 ```
 
-## Data polishing
+## Missing data polishing
 
 Data polishing isn't data cleaning. Where shall we start tidy data analysis if too many missings spread across variables and observations?
 

@@ -5,7 +5,7 @@
 \alias{na_polish_key}
 \alias{na_polish_index}
 \alias{na_polish_index2}
-\title{Data polishing for missing values in tsibble}
+\title{Missing data polishing for tsibble}
 \usage{
 na_polish_measures(data, cutoff)
 
@@ -24,7 +24,7 @@ proportion of overall missings is less than the cutoff.}
 \item{na_fun}{Either \code{\link{na_starts_with}} or \code{\link{na_ends_with}}.}
 }
 \description{
-Data polishing for missing values in tsibble
+Missing data polishing for tsibble
 }
 \details{
 The proportion of overall missings is defined as the number of \code{NA} divided

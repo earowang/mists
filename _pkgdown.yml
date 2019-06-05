@@ -26,7 +26,7 @@ reference:
   contents:
     - mists-plot
 
-- title: Missingness polishing
+- title: Missing data polishing
   contents:
     - starts_with("na_polish")
 

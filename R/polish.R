@@ -64,10 +64,10 @@ na_polish_index2 <- function(data, cutoff) {
 
 na_polish_steps <- function() {
   list2(
-    "na_polish_measures()" = na_polish_measures,
-    "na_polish_key()" = na_polish_key,
-    "na_polish_index(na_starts_with)" = na_polish_index,
-    "na_polish_index(na_ends_with)" = na_polish_index2
+    "na_polish_measures" = na_polish_measures,
+    "na_polish_key" = na_polish_key,
+    "na_polish_index" = na_polish_index,
+    "na_polish_index2" = na_polish_index2
   )
 }
 
@@ -112,7 +112,7 @@ na_polish_auto_impl <- function(data, cutoff, tol = .1, quiet = FALSE,
     before <- data
     fmt_steps <- 
       sprintf(
-        "%s: {strong %.3f * %.3f = %.3f}", names(lst_funs), 
+        "{code {fun %s}} {strong %.3f * %.3f = %.3f}", names(lst_funs), 
         step_na[!rm_funs], step_removed[!rm_funs], step_metrics[!rm_funs]
       )
     p <- pass()

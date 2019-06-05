@@ -72,35 +72,15 @@ na_polish_steps <- function() {
 }
 
 na_polish_auto <- function(data, cutoff, tol = .1, quiet = FALSE) {
-  before <- data
-  tol0 <- 1
-  pass <- counter()
-
-  lst_funs <- na_polish_steps()
-  while (tol0 > tol) {
-    step_metrics <- # carry out individual steps to determine the order
-      map_dbl(lst_funs, function(.f) {
-        metrics <- na_polish_metrics(data, .f(data, cutoff = cutoff))
-        metrics[[1]] * metrics[[3]]
-      })
-
-    lst_funs <- lst_funs[order(step_metrics)]
-    # a full pass
-    for (i in seq_along(lst_funs)) {
-      data <- lst_funs[[i]](data, cutoff = cutoff)
-    }
-    pass_metrics <- na_polish_metrics(before, data)
-    tol0 <- pass_metrics[[1]] * pass_metrics[[3]]
-    before <- data
-    if (!quiet) {
-      cli_report(pass(), names(lst_funs), round(tol0, digits = 3))
-    }
-  }
-
-  data
+  na_polish_auto_impl(data, cutoff, tol, quiet, expect = "data")
 }
 
 na_polish_auto_trace <- function(data, cutoff, tol = .1, quiet = FALSE) {
+  na_polish_auto_impl(data, cutoff, tol, quiet, expect = "report")
+}
+
+na_polish_auto_impl <- function(data, cutoff, tol = .1, quiet = FALSE,
+  expect = "data") {
   before <- data
   tol0 <- 1
   pass <- counter()
@@ -116,7 +96,7 @@ na_polish_auto_trace <- function(data, cutoff, tol = .1, quiet = FALSE) {
 
     lst_funs <- lst_funs[order(step_metrics)]
     # a full pass
-    step_na <- step_removed <- double(4L)
+    step_na <- step_removed <- double(length(lst_funs))
     for (i in seq_along(lst_funs)) {
       data0 <- data
       data <- lst_funs[[i]](data, cutoff = cutoff)
@@ -125,30 +105,37 @@ na_polish_auto_trace <- function(data, cutoff, tol = .1, quiet = FALSE) {
       step_removed[i] <- tmp_metrics[[3]]
       step_metrics[i] <- step_na[i] * step_removed[i]
     }
+    rm_funs <- step_metrics == 0 # should this be less than tol?
+    lst_funs <- lst_funs[!rm_funs]
     pass_metrics <- na_polish_metrics(before, data)
     tol0 <- pass_metrics[[1]] * pass_metrics[[3]]
     before <- data
     fmt_steps <- 
       sprintf(
-        "%s: {strong %.3f * %.3f = %.3f}", 
-        names(lst_funs), step_na, step_removed, step_metrics
+        "%s: {strong %.3f * %.3f = %.3f}", names(lst_funs), 
+        step_na[!rm_funs], step_removed[!rm_funs], step_metrics[!rm_funs]
       )
     p <- pass()
     results[[p]] <- 
       tibble(
         pass = p,
         step = names(lst_funs),
-        prop_na = step_na,
-        prop_removed = step_removed,
-        step_metric = step_metrics,
+        prop_na = step_na[!rm_funs],
+        prop_removed = step_removed[!rm_funs],
+        step_metric = step_metrics[!rm_funs],
         pass_metric = tol0
       )
     if (!quiet) {
-      cli_report(p, fmt_steps, round(tol0, digits = 3))
+      fmt_tol <- sprintf("{strong %.3f}", tol0)
+      cli_report(p, fmt_steps, fmt_tol)
     }
   }
 
-  bind_rows(results)
+  if (expect == "data") {
+    data
+  } else {
+    bind_rows(results)
+  }
 }
 
 na_polish_metrics <- function(before, after) {

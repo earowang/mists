@@ -26,10 +26,15 @@ reference:
   contents:
     - mists-plot
 
+- title: Missingness polishing
+  contents:
+    - starts_with("na_polish")
+
 - title: Helpers
   contents:
     - na_starts_with
     - na_ends_with
+    - na_elsewhere
 
 - title: Data
   contents:

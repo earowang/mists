@@ -74,7 +74,7 @@ Data polishing isn't data cleaning. Where shall we start tidy data analysis if t
 ```{r polish}
 wdi_ts <- wdi %>% 
   tsibble::as_tsibble(key = country_code, index = year)
-wdi_after <- na_polish_auto(wdi_ts, cutoff = .8)
+wdi_after <- na_polish_auto(wdi_ts, cutoff = .8, quiet = TRUE)
 na_polish_metrics(wdi_ts, wdi_after)
 ```
 

@@ -2,23 +2,16 @@ globalVariables(c("n_na", "pct_overall_na"))
 
 #' Data polishing for missing values in tsibble
 #'
-#' @param data,before,after A tsibble.
+#' @param data A tsibble.
 #' @param cutoff A numeric between 0 and 1. Rows/cols will be kept, if the
 #' proportion of overall missings is less than the cutoff.
 #' @param na_fun Either [`na_starts_with`] or [`na_ends_with`].
-#' @param tol A tolerence value as stopping rule.
-#' @param quiet Report metrics along the way of the automatic polishing.
 #'
 #' @details
 #' The proportion of overall missings is defined as the number of `NA` divided
 #' by the number of **measurements** (i.e. excluding key and index).
 #' @rdname mists-polish
 #' @export
-#' @examples
-#' library(tsibble, warn.conflicts = FALSE)
-#' wdi_ts <- as_tsibble(wdi, key = country_code, index = year)
-#' wdi_after <- na_polish_auto(wdi_ts, cutoff = .8)
-#' na_polish_metrics(wdi_ts, wdi_after)
 na_polish_measures <- function(data, cutoff) {
   na_polish_assert(data, cutoff)
   prop_na_by_vars <- summarise_all(as_tibble(data), prop_overall_na)
@@ -68,6 +61,8 @@ na_polish_index <- function(data, cutoff, na_fun = na_starts_with) {
   } else if (is_true(all.equal(na_fun, na_ends_with))) {
     filter_data <- filter(grped_data,
       !! index(data) <= max(!! index(data)) - n_na)
+  } else {
+    abort("`na_fun` requires either `na_starts_with` or `na_ends_with`.")
   }
   select(ungroup(filter_data), -n_na, -pct_overall_na)
 }
@@ -87,13 +82,24 @@ na_polish_steps <- function() {
   )
 }
 
-#' @rdname mists-polish
+#' Automatic data polishing for missing values in tsibble
+#'
+#' @inheritParams na_polish_measures
+#' @param tol A tolerence value as stopping rule.
+#' @param quiet Report metrics along the way of the automatic polishing.
+#'
+#' @rdname mists-polish-auo
 #' @export
+#' @examples
+#' library(tsibble, warn.conflicts = FALSE)
+#' wdi_ts <- as_tsibble(wdi, key = country_code, index = year)
+#' wdi_after <- na_polish_auto(wdi_ts, cutoff = .8)
+#' na_polish_metrics(wdi_ts, wdi_after)
 na_polish_auto <- function(data, cutoff, tol = .1, quiet = FALSE) {
   na_polish_auto_impl(data, cutoff, tol, quiet, expect = "data")
 }
 
-#' @rdname mists-polish
+#' @rdname mists-polish-auo
 #' @export
 na_polish_auto_trace <- function(data, cutoff, tol = .1, quiet = FALSE) {
   na_polish_auto_impl(data, cutoff, tol, quiet, expect = "report")
@@ -159,7 +165,9 @@ na_polish_auto_impl <- function(data, cutoff, tol = .1, quiet = FALSE,
   }
 }
 
-#' @rdname mists-polish
+#' Polishing metrics
+#'
+#' @param before,after A tsibble.
 #' @export
 na_polish_metrics <- function(before, after) {
   stopifnot(is_tsibble(before) && is_tsibble(after))

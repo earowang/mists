@@ -4,7 +4,8 @@
 #'
 #' @rdname mists-na-helpers
 #' @examples
-#' na_starts_with(c(rep(NA, 4), 10:1, NA))
+#' x <- c(rep(NA, 4), 10:6, NA, 4:1, NA)
+#' na_starts_with(x)
 #' @export
 na_starts_with <- function(x) {
   na_rle <- na_rle_impl(x)
@@ -17,7 +18,7 @@ na_starts_with <- function(x) {
 
 #' @rdname mists-na-helpers
 #' @examples
-#' na_ends_with(c(rep(NA, 4), 10:1, NA))
+#' na_ends_with(x)
 #' @export
 na_ends_with <- function(x) {
   na_rle <- na_rle_impl(x)
@@ -26,6 +27,18 @@ na_ends_with <- function(x) {
   } else {
     0L
   }
+}
+
+#' @rdname mists-na-helpers
+#' @examples
+#' na_elsewhere(x)
+#' @export
+na_elsewhere <- function(x) {
+  na_rle <- na_rle_impl(x)
+  na_starts <- if (head(na_rle$values, 1L)) head(na_rle$lengths, 1L) else 0L
+  na_ends <- if (tail(na_rle$values, 1L)) tail(na_rle$lengths, 1L) else 0L
+  na_ttl <- sum(na_rle$lengths[na_rle$values])
+  na_ttl - na_starts - na_ends
 }
 
 n_overall_na <- function(x) {

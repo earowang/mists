@@ -5,9 +5,6 @@
 \alias{na_polish_key}
 \alias{na_polish_index}
 \alias{na_polish_index2}
-\alias{na_polish_auto}
-\alias{na_polish_auto_trace}
-\alias{na_polish_metrics}
 \title{Data polishing for missing values in tsibble}
 \usage{
 na_polish_measures(data, cutoff)
@@ -17,24 +14,14 @@ na_polish_key(data, cutoff)
 na_polish_index(data, cutoff, na_fun = na_starts_with)
 
 na_polish_index2(data, cutoff)
-
-na_polish_auto(data, cutoff, tol = 0.1, quiet = FALSE)
-
-na_polish_auto_trace(data, cutoff, tol = 0.1, quiet = FALSE)
-
-na_polish_metrics(before, after)
 }
 \arguments{
-\item{data, before, after}{A tsibble.}
+\item{data}{A tsibble.}
 
 \item{cutoff}{A numeric between 0 and 1. Rows/cols will be kept, if the
 proportion of overall missings is less than the cutoff.}
 
 \item{na_fun}{Either \code{\link{na_starts_with}} or \code{\link{na_ends_with}}.}
-
-\item{tol}{A tolerence value as stopping rule.}
-
-\item{quiet}{Report metrics along the way of the automatic polishing.}
 }
 \description{
 Data polishing for missing values in tsibble
@@ -42,10 +29,4 @@ Data polishing for missing values in tsibble
 \details{
 The proportion of overall missings is defined as the number of \code{NA} divided
 by the number of \strong{measurements} (i.e. excluding key and index).
-}
-\examples{
-library(tsibble, warn.conflicts = FALSE)
-wdi_ts <- as_tsibble(wdi, key = country_code, index = year)
-wdi_after <- na_polish_auto(wdi_ts, cutoff = .8)
-na_polish_metrics(wdi_ts, wdi_after)
 }

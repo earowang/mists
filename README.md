@@ -92,7 +92,7 @@ analysis if too many missings spread across variables and observations?
 ``` r
 wdi_ts <- wdi %>% 
   tsibble::as_tsibble(key = country_code, index = year)
-wdi_after <- na_polish_auto(wdi_ts, cutoff = .8)
+wdi_after <- na_polish_auto(wdi_ts, cutoff = .8, quiet = TRUE)
 na_polish_metrics(wdi_ts, wdi_after)
 #> # A tibble: 1 x 6
 #>   prop_na nobs_na prop_removed nobs_removed nrows_removed ncols_removed

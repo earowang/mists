@@ -3,11 +3,14 @@
 \name{na_starts_with}
 \alias{na_starts_with}
 \alias{na_ends_with}
+\alias{na_elsewhere}
 \title{Helpers for missing values}
 \usage{
 na_starts_with(x)
 
 na_ends_with(x)
+
+na_elsewhere(x)
 }
 \arguments{
 \item{x}{A vector.}
@@ -16,6 +19,8 @@ na_ends_with(x)
 Helpers for missing values
 }
 \examples{
-na_starts_with(c(rep(NA, 4), 10:1, NA))
-na_ends_with(c(rep(NA, 4), 10:1, NA))
+x <- c(rep(NA, 4), 10:6, NA, 4:1, NA)
+na_starts_with(x)
+na_ends_with(x)
+na_elsewhere(x)
 }

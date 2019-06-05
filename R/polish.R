@@ -58,6 +58,48 @@ na_polish_index <- function(data, cutoff, na_fun = na_starts_with) {
   select(ungroup(filter_data), -n_na, -pct_overall_na)
 }
 
+na_polish_index2 <- function(data, cutoff) {
+  na_polish_index(data, cutoff, na_fun = na_ends_with)
+}
+
+na_polish_steps <- function() {
+  list2(
+    "na_polish_measures()" = na_polish_measures,
+    "na_polish_key()" = na_polish_key,
+    "na_polish_index(na_starts_with)" = na_polish_index,
+    "na_polish_index(na_ends_with)" = na_polish_index2
+  )
+}
+
+na_polish_auto <- function(data, cutoff, tol = .1, quiet = FALSE) {
+  before <- data
+  tol0 <- 1
+  pass <- counter()
+
+  lst_funs <- na_polish_steps()
+  while (tol0 > tol) {
+    step_metrics <- # carry out individual steps to determine the order
+      map_dbl(lst_funs, function(.f) {
+        metrics <- na_polish_metrics(data, .f(data, cutoff = cutoff))
+        metrics[[1]] * metrics[[3]]
+      })
+
+    lst_funs <- lst_funs[order(step_metrics)]
+    # a full pass
+    for (i in seq_along(lst_funs)) {
+      data <- lst_funs[[i]](data, cutoff = cutoff)
+    }
+    pass_metrics <- na_polish_metrics(before, data)
+    tol0 <- pass_metrics[[1]] * pass_metrics[[3]]
+    before <- data
+    if (!quiet) {
+      cli_report(pass(), lst_funs, round(tol0, digits = 2))
+    }
+  }
+
+  data
+}
+
 na_polish_metrics <- function(before, after) {
   stopifnot(is_tsibble(before) && is_tsibble(after))
   stopifnot(dim(before) >= dim(after))
@@ -81,7 +123,7 @@ na_polish_metrics <- function(before, after) {
     removed_rows <- as_tibble(anti_join(before, after, by = names(after)))
     removed_rows <- select(removed_rows, !!! mvars)
     ncols_removed <- NCOL(removed_rows)
-    nrows_removed <- NROW(removed_cols)
+    nrows_removed <- NROW(removed_rows)
     nobs_removed <- nrows_removed * ncols_removed
     nobs_na <- n_overall_na(removed_rows)
     prop_na <- prop_overall_na(removed_rows)
@@ -104,10 +146,24 @@ na_polish_metrics <- function(before, after) {
   )
 }
 
-# na_polish_auto <- function(data, n_pass = 1L) {
-#   
-# }
-
 na_polish_assert <- function(data, cutoff) {
   stopifnot(is_tsibble(data) && (cutoff >= 0 && cutoff <= 1))
+}
+
+counter <- function() {
+  init <- 0L
+  function() {
+    init <<- init + 1L
+    init
+  }
+}
+
+cli_report <- function(npass, step_fun, metric) {
+  if (!is_installed("cliapp")) {
+    abort("`quiet = FALSE` requires the cliapp packge to be installed.")
+  }
+  cliapp::start_app(theme = cliapp::simple_theme())
+  cliapp::cli_h1(paste("Pass", npass))
+  cliapp::cli_ol(names(step_fun))
+  cliapp::cli_alert_success(metric)
 }

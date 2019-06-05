@@ -114,15 +114,14 @@ na_rle_spinoplot <- function(data, x, y = NULL, facets = NULL, ...) {
       x = .5 * c(cumsum(nobs) + cumsum(dplyr::lag(nobs, default = 0)))
     )
 
-  count_scale <- count_label <- 0
+  count_label <- counter()
+  count_scale <- counter()
   label_x <- function(x) {
-    count_label <<- count_label + 1L
-    which_facet <- levels(na_runs_x$facets)[count_label]
+    which_facet <- levels(na_runs_x$facets)[count_label()]
     filter(na_runs_x, facets == which_facet)[["xlabs"]]
   }
   scale_x <- function(x) {
-    count_scale <<- count_scale + 1L
-    which_facet <- levels(na_runs_x$facets)[count_scale]
+    which_facet <- levels(na_runs_x$facets)[count_scale()]
     filter(na_runs_x, facets == which_facet)[["x"]]
   }
   if (quo_is_null(y)) {

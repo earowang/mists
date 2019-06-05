@@ -23,7 +23,8 @@ Imports:
 Suggests: 
     knitr,
     nycflights13,
-    covr
+    covr,
+    cliapp
 LinkingTo: 
     Rcpp (>= 0.12.0)
 VignetteBuilder: 

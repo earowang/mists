@@ -30,7 +30,7 @@ reference:
   contents:
     - starts_with("na_polish")
 
-- title: Helpers
+- title: Missing values handlers
   contents:
     - na_starts_with
     - na_ends_with

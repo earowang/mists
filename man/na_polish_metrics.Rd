@@ -2,7 +2,7 @@
 % Please edit documentation in R/polish.R
 \name{na_polish_metrics}
 \alias{na_polish_metrics}
-\title{Metrics for missing data polishing}
+\title{Evaluation metrics for missing data polishing}
 \usage{
 na_polish_metrics(before, after)
 }
@@ -15,14 +15,14 @@ A tibble contains:
 \item \code{prop_na} & \code{nobs_na}: The proportion of \code{NA}s in the sliced data
 (the difference between \code{before} and \code{after}).
 \item \code{prop_removed}, \code{nobs_removed}, \code{nrows_removed}, & \code{ncols_removed}: The
-proportion of removed observations over the ovarall observations.
+proportion of removed observations over the overall observations.
 }
 }
 \description{
-Metrics for missing data polishing
+Evaluation metrics for missing data polishing
 }
 \details{
-The metric defined for the effect of polishing events is
-\code{prop_na * prop_removed}. We'd like to minimise both \code{prop_na} and
-\code{prop_removed} over a sequence of polishing events.
+The evaluation metric defined for the effect of polishing events is
+\code{prop_na * prop_removed}. We'd like to minimise the loss by minimising both
+\code{prop_na} and \code{prop_removed} over sequential polishing events.
 }

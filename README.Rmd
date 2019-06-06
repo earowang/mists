@@ -49,7 +49,10 @@ The `list_of_na_rle()` makes it easier to work with tibbles.
 library(dplyr)
 na_runs_wind <- nycflights13::weather %>% 
   group_by(origin) %>% 
-  summarise_at(vars(contains("wind")), ~ list_of_na_rle(., time_hour))
+  summarise_at(
+    vars(contains("wind")), 
+    ~ list_of_na_rle(., index_by = time_hour)
+  )
 na_runs_wind
 ```
 
@@ -69,7 +72,22 @@ na_runs_wind %>%
 
 ## Missing data polishing
 
-Data polishing isn't data cleaning. Where shall we start tidy data analysis if too many missings spread across variables and observations?
+Too many missings spread across variables and observations like the `wdi` dataset (world development indicators)? Every observation and measured variable contains `NA`, and almost half of the data goes missing. We would end up with no data if using listwise deletion.
+
+```{r wdi-na-metrics, echo = FALSE}
+report_na_metrics <- function(data) {
+  tibble(
+    prop_overall_na = mean(is.na(data)),
+    prop_cols_na = mean(apply(data[, -(1:2)], 2, anyNA)),
+    prop_rows_na = mean(apply(data, 1, anyNA)),
+    data_ncols = NCOL(data),
+    data_nrows = NROW(data)
+  )
+}
+
+report_na_metrics(wdi)
+```
+
 
 ```{r polish}
 wdi_ts <- wdi %>% 

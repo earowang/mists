@@ -92,29 +92,21 @@ na_polish_index2 <- function(data, cutoff) {
   na_polish_index(data, cutoff, na_fun = na_ends_with)
 }
 
-na_polish_steps <- function() {
-  list2(
-    "na_polish_measures" = na_polish_measures,
-    "na_polish_key" = na_polish_key,
-    "na_polish_index" = na_polish_index,
-    "na_polish_index2" = na_polish_index2
-  )
-}
-
 #' Automate missing data polishing for tsibble
 #'
-#' It is an iterative process for minimising a metric until a tolerance value.
+#' It is an iterative process for minimising the loss until a tolerance value.
 #' * `na_polish_auto()` returns the polished data.
 #' * `na_polish_auto_trace()` returns a metric tibble for documenting the steps.
 #'
 #' @inheritParams na_polish_measures
 #' @param tol A tolerance value near zero as stopping rule. It compares to
-#' a metric defined as `prop_na * prop_removed` to be minimised. See
-#' [`na_polish_metrics()`] for details.
+#' an evaluation metric defined as `prop_na * prop_removed` to be minimised.
+#' See [`na_polish_metrics()`] for details.
+#' @param funs A list of `na_polish_*()` functions to go through.
 #' @param quiet If `FALSE`, report metrics while automatically polishing, and
 #' requires the "cliapp" package to be installed.
 #'
-#' @rdname mists-polish-auo
+#' @rdname mists-polish-auto
 #' @export
 #' @examples
 #' \dontrun{
@@ -122,24 +114,26 @@ na_polish_steps <- function() {
 #' wdi_after <- na_polish_auto(wdi_ts, cutoff = .8)
 #' na_polish_metrics(wdi_ts, wdi_after)
 #' }
-na_polish_auto <- function(data, cutoff, tol = .1, quiet = FALSE) {
-  na_polish_auto_impl(data, cutoff, tol, quiet, expect = "data")
+na_polish_auto <- function(data, cutoff, tol = .1, funs = na_polish_funs(),
+  quiet = FALSE) {
+  na_polish_auto_impl(data, cutoff, tol, funs, quiet, expect = "data")
 }
 
-#' @rdname mists-polish-auo
+#' @rdname mists-polish-auto
 #' @export
-na_polish_auto_trace <- function(data, cutoff, tol = .1, quiet = FALSE) {
-  na_polish_auto_impl(data, cutoff, tol, quiet, expect = "report")
+na_polish_auto_trace <- function(data, cutoff, tol = .1, funs = na_polish_funs(),
+  quiet = FALSE) {
+  na_polish_auto_impl(data, cutoff, tol, funs, quiet, expect = "report")
 }
 
-na_polish_auto_impl <- function(data, cutoff, tol = .1, quiet = FALSE,
-  expect = "data") {
+na_polish_auto_impl <- function(data, cutoff, tol = .1, funs = na_polish_funs(),
+  quiet = FALSE, expect = "data") {
   stopifnot(tol >= 0 && tol <= 1)
   before <- data
   tol0 <- 1
   pass <- counter()
 
-  lst_funs <- na_polish_steps()
+  lst_funs <- funs
   results <- list()
   while (tol0 > tol) {
     step_metrics <- # carry out individual steps to determine the order
@@ -192,7 +186,20 @@ na_polish_auto_impl <- function(data, cutoff, tol = .1, quiet = FALSE,
   }
 }
 
-#' Metrics for missing data polishing
+#' @rdname mists-polish-auto
+#' @keywords internal
+#' @usage NULL
+#' @export
+na_polish_funs <- function() {
+  list(
+    "na_polish_measures" = na_polish_measures,
+    "na_polish_key" = na_polish_key,
+    "na_polish_index" = na_polish_index,
+    "na_polish_index2" = na_polish_index2
+  )
+}
+
+#' Evaluation metrics for missing data polishing
 #'
 #' @param before,after Tsibbles before and after polishing.
 #' @return
@@ -202,9 +209,9 @@ na_polish_auto_impl <- function(data, cutoff, tol = .1, quiet = FALSE,
 #' * `prop_removed`, `nobs_removed`, `nrows_removed`, & `ncols_removed`: The
 #' proportion of removed observations over the overall observations.
 #' @details
-#' The metric defined for the effect of polishing events is
-#' `prop_na * prop_removed`. We'd like to minimise both `prop_na` and
-#' `prop_removed` over a sequence of polishing events.
+#' The evaluation metric defined for the effect of polishing events is
+#' `prop_na * prop_removed`. We'd like to minimise the loss by minimising both
+#' `prop_na` and `prop_removed` over sequential polishing events.
 #' @export
 na_polish_metrics <- function(before, after) {
   stopifnot(is_tsibble(before) && is_tsibble(after))

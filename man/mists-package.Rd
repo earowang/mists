@@ -5,8 +5,8 @@
 \alias{mists-package}
 \title{mists: missingess of time series}
 \description{
-Provides 1d, 2d, and visual methods for exploring, polishing, and
-    visualising temporal missingness.
+Provides 1d, 2d, and visual methods for exploring,
+    polishing, and visualising temporal missingness.
 }
 \seealso{
 Useful links:
@@ -17,6 +17,12 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Earo Wang \email{earo.wang@gmail.com}
+\strong{Maintainer}: Earo Wang \email{earo.wang@gmail.com} (0000-0001-6448-5260)
+
+Other contributors:
+\itemize{
+  \item Di Cook (0000-0002-3813-7155) [thesis advisor]
+  \item Rob Hyndman (0000-0002-2140-5352) [thesis advisor]
+}
 
 }

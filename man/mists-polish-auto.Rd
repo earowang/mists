@@ -3,11 +3,14 @@
 \name{na_polish_auto}
 \alias{na_polish_auto}
 \alias{na_polish_auto_trace}
+\alias{na_polish_funs}
 \title{Automate missing data polishing for tsibble}
 \usage{
-na_polish_auto(data, cutoff, tol = 0.1, quiet = FALSE)
+na_polish_auto(data, cutoff, tol = 0.1, funs = na_polish_funs(),
+  quiet = FALSE)
 
-na_polish_auto_trace(data, cutoff, tol = 0.1, quiet = FALSE)
+na_polish_auto_trace(data, cutoff, tol = 0.1, funs = na_polish_funs(),
+  quiet = FALSE)
 }
 \arguments{
 \item{data}{A tsibble.}
@@ -16,14 +19,16 @@ na_polish_auto_trace(data, cutoff, tol = 0.1, quiet = FALSE)
 proportion of overall missings is less than the cutoff.}
 
 \item{tol}{A tolerance value near zero as stopping rule. It compares to
-a metric defined as \code{prop_na * prop_removed} to be minimised. See
-\code{\link[=na_polish_metrics]{na_polish_metrics()}} for details.}
+an evaluation metric defined as \code{prop_na * prop_removed} to be minimised.
+See \code{\link[=na_polish_metrics]{na_polish_metrics()}} for details.}
+
+\item{funs}{A list of \code{na_polish_*()} functions to go through.}
 
 \item{quiet}{If \code{FALSE}, report metrics while automatically polishing, and
 requires the "cliapp" package to be installed.}
 }
 \description{
-It is an iterative process for minimising a metric until a tolerance value.
+It is an iterative process for minimising the loss until a tolerance value.
 \itemize{
 \item \code{na_polish_auto()} returns the polished data.
 \item \code{na_polish_auto_trace()} returns a metric tibble for documenting the steps.
@@ -36,3 +41,4 @@ wdi_after <- na_polish_auto(wdi_ts, cutoff = .8)
 na_polish_metrics(wdi_ts, wdi_after)
 }
 }
+\keyword{internal}

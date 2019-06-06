@@ -2,10 +2,19 @@ Package: mists
 Title: Missingness of Temporal Data
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "Earo",
-           family = "Wang",
-           role = c("aut", "cre"),
-           email = "earo.wang@gmail.com")
+    c(person(given = "Earo",
+             family = "Wang",
+             role = c("aut", "cre"),
+             email = "earo.wang@gmail.com",
+             comment = c(ORCID = "0000-0001-6448-5260")),
+      person(given = "Di",
+             family = "Cook",
+             role = c("ths"),
+             comment = c(ORCID = "0000-0002-3813-7155")),
+      person(given = "Rob",
+             family = "Hyndman",
+             role = c("ths"),
+             comment = c(ORCID = "0000-0002-2140-5352")))
 Description: Provides 1d, 2d, and visual methods for exploring,
     polishing, and visualising temporal missingness.
 License: GPL-3

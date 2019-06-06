@@ -256,7 +256,15 @@ na_polish_metrics <- function(before, after) {
 }
 
 na_polish_assert <- function(data, cutoff) {
-  stopifnot(is_tsibble(data) && (cutoff >= 0 && cutoff <= 1))
+  if (NROW(data) == 0L) {
+    abort("`data` can't be empty.")
+  }
+  if (!is_tsibble(data)) {
+    abort("`data` requires a tsibble object.")
+  }
+  if (cutoff < 0 || cutoff > 1) {
+    abort("`cutoff` requires a numeric between 0 and 1.")
+  }
 }
 
 counter <- function() {

@@ -106,7 +106,8 @@ this polishing process by minimising the proportion of overall missings
 weighted by the proportion of removed observations. It will go through
 the following passes several times: `na_polish_measures()`,
 `na_polish_key()`, `na_polish_index()` until a tolerance value. The
-`na_polish_*()` family expects a tsibble, because polishing starts with
+`na_polish_*()` family expects a
+[tsibble](http://tsibble.tidyverts.org), because polishing starts with
 tidy and clean data.
 
 ``` r

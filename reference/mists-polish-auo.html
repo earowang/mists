@@ -32,7 +32,10 @@
 
 <meta property="og:title" content="Automate missing data polishing for tsibble — na_polish_auto" />
 
-<meta property="og:description" content="Automate missing data polishing for tsibble" />
+<meta property="og:description" content="It is an iterative process for minising a metric until a tolerence value.
+na_polish_auto() returns the polished data.
+na_polish_auto_trace() returns a metric tibble for documenting the steps.
+" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -100,7 +103,10 @@
 
     <div class="ref-description">
     
-    <p>Automate missing data polishing for tsibble</p>
+    <p>It is an iterative process for minising a metric until a tolerence value.</p><ul>
+<li><p><code>na_polish_auto()</code> returns the polished data.</p></li>
+<li><p><code>na_polish_auto_trace()</code> returns a metric tibble for documenting the steps.</p></li>
+</ul>
     
     </div>
 
@@ -122,31 +128,33 @@ proportion of overall missings is less than the cutoff.</p></td>
     </tr>
     <tr>
       <th>tol</th>
-      <td><p>A tolerence value as stopping rule.</p></td>
+      <td><p>A tolerence value near zero as stopping rule. It compares to
+a metric defined as <code>prop_na * prop_removed</code> to be minimised. See
+<code><a href='na_polish_metrics.html'>na_polish_metrics()</a></code> for details.</p></td>
     </tr>
     <tr>
       <th>quiet</th>
-      <td><p>Report metrics along the way of the automatic polishing.</p></td>
+      <td><p>If <code>FALSE</code>, report metrics while automatically polishing, and
+requires the "cliapp" package to be installed.</p></td>
     </tr>
     </table>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>tsibble</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='no'>wdi_ts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://tsibble.tidyverts.org/reference/as-tsibble.html'>as_tsibble</a></span>(<span class='no'>wdi</span>, <span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>country_code</span>, <span class='kw'>index</span> <span class='kw'>=</span> <span class='no'>year</span>)
+    <pre class="examples"><div class='input'><span class='no'>wdi_ts</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tsibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tsibble.tidyverts.org/reference/as-tsibble.html'>as_tsibble</a></span>(<span class='no'>wdi</span>, <span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>country_code</span>, <span class='kw'>index</span> <span class='kw'>=</span> <span class='no'>year</span>)
 <span class='no'>wdi_after</span> <span class='kw'>&lt;-</span> <span class='fu'>na_polish_auto</span>(<span class='no'>wdi_ts</span>, <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>.8</span>)</div><div class='output co'>#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
 #&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── Pass 1 ──────────────────────────────────────────────────────────────────────</span></div><div class='output co'>#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
-#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='output co'>#&gt; <span class='message'>1. `na_polish_key()` 0.842 * 0.060 = 0.050</span></div><div class='output co'>#&gt; <span class='message'>2. `na_polish_index2()` 0.543 * 0.126 = 0.068</span></div><div class='output co'>#&gt; <span class='message'>3. `na_polish_measures()` 0.884 * 0.164 = 0.145</span></div><div class='output co'>#&gt; <span class='message'>4. `na_polish_index()` 0.609 * 0.255 = 0.155</span></div><div class='output co'>#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
-#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='output co'>#&gt; <span class='message'>✔ 0.340</span></div><div class='output co'>#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
+#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='output co'>#&gt; <span class='message'>1. `na_polish_index()` 0.673 * 0.335 = 0.225</span></div><div class='output co'>#&gt; <span class='message'>2. `na_polish_measures()` 0.881 * 0.109 = 0.096</span></div><div class='output co'>#&gt; <span class='message'>3. `na_polish_index2()` 0.570 * 0.113 = 0.064</span></div><div class='output co'>#&gt; <span class='message'>4. `na_polish_key()` 0.837 * 0.000 = 0.000</span></div><div class='output co'>#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
+#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='output co'>#&gt; <span class='message'>✔ 0.328</span></div><div class='output co'>#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
 #&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610
 #&gt; Error in processx_conn_write(con, str, sep, encoding) : 
 #&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── Pass 2 ──────────────────────────────────────────────────────────────────────</span></div><div class='output co'>#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
-#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='output co'>#&gt; <span class='message'>1. `na_polish_key()` 0.812 * 0.001 = 0.001</span></div><div class='output co'>#&gt; <span class='message'>2. `na_polish_index2()` 0.262 * 0.050 = 0.013</span></div><div class='output co'>#&gt; <span class='message'>3. `na_polish_index()` 0.427 * 0.150 = 0.064</span></div><div class='output co'>#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
-#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='output co'>#&gt; <span class='message'>✔ 0.075</span></div><div class='output co'>#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
+#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='output co'>#&gt; <span class='message'>1. `na_polish_index()` 0.432 * 0.157 = 0.068</span></div><div class='output co'>#&gt; <span class='message'>2. `na_polish_index2()` 0.256 * 0.055 = 0.014</span></div><div class='output co'>#&gt; <span class='message'>3. `na_polish_key()` 0.816 * 0.000 = 0.000</span></div><div class='output co'>#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
+#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='output co'>#&gt; <span class='message'>✔ 0.080</span></div><div class='output co'>#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
 #&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='input'><span class='fu'><a href='na_polish_metrics.html'>na_polish_metrics</a></span>(<span class='no'>wdi_ts</span>, <span class='no'>wdi_after</span>)</div><div class='output co'>#&gt; # A tibble: 1 x 6
 #&gt;   prop_na nobs_na prop_removed nobs_removed nrows_removed ncols_removed
 #&gt;     &lt;dbl&gt;   &lt;int&gt;        &lt;dbl&gt;        &lt;int&gt;         &lt;int&gt;         &lt;int&gt;
-#&gt; 1   0.645  225737        0.587       350006          5486             9</div></pre>
+#&gt; 1   0.636  220533        0.581       346948          5752             6</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

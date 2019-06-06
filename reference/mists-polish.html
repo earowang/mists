@@ -32,7 +32,16 @@
 
 <meta property="og:title" content="Missing data polishing for tsibble — na_polish_measures" />
 
-<meta property="og:description" content="Missing data polishing for tsibble" />
+<meta property="og:description" content="If the proption of overall missings is less than the cutoff,
+na_polish_measures() removes columns or observations.
+na_polish_key() polishes data by rows or observations, removing the whole
+rows of key series.
+na_polish_index() polishes data by rows or observations, removing either
+the starting or the ending NA blocks (if any) within each key series.
+na_polish_index2() polishes data by rows or observations, removing the
+ending NA blocks (if any) within each key series. It is a shortcut of
+na_polish_index(na_fun = na_ends_with).
+" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -100,7 +109,16 @@
 
     <div class="ref-description">
     
-    <p>Missing data polishing for tsibble</p>
+    <p>If the proption of overall missings is less than the cutoff,</p><ul>
+<li><p><code>na_polish_measures()</code> removes columns or observations.</p></li>
+<li><p><code>na_polish_key()</code> polishes data by rows or observations, removing the whole
+rows of key series.</p></li>
+<li><p><code>na_polish_index()</code> polishes data by rows or observations, removing either
+the starting or the ending <code>NA</code> blocks (if any) within each key series.</p></li>
+<li><p><code>na_polish_index2()</code> polishes data by rows or observations, removing the
+ending <code>NA</code> blocks (if any) within each key series. It is a shortcut of
+<code>na_polish_index(na_fun = na_ends_with)</code>.</p></li>
+</ul>
     
     </div>
 
@@ -136,6 +154,130 @@ proportion of overall missings is less than the cutoff.</p></td>
 by the number of <strong>measurements</strong> (i.e. excluding key and index).</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>wdi_ts</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tsibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tsibble.tidyverts.org/reference/as-tsibble.html'>as_tsibble</a></span>(<span class='no'>wdi</span>, <span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>country_code</span>, <span class='kw'>index</span> <span class='kw'>=</span> <span class='no'>year</span>)
+<span class='fu'>na_polish_measures</span>(<span class='no'>wdi_ts</span>, <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>.7</span>)</div><div class='output co'>#&gt; # A tsibble: 10,850 x 46 [1Y]
+#&gt; # Key:       country_code [217]
+#&gt;    country_code  year ag_lnd_frst_k2 ag_srf_totl_k2 bx_klt_dinv_cd_…
+#&gt;    &lt;fct&gt;        &lt;int&gt;          &lt;dbl&gt;          &lt;dbl&gt;            &lt;dbl&gt;
+#&gt;  1 BDI           1969             NA          27830               NA
+#&gt;  2 BDI           1970             NA          27830               NA
+#&gt;  3 BDI           1971             NA          27830               NA
+#&gt;  4 BDI           1972             NA          27830               NA
+#&gt;  5 BDI           1973             NA          27830               NA
+#&gt;  6 BDI           1974             NA          27830               NA
+#&gt;  7 BDI           1975             NA          27830               NA
+#&gt;  8 BDI           1976             NA          27830               NA
+#&gt;  9 BDI           1977             NA          27830               NA
+#&gt; 10 BDI           1978             NA          27830               NA
+#&gt; # … with 10,840 more rows, and 41 more variables: bx_trf_pwkr_cd_dt &lt;dbl&gt;,
+#&gt; #   dt_dod_dect_cd &lt;dbl&gt;, dt_oda_alld_cd &lt;dbl&gt;, dt_tds_dect_ex_zs &lt;dbl&gt;,
+#&gt; #   eg_use_elec_kh_pc &lt;dbl&gt;, eg_use_pcap_kg_oe &lt;dbl&gt;, en_atm_co2e_pc &lt;dbl&gt;,
+#&gt; #   en_pop_dnst &lt;dbl&gt;, fs_ast_doms_gd_zs &lt;dbl&gt;, gc_rev_xgrt_gd_zs &lt;dbl&gt;,
+#&gt; #   gc_tax_totl_gd_zs &lt;dbl&gt;, it_cel_sets_p2 &lt;dbl&gt;, ms_mil_xpnd_gd_zs &lt;dbl&gt;,
+#&gt; #   ne_exp_gnfs_zs &lt;dbl&gt;, ne_gdi_totl_zs &lt;dbl&gt;, ne_imp_gnfs_zs &lt;dbl&gt;,
+#&gt; #   nv_agr_totl_zs &lt;dbl&gt;, nv_ind_totl_zs &lt;dbl&gt;, ny_gdp_defl_kd_zg &lt;dbl&gt;,
+#&gt; #   ny_gdp_mktp_cd &lt;dbl&gt;, ny_gdp_mktp_kd_zg &lt;dbl&gt;, ny_gnp_atls_cd &lt;dbl&gt;,
+#&gt; #   ny_gnp_mktp_pp_cd &lt;dbl&gt;, ny_gnp_pcap_cd &lt;dbl&gt;, ny_gnp_pcap_pp_cd &lt;dbl&gt;,
+#&gt; #   se_enr_prsc_fm_zs &lt;dbl&gt;, se_prm_cmpt_zs &lt;dbl&gt;, se_prm_enrr &lt;dbl&gt;,
+#&gt; #   se_sec_enrr &lt;dbl&gt;, sh_dyn_aids_zs &lt;dbl&gt;, sh_dyn_mort &lt;dbl&gt;,
+#&gt; #   sh_imm_meas &lt;dbl&gt;, sp_ado_tfrt &lt;dbl&gt;, sp_dyn_le00_in &lt;dbl&gt;,
+#&gt; #   sp_dyn_tfrt_in &lt;dbl&gt;, sp_pop_grow &lt;dbl&gt;, sp_pop_totl &lt;dbl&gt;,
+#&gt; #   sp_urb_grow &lt;dbl&gt;, tg_val_totl_gd_zs &lt;dbl&gt;, tt_pri_mrch_xd_wd &lt;dbl&gt;,
+#&gt; #   tx_val_tech_mf_zs &lt;dbl&gt;</div><div class='input'><span class='fu'>na_polish_key</span>(<span class='no'>wdi_ts</span>, <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>.7</span>)</div><div class='output co'>#&gt; # A tsibble: 9,600 x 57 [1Y]
+#&gt; # Key:       country_code [192]
+#&gt;    country_code  year ag_lnd_frst_k2 ag_srf_totl_k2 bx_klt_dinv_cd_…
+#&gt;    &lt;fct&gt;        &lt;int&gt;          &lt;dbl&gt;          &lt;dbl&gt;            &lt;dbl&gt;
+#&gt;  1 BDI           1969             NA          27830               NA
+#&gt;  2 BDI           1970             NA          27830               NA
+#&gt;  3 BDI           1971             NA          27830               NA
+#&gt;  4 BDI           1972             NA          27830               NA
+#&gt;  5 BDI           1973             NA          27830               NA
+#&gt;  6 BDI           1974             NA          27830               NA
+#&gt;  7 BDI           1975             NA          27830               NA
+#&gt;  8 BDI           1976             NA          27830               NA
+#&gt;  9 BDI           1977             NA          27830               NA
+#&gt; 10 BDI           1978             NA          27830               NA
+#&gt; # … with 9,590 more rows, and 52 more variables: bx_trf_pwkr_cd_dt &lt;dbl&gt;,
+#&gt; #   dt_dod_dect_cd &lt;dbl&gt;, dt_oda_alld_cd &lt;dbl&gt;, dt_tds_dect_ex_zs &lt;dbl&gt;,
+#&gt; #   eg_use_elec_kh_pc &lt;dbl&gt;, eg_use_pcap_kg_oe &lt;dbl&gt;, en_atm_co2e_pc &lt;dbl&gt;,
+#&gt; #   en_pop_dnst &lt;dbl&gt;, er_h2o_fwtl_zs &lt;dbl&gt;, er_ptd_totl_zs &lt;dbl&gt;,
+#&gt; #   fs_ast_doms_gd_zs &lt;dbl&gt;, gc_rev_xgrt_gd_zs &lt;dbl&gt;, gc_tax_totl_gd_zs &lt;dbl&gt;,
+#&gt; #   ic_reg_durs &lt;dbl&gt;, iq_sci_ovrl &lt;dbl&gt;, it_cel_sets_p2 &lt;dbl&gt;,
+#&gt; #   ms_mil_xpnd_gd_zs &lt;dbl&gt;, ne_exp_gnfs_zs &lt;dbl&gt;, ne_gdi_totl_zs &lt;dbl&gt;,
+#&gt; #   ne_imp_gnfs_zs &lt;dbl&gt;, nv_agr_totl_zs &lt;dbl&gt;, nv_ind_totl_zs &lt;dbl&gt;,
+#&gt; #   ny_gdp_defl_kd_zg &lt;dbl&gt;, ny_gdp_mktp_cd &lt;dbl&gt;, ny_gdp_mktp_kd_zg &lt;dbl&gt;,
+#&gt; #   ny_gnp_atls_cd &lt;dbl&gt;, ny_gnp_mktp_pp_cd &lt;dbl&gt;, ny_gnp_pcap_cd &lt;dbl&gt;,
+#&gt; #   ny_gnp_pcap_pp_cd &lt;dbl&gt;, se_enr_prsc_fm_zs &lt;dbl&gt;, se_prm_cmpt_zs &lt;dbl&gt;,
+#&gt; #   se_prm_enrr &lt;dbl&gt;, se_sec_enrr &lt;dbl&gt;, sh_dyn_aids_zs &lt;dbl&gt;,
+#&gt; #   sh_dyn_mort &lt;dbl&gt;, sh_imm_meas &lt;dbl&gt;, sh_sta_brtc_zs &lt;dbl&gt;,
+#&gt; #   sh_sta_maln_zs &lt;dbl&gt;, si_dst_frst_20 &lt;dbl&gt;, si_pov_dday &lt;dbl&gt;,
+#&gt; #   si_pov_nahc &lt;dbl&gt;, sm_pop_netm &lt;dbl&gt;, sp_ado_tfrt &lt;dbl&gt;,
+#&gt; #   sp_dyn_conu_zs &lt;dbl&gt;, sp_dyn_le00_in &lt;dbl&gt;, sp_dyn_tfrt_in &lt;dbl&gt;,
+#&gt; #   sp_pop_grow &lt;dbl&gt;, sp_pop_totl &lt;dbl&gt;, sp_urb_grow &lt;dbl&gt;,
+#&gt; #   tg_val_totl_gd_zs &lt;dbl&gt;, tt_pri_mrch_xd_wd &lt;dbl&gt;, tx_val_tech_mf_zs &lt;dbl&gt;</div><div class='input'><span class='fu'>na_polish_index</span>(<span class='no'>wdi_ts</span>, <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>.7</span>)</div><div class='output co'>#&gt; # A tsibble: 7,008 x 57 [1Y]
+#&gt; # Key:       country_code [198]
+#&gt;    country_code  year ag_lnd_frst_k2 ag_srf_totl_k2 bx_klt_dinv_cd_…
+#&gt;    &lt;fct&gt;        &lt;int&gt;          &lt;dbl&gt;          &lt;dbl&gt;            &lt;dbl&gt;
+#&gt;  1 BDI           1980             NA          27830              NA 
+#&gt;  2 BDI           1981             NA          27830              NA 
+#&gt;  3 BDI           1982             NA          27830              NA 
+#&gt;  4 BDI           1983             NA          27830              NA 
+#&gt;  5 BDI           1984             NA          27830              NA 
+#&gt;  6 BDI           1985             NA          27830          538567.
+#&gt;  7 BDI           1986             NA          27830         1524029.
+#&gt;  8 BDI           1987             NA          27830         1367714.
+#&gt;  9 BDI           1988             NA          27830         1196624.
+#&gt; 10 BDI           1989             NA          27830          567227.
+#&gt; # … with 6,998 more rows, and 52 more variables: bx_trf_pwkr_cd_dt &lt;dbl&gt;,
+#&gt; #   dt_dod_dect_cd &lt;dbl&gt;, dt_oda_alld_cd &lt;dbl&gt;, dt_tds_dect_ex_zs &lt;dbl&gt;,
+#&gt; #   eg_use_elec_kh_pc &lt;dbl&gt;, eg_use_pcap_kg_oe &lt;dbl&gt;, en_atm_co2e_pc &lt;dbl&gt;,
+#&gt; #   en_pop_dnst &lt;dbl&gt;, er_h2o_fwtl_zs &lt;dbl&gt;, er_ptd_totl_zs &lt;dbl&gt;,
+#&gt; #   fs_ast_doms_gd_zs &lt;dbl&gt;, gc_rev_xgrt_gd_zs &lt;dbl&gt;, gc_tax_totl_gd_zs &lt;dbl&gt;,
+#&gt; #   ic_reg_durs &lt;dbl&gt;, iq_sci_ovrl &lt;dbl&gt;, it_cel_sets_p2 &lt;dbl&gt;,
+#&gt; #   ms_mil_xpnd_gd_zs &lt;dbl&gt;, ne_exp_gnfs_zs &lt;dbl&gt;, ne_gdi_totl_zs &lt;dbl&gt;,
+#&gt; #   ne_imp_gnfs_zs &lt;dbl&gt;, nv_agr_totl_zs &lt;dbl&gt;, nv_ind_totl_zs &lt;dbl&gt;,
+#&gt; #   ny_gdp_defl_kd_zg &lt;dbl&gt;, ny_gdp_mktp_cd &lt;dbl&gt;, ny_gdp_mktp_kd_zg &lt;dbl&gt;,
+#&gt; #   ny_gnp_atls_cd &lt;dbl&gt;, ny_gnp_mktp_pp_cd &lt;dbl&gt;, ny_gnp_pcap_cd &lt;dbl&gt;,
+#&gt; #   ny_gnp_pcap_pp_cd &lt;dbl&gt;, se_enr_prsc_fm_zs &lt;dbl&gt;, se_prm_cmpt_zs &lt;dbl&gt;,
+#&gt; #   se_prm_enrr &lt;dbl&gt;, se_sec_enrr &lt;dbl&gt;, sh_dyn_aids_zs &lt;dbl&gt;,
+#&gt; #   sh_dyn_mort &lt;dbl&gt;, sh_imm_meas &lt;dbl&gt;, sh_sta_brtc_zs &lt;dbl&gt;,
+#&gt; #   sh_sta_maln_zs &lt;dbl&gt;, si_dst_frst_20 &lt;dbl&gt;, si_pov_dday &lt;dbl&gt;,
+#&gt; #   si_pov_nahc &lt;dbl&gt;, sm_pop_netm &lt;dbl&gt;, sp_ado_tfrt &lt;dbl&gt;,
+#&gt; #   sp_dyn_conu_zs &lt;dbl&gt;, sp_dyn_le00_in &lt;dbl&gt;, sp_dyn_tfrt_in &lt;dbl&gt;,
+#&gt; #   sp_pop_grow &lt;dbl&gt;, sp_pop_totl &lt;dbl&gt;, sp_urb_grow &lt;dbl&gt;,
+#&gt; #   tg_val_totl_gd_zs &lt;dbl&gt;, tt_pri_mrch_xd_wd &lt;dbl&gt;, tx_val_tech_mf_zs &lt;dbl&gt;</div><div class='input'><span class='fu'>na_polish_index2</span>(<span class='no'>wdi_ts</span>, <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>.7</span>)</div><div class='output co'>#&gt; # A tsibble: 9,077 x 57 [1Y]
+#&gt; # Key:       country_code [211]
+#&gt;    country_code  year ag_lnd_frst_k2 ag_srf_totl_k2 bx_klt_dinv_cd_…
+#&gt;    &lt;fct&gt;        &lt;int&gt;          &lt;dbl&gt;          &lt;dbl&gt;            &lt;dbl&gt;
+#&gt;  1 BDI           1969             NA          27830               NA
+#&gt;  2 BDI           1970             NA          27830               NA
+#&gt;  3 BDI           1971             NA          27830               NA
+#&gt;  4 BDI           1972             NA          27830               NA
+#&gt;  5 BDI           1973             NA          27830               NA
+#&gt;  6 BDI           1974             NA          27830               NA
+#&gt;  7 BDI           1975             NA          27830               NA
+#&gt;  8 BDI           1976             NA          27830               NA
+#&gt;  9 BDI           1977             NA          27830               NA
+#&gt; 10 BDI           1978             NA          27830               NA
+#&gt; # … with 9,067 more rows, and 52 more variables: bx_trf_pwkr_cd_dt &lt;dbl&gt;,
+#&gt; #   dt_dod_dect_cd &lt;dbl&gt;, dt_oda_alld_cd &lt;dbl&gt;, dt_tds_dect_ex_zs &lt;dbl&gt;,
+#&gt; #   eg_use_elec_kh_pc &lt;dbl&gt;, eg_use_pcap_kg_oe &lt;dbl&gt;, en_atm_co2e_pc &lt;dbl&gt;,
+#&gt; #   en_pop_dnst &lt;dbl&gt;, er_h2o_fwtl_zs &lt;dbl&gt;, er_ptd_totl_zs &lt;dbl&gt;,
+#&gt; #   fs_ast_doms_gd_zs &lt;dbl&gt;, gc_rev_xgrt_gd_zs &lt;dbl&gt;, gc_tax_totl_gd_zs &lt;dbl&gt;,
+#&gt; #   ic_reg_durs &lt;dbl&gt;, iq_sci_ovrl &lt;dbl&gt;, it_cel_sets_p2 &lt;dbl&gt;,
+#&gt; #   ms_mil_xpnd_gd_zs &lt;dbl&gt;, ne_exp_gnfs_zs &lt;dbl&gt;, ne_gdi_totl_zs &lt;dbl&gt;,
+#&gt; #   ne_imp_gnfs_zs &lt;dbl&gt;, nv_agr_totl_zs &lt;dbl&gt;, nv_ind_totl_zs &lt;dbl&gt;,
+#&gt; #   ny_gdp_defl_kd_zg &lt;dbl&gt;, ny_gdp_mktp_cd &lt;dbl&gt;, ny_gdp_mktp_kd_zg &lt;dbl&gt;,
+#&gt; #   ny_gnp_atls_cd &lt;dbl&gt;, ny_gnp_mktp_pp_cd &lt;dbl&gt;, ny_gnp_pcap_cd &lt;dbl&gt;,
+#&gt; #   ny_gnp_pcap_pp_cd &lt;dbl&gt;, se_enr_prsc_fm_zs &lt;dbl&gt;, se_prm_cmpt_zs &lt;dbl&gt;,
+#&gt; #   se_prm_enrr &lt;dbl&gt;, se_sec_enrr &lt;dbl&gt;, sh_dyn_aids_zs &lt;dbl&gt;,
+#&gt; #   sh_dyn_mort &lt;dbl&gt;, sh_imm_meas &lt;dbl&gt;, sh_sta_brtc_zs &lt;dbl&gt;,
+#&gt; #   sh_sta_maln_zs &lt;dbl&gt;, si_dst_frst_20 &lt;dbl&gt;, si_pov_dday &lt;dbl&gt;,
+#&gt; #   si_pov_nahc &lt;dbl&gt;, sm_pop_netm &lt;dbl&gt;, sp_ado_tfrt &lt;dbl&gt;,
+#&gt; #   sp_dyn_conu_zs &lt;dbl&gt;, sp_dyn_le00_in &lt;dbl&gt;, sp_dyn_tfrt_in &lt;dbl&gt;,
+#&gt; #   sp_pop_grow &lt;dbl&gt;, sp_pop_totl &lt;dbl&gt;, sp_urb_grow &lt;dbl&gt;,
+#&gt; #   tg_val_totl_gd_zs &lt;dbl&gt;, tt_pri_mrch_xd_wd &lt;dbl&gt;, tx_val_tech_mf_zs &lt;dbl&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -143,7 +285,9 @@ by the number of <strong>measurements</strong> (i.e. excluding key and index).</
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

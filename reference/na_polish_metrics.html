@@ -111,9 +111,25 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>before, after</th>
-      <td><p>A tsibble.</p></td>
+      <td><p>Tsibbles before and after polishing.</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A tibble contains:</p><ul>
+<li><p><code>prop_na</code> &amp; <code>nobs_na</code>: The proportion of <code>NA</code>s in the sliced data
+(the difference between <code>before</code> and <code>after</code>).</p></li>
+<li><p><code>prop_removed</code>, <code>nobs_removed</code>, <code>nrows_removed</code>, &amp; <code>ncols_removed</code>: The
+proportion of removed observations over the ovarall observations.</p></li>
+</ul>
+
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The metric defined for the effect of polishing events is
+<code>prop_na * prop_removed</code>. We'd like to minimise both <code>prop_na</code> and
+<code>prop_removed</code> over a sequence of polishing events.</p>
     
 
   </div>
@@ -121,7 +137,11 @@
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
+          </ul>
 
   </div>
 </div>

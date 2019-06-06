@@ -77,17 +77,17 @@ Too many missings spread across variables and observations like the `wdi` datase
 ```{r wdi-na-metrics, echo = FALSE}
 report_na_metrics <- function(data) {
   tibble(
-    prop_overall_na = mean(is.na(data)),
+    prop_overall_na = mean(is.na(data[, -(1:2)])),
     prop_cols_na = mean(apply(data[, -(1:2)], 2, anyNA)),
-    prop_rows_na = mean(apply(data, 1, anyNA)),
+    prop_rows_na = mean(apply(data[, -(1:2)], 1, anyNA)),
     data_ncols = NCOL(data),
     data_nrows = NROW(data)
   )
 }
-
 report_na_metrics(wdi)
 ```
 
+Polishing columns and rows iteratively sweeps out chunks of `NA` but leaves some of them in. The index should be kept intact by only slicing the ends due to the temporal ordering. The `na_polish_auto()` automates this polishing process by minimising the proportion of overall missings weighted by the proportion of removed observations. It will go through the following passes several times: `na_polish_measures()`, `na_polish_key()`, `na_polish_index()` until a tolerance value. The `na_polish_*()` family expects a tsibble, because polishing starts with tidy and clean data.
 
 ```{r polish}
 wdi_ts <- wdi %>% 

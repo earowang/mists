@@ -97,7 +97,17 @@ missing. We would end up with no data if using listwise deletion.
     #> # A tibble: 1 x 5
     #>   prop_overall_na prop_cols_na prop_rows_na data_ncols data_nrows
     #>             <dbl>        <dbl>        <dbl>      <int>      <int>
-    #> 1           0.433            1            1         57      10850
+    #> 1           0.449            1            1         57      10850
+
+Polishing columns and rows iteratively sweeps out chunks of `NA` but
+leaves some of them in. The index should be kept intact by only slicing
+the ends due to the temporal ordering. The `na_polish_auto()` automates
+this polishing process by minimising the proportion of overall missings
+weighted by the proportion of removed observations. It will go through
+the following passes several times: `na_polish_measures()`,
+`na_polish_key()`, `na_polish_index()` until a tolerance value. The
+`na_polish_*()` family expects a tsibble, because polishing starts with
+tidy and clean data.
 
 ``` r
 wdi_ts <- wdi %>% 

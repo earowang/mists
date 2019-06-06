@@ -28,7 +28,8 @@ reference:
 
 - title: Missing data polishing
   contents:
-    - starts_with("na_polish")
+    - mists-polish-auto
+    - mists-polish
 
 - title: Missing values handlers
   contents:

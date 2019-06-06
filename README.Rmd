@@ -96,7 +96,6 @@ wdi_after <- na_polish_auto(wdi_ts, cutoff = .8, quiet = TRUE)
 na_polish_metrics(wdi_ts, wdi_after)
 ```
 
-
 ## Related work
 
 * [imputeTS](http://steffenmoritz.github.io/imputeTS/): Time Series Missing Value Imputation

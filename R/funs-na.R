@@ -1,4 +1,4 @@
-#' Helpers for missing values
+#' Handlers for missing values
 #'
 #' @param x A vector.
 #'
@@ -9,6 +9,8 @@
 #' @export
 na_starts_with <- function(x) {
   na_rle <- na_rle_impl(x)
+  if (is_rle_empty(na_rle)) return(0L)
+
   if (na_rle$values[1L]) {
     na_rle$lengths[1L]
   } else {
@@ -22,6 +24,8 @@ na_starts_with <- function(x) {
 #' @export
 na_ends_with <- function(x) {
   na_rle <- na_rle_impl(x)
+  if (is_rle_empty(na_rle)) return(0L)
+
   if (tail(na_rle$values, 1L)) {
     tail(na_rle$lengths, 1L)
   } else {
@@ -35,10 +39,16 @@ na_ends_with <- function(x) {
 #' @export
 na_elsewhere <- function(x) {
   na_rle <- na_rle_impl(x)
+  if (is_rle_empty(na_rle)) return(0L)
+
   na_starts <- if (head(na_rle$values, 1L)) head(na_rle$lengths, 1L) else 0L
   na_ends <- if (tail(na_rle$values, 1L)) tail(na_rle$lengths, 1L) else 0L
   na_ttl <- sum(na_rle$lengths[na_rle$values])
   na_ttl - na_starts - na_ends
+}
+
+is_rle_empty <- function(x) {
+  is_empty(x$values)
 }
 
 n_overall_na <- function(x) {

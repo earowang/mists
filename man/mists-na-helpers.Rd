@@ -4,7 +4,7 @@
 \alias{na_starts_with}
 \alias{na_ends_with}
 \alias{na_elsewhere}
-\title{Helpers for missing values}
+\title{Handlers for missing values}
 \usage{
 na_starts_with(x)
 
@@ -16,7 +16,7 @@ na_elsewhere(x)
 \item{x}{A vector.}
 }
 \description{
-Helpers for missing values
+Handlers for missing values
 }
 \examples{
 x <- c(rep(NA, 4), 10:6, NA, 4:1, NA)

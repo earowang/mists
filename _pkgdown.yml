@@ -28,8 +28,9 @@ reference:
 
 - title: Missing data polishing
   contents:
-    - mists-polish-auto
-    - mists-polish
+    - na_polish_auto
+    - na_polish_measures
+    - na_polish_metrics
 
 - title: Missing values handlers
   contents:

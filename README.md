@@ -17,8 +17,9 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 
 The **mists** package provides a suite of 1d, 2d, and visual tools for
 exploring and polishing missing values residing in temporal data. The
-primary focus of temporal missings is to look at the runs of `NA`, and
-the association with other variables.
+primary focus of the package is to look at the runs of `NA` and the
+association with other variables, and to formulate missing data
+polishing strategies.
 
 ## Installation
 
@@ -71,7 +72,9 @@ na_runs_wind
 
 ## Range plots and extended spinoplots
 
-How are those missings distributed and associated with others?
+How do those missings distribute and associate with others? The range
+plot below shows many of single `NA` runs occurs to the `wind_dir`
+variable over the year of 2013.
 
 ``` r
 na_runs_wind %>% 
@@ -79,6 +82,11 @@ na_runs_wind %>%
 ```
 
 <img src="man/figures/README-rangeplot-1.png" style="display: block; margin: auto;" />
+
+The spinoplot has been extended to examine the association of missing
+runs with a second variable through temporal overlapping. A large amount
+of missings in `wind_dir` intersects with `wind_gust` missings at all
+three places.
 
 ``` r
 na_runs_wind %>% 
@@ -100,13 +108,13 @@ missing. We would end up with no data if using listwise deletion.
     #> 1           0.449            1            1         57      10850
 
 Polishing columns and rows iteratively sweeps out chunks of `NA` but
-leaves some of them in. The index should be kept intact by only slicing
-the ends due to the temporal ordering. The `na_polish_auto()` automates
-this polishing process by minimising the proportion of overall missings
-weighted by the proportion of removed observations. It will go through
-the following passes several times: `na_polish_measures()`,
-`na_polish_key()`, `na_polish_index()` until a tolerance value. The
-`na_polish_*()` family expects a
+leaves some of them in. The index should be kept intact by slicing the
+ends only due to the temporal ordering. The `na_polish_auto()` automates
+this polishing process by minimising *the proportion of overall
+missings* weighted by *the proportion of removed observations*. It will
+go through the following passes several times: `na_polish_measures()`,
+`na_polish_key()`, `na_polish_index()` until a tolerance value close or
+equal to zero. The `na_polish_*()` family expects a
 [tsibble](http://tsibble.tidyverts.org), because polishing starts with
 tidy and clean data.
 

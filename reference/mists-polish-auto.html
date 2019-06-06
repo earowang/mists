@@ -32,7 +32,7 @@
 
 <meta property="og:title" content="Automate missing data polishing for tsibble — na_polish_auto" />
 
-<meta property="og:description" content="It is an iterative process for minimising a metric until a tolerance value.
+<meta property="og:description" content="It is an iterative process for minimising the loss until a tolerance value.
 na_polish_auto() returns the polished data.
 na_polish_auto_trace() returns a metric tibble for documenting the steps.
 " />
@@ -98,21 +98,23 @@ na_polish_auto_trace() returns a metric tibble for documenting the steps.
     <div class="page-header">
     <h1>Automate missing data polishing for tsibble</h1>
     
-    <div class="hidden name"><code>mists-polish-auo.Rd</code></div>
+    <div class="hidden name"><code>mists-polish-auto.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>It is an iterative process for minimising a metric until a tolerance value.</p><ul>
+    <p>It is an iterative process for minimising the loss until a tolerance value.</p><ul>
 <li><p><code>na_polish_auto()</code> returns the polished data.</p></li>
 <li><p><code>na_polish_auto_trace()</code> returns a metric tibble for documenting the steps.</p></li>
 </ul>
     
     </div>
 
-    <pre class="usage"><span class='fu'>na_polish_auto</span>(<span class='no'>data</span>, <span class='no'>cutoff</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+    <pre class="usage"><span class='fu'>na_polish_auto</span>(<span class='no'>data</span>, <span class='no'>cutoff</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>funs</span> <span class='kw'>=</span> <span class='fu'>na_polish_funs</span>(),
+  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>na_polish_auto_trace</span>(<span class='no'>data</span>, <span class='no'>cutoff</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>na_polish_auto_trace</span>(<span class='no'>data</span>, <span class='no'>cutoff</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>funs</span> <span class='kw'>=</span> <span class='fu'>na_polish_funs</span>(),
+  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -129,8 +131,12 @@ proportion of overall missings is less than the cutoff.</p></td>
     <tr>
       <th>tol</th>
       <td><p>A tolerance value near zero as stopping rule. It compares to
-a metric defined as <code>prop_na * prop_removed</code> to be minimised. See
-<code><a href='na_polish_metrics.html'>na_polish_metrics()</a></code> for details.</p></td>
+an evaluation metric defined as <code>prop_na * prop_removed</code> to be minimised.
+See <code><a href='na_polish_metrics.html'>na_polish_metrics()</a></code> for details.</p></td>
+    </tr>
+    <tr>
+      <th>funs</th>
+      <td><p>A list of <code>na_polish_*()</code> functions to go through.</p></td>
     </tr>
     <tr>
       <th>quiet</th>

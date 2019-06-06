@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Metrics for missing data polishing — na_polish_metrics • mists</title>
+<title>Evaluation metrics for missing data polishing — na_polish_metrics • mists</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Metrics for missing data polishing — na_polish_metrics" />
+<meta property="og:title" content="Evaluation metrics for missing data polishing — na_polish_metrics" />
 
-<meta property="og:description" content="Metrics for missing data polishing" />
+<meta property="og:description" content="Evaluation metrics for missing data polishing" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -93,14 +93,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Metrics for missing data polishing</h1>
+    <h1>Evaluation metrics for missing data polishing</h1>
     
     <div class="hidden name"><code>na_polish_metrics.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Metrics for missing data polishing</p>
+    <p>Evaluation metrics for missing data polishing</p>
     
     </div>
 
@@ -121,15 +121,15 @@
 <li><p><code>prop_na</code> &amp; <code>nobs_na</code>: The proportion of <code>NA</code>s in the sliced data
 (the difference between <code>before</code> and <code>after</code>).</p></li>
 <li><p><code>prop_removed</code>, <code>nobs_removed</code>, <code>nrows_removed</code>, &amp; <code>ncols_removed</code>: The
-proportion of removed observations over the ovarall observations.</p></li>
+proportion of removed observations over the overall observations.</p></li>
 </ul>
 
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The metric defined for the effect of polishing events is
-<code>prop_na * prop_removed</code>. We'd like to minimise both <code>prop_na</code> and
-<code>prop_removed</code> over a sequence of polishing events.</p>
+    <p>The evaluation metric defined for the effect of polishing events is
+<code>prop_na * prop_removed</code>. We'd like to minimise the loss by minimising both
+<code>prop_na</code> and <code>prop_removed</code> over sequential polishing events.</p>
     
 
   </div>

@@ -96,14 +96,17 @@
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">na_runs_wind &lt;-<span class="st"> </span>nycflights13<span class="op">::</span>weather <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb3-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(origin) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/summarise_all.html">summarise_at</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">contains</a></span>(<span class="st">"wind"</span>)), <span class="op">~</span><span class="st"> </span><span class="kw"><a href="reference/na-rle.html">list_of_na_rle</a></span>(., time_hour))</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">na_runs_wind</a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; # A tibble: 3 x 4</span></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt;   origin        wind_dir      wind_speed       wind_gust</span></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt;   &lt;chr&gt;  &lt;list&lt;rle&lt;NA&gt;&gt;&gt; &lt;list&lt;rle&lt;NA&gt;&gt;&gt; &lt;list&lt;rle&lt;NA&gt;&gt;&gt;</span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; 1 EWR              [223]             [1]           [644]</span></a>
-<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; 2 JFK               [50]             [3]           [519]</span></a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; 3 LGA              [138]             [0]           [670]</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/summarise_all.html">summarise_at</a></span>(</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">    <span class="kw"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">contains</a></span>(<span class="st">"wind"</span>)), </a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">    <span class="op">~</span><span class="st"> </span><span class="kw"><a href="reference/na-rle.html">list_of_na_rle</a></span>(., <span class="dt">index_by =</span> time_hour)</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">  )</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">na_runs_wind</a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; # A tibble: 3 x 4</span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt;   origin        wind_dir      wind_speed       wind_gust</span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt;   &lt;chr&gt;  &lt;list&lt;rle&lt;NA&gt;&gt;&gt; &lt;list&lt;rle&lt;NA&gt;&gt;&gt; &lt;list&lt;rle&lt;NA&gt;&gt;&gt;</span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt; 1 EWR              [223]             [1]           [644]</span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; 2 JFK               [50]             [3]           [519]</span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt; 3 LGA              [138]             [0]           [670]</span></a></code></pre></div>
 </div>
 <div id="range-plots-and-extended-spinoplots" class="section level2">
 <h2 class="hasAnchor">
@@ -119,15 +122,19 @@
 <div id="missing-data-polishing" class="section level2">
 <h2 class="hasAnchor">
 <a href="#missing-data-polishing" class="anchor"></a>Missing data polishing</h2>
-<p>Data polishing isn’t data cleaning. Where shall we start tidy data analysis if too many missings spread across variables and observations?</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">wdi_ts &lt;-<span class="st"> </span>wdi <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span>tsibble<span class="op">::</span><span class="kw"><a href="https://tsibble.tidyverts.org/reference/as-tsibble.html">as_tsibble</a></span>(<span class="dt">key =</span> country_code, <span class="dt">index =</span> year)</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">wdi_after &lt;-<span class="st"> </span><span class="kw"><a href="reference/mists-polish-auo.html">na_polish_auto</a></span>(wdi_ts, <span class="dt">cutoff =</span> <span class="fl">.8</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="kw"><a href="reference/na_polish_metrics.html">na_polish_metrics</a></span>(wdi_ts, wdi_after)</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; # A tibble: 1 x 6</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt;   prop_na nobs_na prop_removed nobs_removed nrows_removed ncols_removed</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt;     &lt;dbl&gt;   &lt;int&gt;        &lt;dbl&gt;        &lt;int&gt;         &lt;int&gt;         &lt;int&gt;</span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; 1   0.636  220533        0.581       346948          5752             6</span></a></code></pre></div>
+<p>Too many missings spread across variables and observations like the <code>wdi</code> dataset (world development indicators)? Every observation and measured variable contains <code>NA</code>, and almost half of the data goes missing. We would end up with no data if using listwise deletion.</p>
+<pre><code>#&gt; # A tibble: 1 x 5
+#&gt;   prop_overall_na prop_cols_na prop_rows_na data_ncols data_nrows
+#&gt;             &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;int&gt;      &lt;int&gt;
+#&gt; 1           0.433            1            1         57      10850</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">wdi_ts &lt;-<span class="st"> </span>wdi <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="st">  </span>tsibble<span class="op">::</span><span class="kw"><a href="https://tsibble.tidyverts.org/reference/as-tsibble.html">as_tsibble</a></span>(<span class="dt">key =</span> country_code, <span class="dt">index =</span> year)</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">wdi_after &lt;-<span class="st"> </span><span class="kw"><a href="reference/mists-polish-auto.html">na_polish_auto</a></span>(wdi_ts, <span class="dt">cutoff =</span> <span class="fl">.8</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="kw"><a href="reference/na_polish_metrics.html">na_polish_metrics</a></span>(wdi_ts, wdi_after)</a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; # A tibble: 1 x 6</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt;   prop_na nobs_na prop_removed nobs_removed nrows_removed ncols_removed</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt;     &lt;dbl&gt;   &lt;int&gt;        &lt;dbl&gt;        &lt;int&gt;         &lt;int&gt;         &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt; 1   0.636  220533        0.581       346948          5752             6</span></a></code></pre></div>
 </div>
 <div id="related-work" class="section level2">
 <h2 class="hasAnchor">
@@ -163,7 +170,8 @@
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>
-<a href="https://earo.me">Earo Wang</a> <br><small class="roles"> Author, maintainer </small>  </li>
+<a href="https://earo.me">Earo Wang</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-6448-5260" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
+<li><a href="authors.html">All authors...</a></li>
 </ul>
 </div>
 

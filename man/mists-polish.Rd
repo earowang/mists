@@ -24,9 +24,26 @@ proportion of overall missings is less than the cutoff.}
 \item{na_fun}{Either \code{\link{na_starts_with}} or \code{\link{na_ends_with}}.}
 }
 \description{
-Missing data polishing for tsibble
+If the proption of overall missings is less than the cutoff,
+\itemize{
+\item \code{na_polish_measures()} removes columns or observations.
+\item \code{na_polish_key()} polishes data by rows or observations, removing the whole
+rows of key series.
+\item \code{na_polish_index()} polishes data by rows or observations, removing either
+the starting or the ending \code{NA} blocks (if any) within each key series.
+\item \code{na_polish_index2()} polishes data by rows or observations, removing the
+ending \code{NA} blocks (if any) within each key series. It is a shortcut of
+\code{na_polish_index(na_fun = na_ends_with)}.
+}
 }
 \details{
 The proportion of overall missings is defined as the number of \code{NA} divided
 by the number of \strong{measurements} (i.e. excluding key and index).
+}
+\examples{
+wdi_ts <- tsibble::as_tsibble(wdi, key = country_code, index = year)
+na_polish_measures(wdi_ts, cutoff = .7)
+na_polish_key(wdi_ts, cutoff = .7)
+na_polish_index(wdi_ts, cutoff = .7)
+na_polish_index2(wdi_ts, cutoff = .7)
 }

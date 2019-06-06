@@ -2,6 +2,16 @@ globalVariables(c("n_na", "pct_overall_na"))
 
 #' Missing data polishing for tsibble
 #'
+#' If the proption of overall missings is less than the cutoff,
+#' * `na_polish_measures()` removes columns or observations.
+#' * `na_polish_key()` polishes data by rows or observations, removing the whole
+#' rows of key series.
+#' * `na_polish_index()` polishes data by rows or observations, removing either
+#' the starting or the ending `NA` blocks (if any) within each key series.
+#' * `na_polish_index2()` polishes data by rows or observations, removing the
+#' ending `NA` blocks (if any) within each key series. It is a shortcut of
+#' `na_polish_index(na_fun = na_ends_with)`.
+#'
 #' @param data A tsibble.
 #' @param cutoff A numeric between 0 and 1. Rows/cols will be kept, if the
 #' proportion of overall missings is less than the cutoff.
@@ -11,6 +21,9 @@ globalVariables(c("n_na", "pct_overall_na"))
 #' The proportion of overall missings is defined as the number of `NA` divided
 #' by the number of **measurements** (i.e. excluding key and index).
 #' @rdname mists-polish
+#' @examples
+#' wdi_ts <- tsibble::as_tsibble(wdi, key = country_code, index = year)
+#' na_polish_measures(wdi_ts, cutoff = .7)
 #' @export
 na_polish_measures <- function(data, cutoff) {
   na_polish_assert(data, cutoff)
@@ -20,6 +33,8 @@ na_polish_measures <- function(data, cutoff) {
 }
 
 #' @rdname mists-polish
+#' @examples
+#' na_polish_key(wdi_ts, cutoff = .7)
 #' @export
 na_polish_key <- function(data, cutoff) {
   na_polish_assert(data, cutoff)
@@ -37,6 +52,8 @@ na_polish_key <- function(data, cutoff) {
 }
 
 #' @rdname mists-polish
+#' @examples
+#' na_polish_index(wdi_ts, cutoff = .7)
 #' @export
 na_polish_index <- function(data, cutoff, na_fun = na_starts_with) {
   na_polish_assert(data, cutoff)
@@ -68,6 +85,8 @@ na_polish_index <- function(data, cutoff, na_fun = na_starts_with) {
 }
 
 #' @rdname mists-polish
+#' @examples
+#' na_polish_index2(wdi_ts, cutoff = .7)
 #' @export
 na_polish_index2 <- function(data, cutoff) {
   na_polish_index(data, cutoff, na_fun = na_ends_with)
@@ -84,17 +103,25 @@ na_polish_steps <- function() {
 
 #' Automate missing data polishing for tsibble
 #'
+#' It is an iterative process for minising a metric until a tolerence value.
+#' * `na_polish_auto()` returns the polished data.
+#' * `na_polish_auto_trace()` returns a metric tibble for documenting the steps.
+#'
 #' @inheritParams na_polish_measures
-#' @param tol A tolerence value as stopping rule.
-#' @param quiet Report metrics along the way of the automatic polishing.
+#' @param tol A tolerence value near zero as stopping rule. It compares to
+#' a metric defined as `prop_na * prop_removed` to be minimised. See
+#' [`na_polish_metrics()`] for details.
+#' @param quiet If `FALSE`, report metrics while automatically polishing, and
+#' requires the "cliapp" package to be installed.
 #'
 #' @rdname mists-polish-auo
 #' @export
 #' @examples
-#' library(tsibble, warn.conflicts = FALSE)
-#' wdi_ts <- as_tsibble(wdi, key = country_code, index = year)
+#' \dontrun{
+#' wdi_ts <- tsibble::as_tsibble(wdi, key = country_code, index = year)
 #' wdi_after <- na_polish_auto(wdi_ts, cutoff = .8)
 #' na_polish_metrics(wdi_ts, wdi_after)
+#' }
 na_polish_auto <- function(data, cutoff, tol = .1, quiet = FALSE) {
   na_polish_auto_impl(data, cutoff, tol, quiet, expect = "data")
 }
@@ -121,7 +148,7 @@ na_polish_auto_impl <- function(data, cutoff, tol = .1, quiet = FALSE,
         metrics[[1]] * metrics[[3]]
       })
 
-    lst_funs <- lst_funs[order(step_metrics)]
+    lst_funs <- lst_funs[order(step_metrics, decreasing = TRUE)]
     # a full pass
     step_na <- step_removed <- double(length(lst_funs))
     for (i in seq_along(lst_funs)) {
@@ -167,7 +194,17 @@ na_polish_auto_impl <- function(data, cutoff, tol = .1, quiet = FALSE,
 
 #' Metrics for missing data polishing
 #'
-#' @param before,after A tsibble.
+#' @param before,after Tsibbles before and after polishing.
+#' @return
+#' A tibble contains:
+#' * `prop_na` & `nobs_na`: The proportion of `NA`s in the sliced data
+#' (the difference between `before` and `after`).
+#' * `prop_removed`, `nobs_removed`, `nrows_removed`, & `ncols_removed`: The
+#' proportion of removed observations over the ovarall observations.
+#' @details
+#' The metric defined for the effect of polishing events is
+#' `prop_na * prop_removed`. We'd like to minimise both `prop_na` and
+#' `prop_removed` over a sequence of polishing events.
 #' @export
 na_polish_metrics <- function(before, after) {
   stopifnot(is_tsibble(before) && is_tsibble(after))
@@ -225,7 +262,7 @@ counter <- function() {
 
 cli_report <- function(npass, step_fun, metric) {
   if (!is_installed("cliapp")) {
-    abort("`quiet = FALSE` requires the cliapp packge to be installed.")
+    abort("`quiet = FALSE` requires the \"cliapp\" packge to be installed.")
   }
   cliapp::start_app(theme = cliapp::simple_theme())
   cliapp::cli_h1(paste("Pass", npass))

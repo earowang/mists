@@ -15,16 +15,24 @@ na_polish_auto_trace(data, cutoff, tol = 0.1, quiet = FALSE)
 \item{cutoff}{A numeric between 0 and 1. Rows/cols will be kept, if the
 proportion of overall missings is less than the cutoff.}
 
-\item{tol}{A tolerence value as stopping rule.}
+\item{tol}{A tolerence value near zero as stopping rule. It compares to
+a metric defined as \code{prop_na * prop_removed} to be minimised. See
+\code{\link[=na_polish_metrics]{na_polish_metrics()}} for details.}
 
-\item{quiet}{Report metrics along the way of the automatic polishing.}
+\item{quiet}{If \code{FALSE}, report metrics while automatically polishing, and
+requires the "cliapp" package to be installed.}
 }
 \description{
-Automate missing data polishing for tsibble
+It is an iterative process for minising a metric until a tolerence value.
+\itemize{
+\item \code{na_polish_auto()} returns the polished data.
+\item \code{na_polish_auto_trace()} returns a metric tibble for documenting the steps.
+}
 }
 \examples{
-library(tsibble, warn.conflicts = FALSE)
-wdi_ts <- as_tsibble(wdi, key = country_code, index = year)
+\dontrun{
+wdi_ts <- tsibble::as_tsibble(wdi, key = country_code, index = year)
 wdi_after <- na_polish_auto(wdi_ts, cutoff = .8)
 na_polish_metrics(wdi_ts, wdi_after)
+}
 }

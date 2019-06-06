@@ -7,8 +7,22 @@
 na_polish_metrics(before, after)
 }
 \arguments{
-\item{before, after}{A tsibble.}
+\item{before, after}{Tsibbles before and after polishing.}
+}
+\value{
+A tibble contains:
+\itemize{
+\item \code{prop_na} & \code{nobs_na}: The proportion of \code{NA}s in the sliced data
+(the difference between \code{before} and \code{after}).
+\item \code{prop_removed}, \code{nobs_removed}, \code{nrows_removed}, & \code{ncols_removed}: The
+proportion of removed observations over the ovarall observations.
+}
 }
 \description{
 Metrics for missing data polishing
+}
+\details{
+The metric defined for the effect of polishing events is
+\code{prop_na * prop_removed}. We'd like to minimise both \code{prop_na} and
+\code{prop_removed} over a sequence of polishing events.
 }

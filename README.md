@@ -97,7 +97,7 @@ na_polish_metrics(wdi_ts, wdi_after)
 #> # A tibble: 1 x 6
 #>   prop_na nobs_na prop_removed nobs_removed nrows_removed ncols_removed
 #>     <dbl>   <int>        <dbl>        <int>         <int>         <int>
-#> 1   0.645  225737        0.587       350006          5486             9
+#> 1   0.636  220533        0.581       346948          5752             6
 ```
 
 ## Related work

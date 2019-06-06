@@ -24,7 +24,7 @@ proportion of overall missings is less than the cutoff.}
 \item{na_fun}{Either \code{\link{na_starts_with}} or \code{\link{na_ends_with}}.}
 }
 \description{
-If the proption of overall missings is less than the cutoff,
+If the proportion of overall missings is less than the cutoff,
 \itemize{
 \item \code{na_polish_measures()} removes columns or observations.
 \item \code{na_polish_key()} polishes data by rows or observations, removing the whole

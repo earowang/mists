@@ -2,7 +2,7 @@ globalVariables(c("n_na", "pct_overall_na"))
 
 #' Missing data polishing for tsibble
 #'
-#' If the proption of overall missings is less than the cutoff,
+#' If the proportion of overall missings is less than the cutoff,
 #' * `na_polish_measures()` removes columns or observations.
 #' * `na_polish_key()` polishes data by rows or observations, removing the whole
 #' rows of key series.
@@ -103,12 +103,12 @@ na_polish_steps <- function() {
 
 #' Automate missing data polishing for tsibble
 #'
-#' It is an iterative process for minising a metric until a tolerence value.
+#' It is an iterative process for minimising a metric until a tolerance value.
 #' * `na_polish_auto()` returns the polished data.
 #' * `na_polish_auto_trace()` returns a metric tibble for documenting the steps.
 #'
 #' @inheritParams na_polish_measures
-#' @param tol A tolerence value near zero as stopping rule. It compares to
+#' @param tol A tolerance value near zero as stopping rule. It compares to
 #' a metric defined as `prop_na * prop_removed` to be minimised. See
 #' [`na_polish_metrics()`] for details.
 #' @param quiet If `FALSE`, report metrics while automatically polishing, and
@@ -200,7 +200,7 @@ na_polish_auto_impl <- function(data, cutoff, tol = .1, quiet = FALSE,
 #' * `prop_na` & `nobs_na`: The proportion of `NA`s in the sliced data
 #' (the difference between `before` and `after`).
 #' * `prop_removed`, `nobs_removed`, `nrows_removed`, & `ncols_removed`: The
-#' proportion of removed observations over the ovarall observations.
+#' proportion of removed observations over the overall observations.
 #' @details
 #' The metric defined for the effect of polishing events is
 #' `prop_na * prop_removed`. We'd like to minimise both `prop_na` and

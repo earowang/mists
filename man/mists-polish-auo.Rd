@@ -15,7 +15,7 @@ na_polish_auto_trace(data, cutoff, tol = 0.1, quiet = FALSE)
 \item{cutoff}{A numeric between 0 and 1. Rows/cols will be kept, if the
 proportion of overall missings is less than the cutoff.}
 
-\item{tol}{A tolerence value near zero as stopping rule. It compares to
+\item{tol}{A tolerance value near zero as stopping rule. It compares to
 a metric defined as \code{prop_na * prop_removed} to be minimised. See
 \code{\link[=na_polish_metrics]{na_polish_metrics()}} for details.}
 
@@ -23,7 +23,7 @@ a metric defined as \code{prop_na * prop_removed} to be minimised. See
 requires the "cliapp" package to be installed.}
 }
 \description{
-It is an iterative process for minising a metric until a tolerence value.
+It is an iterative process for minimising a metric until a tolerance value.
 \itemize{
 \item \code{na_polish_auto()} returns the polished data.
 \item \code{na_polish_auto_trace()} returns a metric tibble for documenting the steps.

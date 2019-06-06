@@ -6,8 +6,8 @@ Authors@R:
            family = "Wang",
            role = c("aut", "cre"),
            email = "earo.wang@gmail.com")
-Description: Provides 1d, 2d, and visual methods for exploring, polishing, and
-    visualising temporal missingness.
+Description: Provides 1d, 2d, and visual methods for exploring,
+    polishing, and visualising temporal missingness.
 License: GPL-3
 URL: https://pkg.earo.me/mists
 BugReports: https://github.com/earowang/mists/issues
@@ -21,10 +21,11 @@ Imports:
     tsibble (>= 0.8.0),
     vctrs
 Suggests: 
+    cliapp,
+    covr,
     knitr,
     nycflights13,
-    covr,
-    cliapp
+    spelling
 LinkingTo: 
     Rcpp (>= 0.12.0)
 VignetteBuilder: 

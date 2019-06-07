@@ -13,10 +13,13 @@ na_rle_impl <- function(x) {
 #' @return A named list of
 #' * `lengths`: the lengths of `NA` runs
 #' * `indices`: the starting indices of runs
-#' @details
-#' Mathematical operations such as `sum()` and `range()` can be directly applied to
-#' `na_rle()` and `list_of_na_rle()`, and their returned values are the functions
-#' of the *lengths* of runs only.
+#'
+#' @section Mathematical operations:
+#' Many math operations can be applied to objects returned from `na_rle()` and 
+#' `list_of_na_rle()`, regarding the *lengths* of runs.
+#' * `sum()`: the total number of `NA` over all runs.
+#' * `mean()`: the average `NA`s per run.
+#' * `min()` & `max()`: the minimum and maximum of runs.
 #'
 #' @rdname na-rle
 #' @examples
@@ -29,13 +32,9 @@ na_rle_impl <- function(x) {
 #' na_rle_lengths(x)
 #' na_rle_indices(x)
 #'
-#' # subsetting like a vector (not working yet)
-#' # x[3:4]
-#' # the total number of runs
-#' length(x)
-#' # summary group generics
-#' sum(x) # the total number of `NA`s
-#' range(x)
+#' length(x) # the number of runs
+#' sum(x) # the total number of `NA`
+#' range(x) # min & max runs
 #' 
 #' library(dplyr, warn.conflicts = FALSE)
 #' # list_of_na_rle() is useful when working with tabular data
@@ -144,5 +143,29 @@ mists_rle_na_assert <- function(x) {
 
 #' @export
 length.mists_rle_na <- function(x) { # for displaying the size of runs
-  length(x$lengths)
+  length(na_rle_lengths(x))
+}
+
+# `min()` and `max()` better to be defined through `vec_math()`, but seems that
+# they require the input to be orderable. Not the case for mists_rle_na, so
+# overwrite `vctrs_vctr`.
+
+#' @export
+min.mists_rle_na <- function(x, ...) {
+  vec_math_base("min", na_rle_lengths(x))
+}
+
+#' @export
+max.mists_rle_na <- function(x, ...) {
+  vec_math_base("max", na_rle_lengths(x))
+}
+
+#' @export
+min.mists_list_of_rle_na <- function(x, ...) {
+  map_int(x, min)
+}
+
+#' @export
+max.mists_list_of_rle_na <- function(x, ...) {
+  map_int(x, max)
 }

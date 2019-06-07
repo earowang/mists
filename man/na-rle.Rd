@@ -39,11 +39,17 @@ A named list of
 \description{
 Run lengths encoding for missing values (\code{NA})
 }
-\details{
-Mathematical operations such as \code{sum()} and \code{range()} can be directly applied to
-\code{na_rle()} and \code{list_of_na_rle()}, and their returned values are the functions
-of the \emph{lengths} of runs only.
+\section{Mathematical operations}{
+
+Many math operations can be applied to objects returned from \code{na_rle()} and
+\code{list_of_na_rle()}, regarding the \emph{lengths} of runs.
+\itemize{
+\item \code{sum()}: the total number of \code{NA} over all runs.
+\item \code{mean()}: the average \code{NA}s per run.
+\item \code{min()} & \code{max()}: the minimum and maximum of runs.
 }
+}
+
 \examples{
 df <- data.frame(year = 2000:2019, temp = sample(0:30, size = 10))
 df[c(1, 6, 13:16, 19), "temp"] <- NA
@@ -54,13 +60,9 @@ na_rle(df$temp) # indexed by the default positions
 na_rle_lengths(x)
 na_rle_indices(x)
 
-# subsetting like a vector (not working yet)
-# x[3:4]
-# the total number of runs
-length(x)
-# summary group generics
-sum(x) # the total number of `NA`s
-range(x)
+length(x) # the number of runs
+sum(x) # the total number of `NA`
+range(x) # min & max runs
 
 library(dplyr, warn.conflicts = FALSE)
 # list_of_na_rle() is useful when working with tabular data

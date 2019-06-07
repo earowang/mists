@@ -1,4 +1,4 @@
-globalVariables(c("values", "group", "n", "nobs", "frac", "n.x", "overlap",
+globalVariables(c("indices", "group", "n", "nobs", "frac", "n.x", "overlap",
   "start", "end"))
 
 distinct_groups <- function(x) {
@@ -42,12 +42,12 @@ na_rle_rangeplot <- function(data, x, y = NULL, ...) {
   data <- 
     ungroup(mutate(
       group_by(na_rle_expand(x, y = y), y), 
-      "group" := paste(y, distinct_groups(values), sep = "-")
+      "group" := paste(y, distinct_groups(indices), sep = "-")
     ))
   ends <- 
     summarise(
       group_by(data, y, group), 
-      "start" := min(values), "end" := max(values)
+      "start" := min(indices), "end" := max(indices)
     )
   unique_grp <- filter(count(data, group), n == 1)[["group"]]
   rngs <- filter(data, !(group %in% unique_grp))
@@ -66,7 +66,7 @@ na_rle_rangeplot <- function(data, x, y = NULL, ...) {
 
   plot <- ggplot()
   line_params$data <- rngs
-  line_params$mapping <- aes(x = values, y = y, group = group)
+  line_params$mapping <- aes(x = indices, y = y, group = group)
   line_params$inherit.aes <- FALSE
   plot <- plot + do.call(geom_line, line_params)
 
@@ -76,7 +76,7 @@ na_rle_rangeplot <- function(data, x, y = NULL, ...) {
   plot <- plot + do.call(geom_point, point_params)
   point_params$mapping <- aes(x = end, y = y)
   plot <- plot + do.call(geom_point, point_params)
-  plot + labs(x = vec_ptype_full(data$values), y = "")
+  plot + labs(x = vec_ptype_full(data$indices), y = "")
 }
 
 #' @rdname mists-plot
@@ -139,7 +139,7 @@ na_rle_spinoplot <- function(data, x, y = NULL, facets = NULL, ...) {
     ylab <- paste("proportion of overlaps", parenthesis(as_label(y)))
     x_full <- na_rle_expand(lst_na_rle_x, facets = facets_vals)
     y_full <- na_rle_expand(lst_na_rle_y, facets = facets_vals)
-    intersect_xy <- semi_join(x_full, y_full, by = c("values", "facets"))
+    intersect_xy <- semi_join(x_full, y_full, by = c("indices", "facets"))
     overlaps_xy <- count(intersect_xy, lengths, facets)
     frac_intersect <- 
       transmute(

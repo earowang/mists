@@ -3,7 +3,7 @@
 \name{na_rle}
 \alias{na_rle}
 \alias{na_rle_lengths}
-\alias{na_rle_values}
+\alias{na_rle_indices}
 \alias{list_of_na_rle}
 \alias{as_list_of.mists_rle_na}
 \title{Run lengths encoding for missing values (\code{NA})}
@@ -12,7 +12,7 @@ na_rle(x = double(), index_by = seq_along(x), interval = NULL)
 
 na_rle_lengths(x)
 
-na_rle_values(x)
+na_rle_indices(x)
 
 list_of_na_rle(x = double(), index_by = seq_along(x),
   interval = NULL)
@@ -33,7 +33,7 @@ otherwise a supplied "interval" class. See \code{?tsibble::tsibble} for details.
 A named list of
 \itemize{
 \item \code{lengths}: the lengths of \code{NA} runs
-\item \code{values}: the starting indices of runs
+\item \code{indices}: the starting indices of runs
 }
 }
 \description{
@@ -52,7 +52,7 @@ na_rle(df$temp) # indexed by the default positions
 (x <- na_rle(df$temp, index_by = df$year)) # indexed by a variable
 
 na_rle_lengths(x)
-na_rle_values(x)
+na_rle_indices(x)
 
 # subsetting like a vector (not working yet)
 # x[3:4]

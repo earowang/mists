@@ -70,8 +70,8 @@ obj_print_data.mists_rle_na <- function(x, ...) {
     if (over10) ellipsis(x$lengths[1:10]) else x$lengths, "\n"
   )
   cat(
-    "$values :", angle_brackets(vec_ptype_abbr(x$values)),
-    if (over10) ellipsis(format(x$values[1:10])) else format(x$values)
+    "$indices :", angle_brackets(vec_ptype_abbr(x$indices)),
+    if (over10) ellipsis(format(x$indices[1:10])) else format(x$indices)
   )
   invisible(x)
 }

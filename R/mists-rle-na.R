@@ -12,7 +12,7 @@ na_rle_impl <- function(x) {
 #' 
 #' @return A named list of
 #' * `lengths`: the lengths of `NA` runs
-#' * `values`: the starting indices of runs
+#' * `indices`: the starting indices of runs
 #' @details
 #' Mathematical operations such as `sum()` and `range()` can be directly applied to
 #' `na_rle()` and `list_of_na_rle()`, and their returned values are the functions
@@ -27,7 +27,7 @@ na_rle_impl <- function(x) {
 #' (x <- na_rle(df$temp, index_by = df$year)) # indexed by a variable
 #' 
 #' na_rle_lengths(x)
-#' na_rle_values(x)
+#' na_rle_indices(x)
 #'
 #' # subsetting like a vector (not working yet)
 #' # x[3:4]
@@ -50,9 +50,9 @@ na_rle_impl <- function(x) {
 na_rle <- function(x = double(), index_by = seq_along(x), interval = NULL) {
   stopifnot(vec_size(x) == vec_size(index_by))
   if (has_length(x, 0)) {
-    values <- index_by
-    attr(values, "interval") <- interval_pull(index_by)
-    return(new_mists_rle_na(list(lengths = integer(), values = values)))
+    indices <- index_by
+    attr(indices, "interval") <- interval_pull(index_by)
+    return(new_mists_rle_na(list(lengths = integer(), indices = indices)))
   }
 
   if (vec_duplicate_any(index_by)) {
@@ -71,9 +71,9 @@ na_rle <- function(x = double(), index_by = seq_along(x), interval = NULL) {
 
   res <- na_rle_impl(x)
   from <- c(1L, head(cumsum(res$lengths), -1L) + 1L)[res$values]
-  values <- index_by[ord][from]
-  attr(values, "interval") <- int
-  new_mists_rle_na(list(lengths = res$lengths[res$values], values = values))
+  indices <- index_by[ord][from]
+  attr(indices, "interval") <- int
+  new_mists_rle_na(list(lengths = res$lengths[res$values], indices = indices))
 }
 
 #' @rdname na-rle
@@ -94,18 +94,18 @@ na_rle_lengths.mists_list_of_rle_na <- function(x) {
 
 #' @rdname na-rle
 #' @export
-na_rle_values <- function(x) {
-  UseMethod("na_rle_values")
+na_rle_indices <- function(x) {
+  UseMethod("na_rle_indices")
 }
 
 #' @export
-na_rle_values.mists_rle_na <- function(x) {
-  x$values
+na_rle_indices.mists_rle_na <- function(x) {
+  x$indices
 }
 
 #' @export
-na_rle_values.mists_list_of_rle_na <- function(x) {
-  as_list_of(map(x, na_rle_values))
+na_rle_indices.mists_list_of_rle_na <- function(x) {
+  as_list_of(map(x, na_rle_indices))
 }
 
 #' @rdname na-rle
@@ -137,8 +137,8 @@ new_mists_rle_na <- function(x) {
 }
 
 mists_rle_na_assert <- function(x) {
-  if (is_false(is_bare_list(x) && all(has_name(x, c("lengths", "values"))))) {
-    abort("Run length encoding must be a named list with `lengths` and `values`.")
+  if (is_false(is_bare_list(x) && all(has_name(x, c("lengths", "indices"))))) {
+    abort("Run length encoding must be a named list with `lengths` and `indices`.")
   }
 }
 

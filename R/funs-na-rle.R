@@ -18,9 +18,9 @@ na_rle_shift <- function(x, n = 1L) {
 
 #' @export
 na_rle_shift.mists_rle_na <- function(x, n = 1L) {
-  rle_values <- na_rle_values(x)
-  tunit <- tunit(rle_values)
-  x$values <- rle_values + sign(n) * tunit * abs(n)
+  rle_indices <- na_rle_indices(x)
+  tunit <- tunit(rle_indices)
+  x$indices <- rle_indices + sign(n) * tunit * abs(n)
   x
 }
 
@@ -50,16 +50,16 @@ na_rle_expand <- function(x, ...) {
 #' @export
 na_rle_expand.mists_rle_na <- function(x, ...) {
   if (is_empty(x)) {
-    return(tibble("lengths" = integer(0), "values" = integer(0)))
+    return(tibble("lengths" = integer(0), "indices" = integer(0)))
   }
   rle_lengths <- na_rle_lengths(x)
-  rle_values <- na_rle_values(x)
-  tunit <- tunit(rle_values)
-  full_seq <- map2(rle_values, rle_lengths,
+  rle_indices <- na_rle_indices(x)
+  tunit <- tunit(rle_indices)
+  full_seq <- map2(rle_indices, rle_lengths,
     function(.x, .y) seq(.x, by = tunit, length.out = .y))
   rep_lengths <- rep.int(rle_lengths, map_int(full_seq, vec_size))
   full_seq <- do.call("c", full_seq)
-  res <- tibble("lengths" = rep_lengths, "values" = full_seq)
+  res <- tibble("lengths" = rep_lengths, "indices" = full_seq)
   interval_restore(res, x)
 }
 
@@ -85,23 +85,23 @@ na_rle_table <- function(x) {
 
 tbl_to_na_rle <- function(data) {
   if (is_empty(data)) {
-    return(na_rle(x = data[["values"]], index_by = data[["lengths"]]))
+    return(na_rle(x = data[["indices"]], index_by = data[["lengths"]]))
   }
 
-  rle_cont <- continuous_rle_impl(data[["values"]], tunit(data[["values"]]))
+  rle_cont <- continuous_rle_impl(data[["indices"]], tunit(data[["indices"]]))
   add_len <- mutate(data, lengths = rep.int(cumsum(rle_cont), rle_cont))
-  red_data <- summarise(group_by(add_len, lengths), values = min(values))
+  red_data <- summarise(group_by(add_len, lengths), indices = min(indices))
   red_data <- interval_restore(red_data, data)
   new_mists_rle_na(as_list(mutate(red_data, lengths = rle_cont)))
 }
 
 interval_restore <- function(x, to) {
-  attr(x$values, "interval") <- attr(to$values, "interval")
+  attr(x$indices, "interval") <- attr(to$indices, "interval")
   x
 }
 
-tunit <- function(values) {
-  time_unit(values %@% "interval")
+tunit <- function(indices) {
+  time_unit(indices %@% "interval")
 }
 
 #' Set operations for run length encoding <`NA`>
@@ -121,8 +121,8 @@ tunit <- function(values) {
 #' @method intersect mists_rle_na
 #' @export
 intersect.mists_rle_na <- function(x, y, ...) {
-  x_full <- na_rle_expand(x)[, "values"]
-  y_full <- na_rle_expand(y)[, "values"]
+  x_full <- na_rle_expand(x)[, "indices"]
+  y_full <- na_rle_expand(y)[, "indices"]
   res <- intersect(x_full, y_full) # dplyr::intersect for data frame
   tbl_to_na_rle(interval_restore(res, x))
 }
@@ -137,9 +137,9 @@ intersect.mists_list_of_rle_na <- function(x, y, ...) {
 #' @method union mists_rle_na
 #' @export
 union.mists_rle_na <- function(x, y, ...) {
-  x_full <- na_rle_expand(x)[, "values"]
-  y_full <- na_rle_expand(y)[, "values"]
-  res <- arrange(union(x_full, y_full), values)
+  x_full <- na_rle_expand(x)[, "indices"]
+  y_full <- na_rle_expand(y)[, "indices"]
+  res <- arrange(union(x_full, y_full), indices)
   tbl_to_na_rle(interval_restore(res, x))
 }
 
@@ -153,8 +153,8 @@ union.mists_list_of_rle_na <- function(x, y, ...) {
 #' @method setdiff mists_rle_na
 #' @export
 setdiff.mists_rle_na <- function(x, y, ...) {
-  x_full <- na_rle_expand(x)[, "values"]
-  y_full <- na_rle_expand(y)[, "values"]
+  x_full <- na_rle_expand(x)[, "indices"]
+  y_full <- na_rle_expand(y)[, "indices"]
   res <- setdiff(x_full, y_full)
   tbl_to_na_rle(interval_restore(res, x))
 }

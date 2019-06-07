@@ -3,6 +3,8 @@
 \name{vctrs-compat}
 \alias{vctrs-compat}
 \alias{vec_cast.list.mists_rle_na}
+\alias{vec_math.mists_rle_na}
+\alias{vec_math.mists_list_of_rle_na}
 \alias{obj_print_data.mists_rle_na}
 \alias{vec_ptype_full.mists_rle_na}
 \alias{vec_ptype_abbr.mists_rle_na}
@@ -11,6 +13,10 @@
 \title{vctrs compatibility functions}
 \usage{
 \method{vec_cast.list}{mists_rle_na}(x, to)
+
+\method{vec_math}{mists_rle_na}(fun, x, ...)
+
+\method{vec_math}{mists_list_of_rle_na}(fun, x, ...)
 
 \method{obj_print_data}{mists_rle_na}(x, ...)
 

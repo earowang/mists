@@ -6,7 +6,6 @@
 #' @param x Objects.
 #' @param to Type to cast to.
 #' @param ... Used to pass along error message information.
-#' @inheritParams vec_type2
 #'
 #' @name vctrs-compat
 #'
@@ -19,6 +18,26 @@ NULL
 #' @export vec_cast.list.mists_rle_na
 vec_cast.list.mists_rle_na <- function(x, to) {
   as_list_of(x)
+}
+
+#' @rdname vctrs-compat
+#' @keywords internal
+#' @method vec_math mists_rle_na
+#' @export
+#' @export vec_math.mists_rle_na
+vec_math.mists_rle_na <- function(fun, x, ...) {
+  na_rle_lengths_x <- na_rle_lengths(x)
+  vec_math_base(fun, na_rle_lengths_x, ...)
+}
+
+#' @rdname vctrs-compat
+#' @keywords internal
+#' @method vec_math mists_list_of_rle_na
+#' @export
+#' @export vec_math.mists_list_of_rle_na
+vec_math.mists_list_of_rle_na <- function(fun, x, ...) {
+  na_rle_lengths_x <- unlist(na_rle_lengths(x), use.names = FALSE)
+  vec_math_base(fun, na_rle_lengths_x, ...)
 }
 
 #' @rdname vctrs-compat

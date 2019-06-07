@@ -49,8 +49,18 @@ na_rle(df$temp) # indexed by the default positions
 na_rle_lengths(x)
 na_rle_values(x)
 
+length(x) # the total number of runs
+# Summary group generics
+sum(x) # the total number of `NA`s
+mean(x)
+
 library(dplyr, warn.conflicts = FALSE)
 # list_of_na_rle() is useful when working with tabular data
-as_tibble(df) \%>\% 
+na_rle_df <- as_tibble(df) \%>\% 
   summarise(na_runs = list_of_na_rle(temp, year))
+na_rle_df
+
+length(na_rle_df$na_runs)
+sum(na_rle_df$na_runs)
+mean(na_rle_df$na_runs)
 }

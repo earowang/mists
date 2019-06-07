@@ -146,11 +146,15 @@ otherwise a supplied "interval" class. See <code><a href='https://tsibble.tidyve
 </ul>
 
     
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <h2 class="hasAnchor" id="mathematical-operations"><a class="anchor" href="#mathematical-operations"></a>Mathematical operations</h2>
 
-    <p>Mathematical operations such as <code><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum()</a></code> and <code><a href='https://www.rdocumentation.org/packages/base/topics/range'>range()</a></code> can be directly applied to
-<code>na_rle()</code> and <code>list_of_na_rle()</code>, and their returned values are the functions
-of the <em>lengths</em> of runs only.</p>
+    
+    <p>Many math operations can be applied to objects returned from <code>na_rle()</code> and
+<code>list_of_na_rle()</code>, regarding the <em>lengths</em> of runs.</p><ul>
+<li><p><code><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum()</a></code>: the total number of <code>NA</code> over all runs.</p></li>
+<li><p><code><a href='https://www.rdocumentation.org/packages/base/topics/mean'>mean()</a></code>: the average <code>NA</code>s per run.</p></li>
+<li><p><code><a href='https://www.rdocumentation.org/packages/base/topics/Extremes'>min()</a></code> &amp; <code><a href='https://www.rdocumentation.org/packages/base/topics/Extremes'>max()</a></code>: the minimum and maximum of runs.</p></li>
+</ul>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -165,11 +169,7 @@ of the <em>lengths</em> of runs only.</p>
 <span class='fu'>na_rle_lengths</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 1 1 4 1</div><div class='input'><span class='fu'>na_rle_indices</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 2000 2005 2012 2018
 #&gt; attr(,"interval")
 #&gt; 1Y</div><div class='input'>
-<span class='co'># subsetting like a vector (not working yet)</span>
-<span class='co'># x[3:4]</span>
-<span class='co'># the total number of runs</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 4</div><div class='input'><span class='co'># summary group generics</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum</a></span>(<span class='no'>x</span>) <span class='co'># the total number of `NA`s</span></div><div class='output co'>#&gt; [1] 7</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/range'>range</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 1 4</div><div class='input'>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>x</span>) <span class='co'># the number of runs</span></div><div class='output co'>#&gt; [1] 4</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum</a></span>(<span class='no'>x</span>) <span class='co'># the total number of `NA`</span></div><div class='output co'>#&gt; [1] 7</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/range'>range</a></span>(<span class='no'>x</span>) <span class='co'># min &amp; max runs</span></div><div class='output co'>#&gt; [1] 1 4</div><div class='input'>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>dplyr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='co'># list_of_na_rle() is useful when working with tabular data</span>
 <span class='no'>na_rle_df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/reexports.html'>as_tibble</a></span>(<span class='no'>df</span>) <span class='kw'>%&gt;%</span>
@@ -187,7 +187,7 @@ of the <em>lengths</em> of runs only.</p>
       
       <li><a href="#value">Value</a></li>
 
-      <li><a href="#details">Details</a></li>
+      <li><a href="#mathematical-operations">Mathematical operations</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

@@ -1,7 +1,6 @@
 #' mists: missingess of time series
 #'
 #' @aliases NULL mists-package
-#' @useDynLib mists, .registration = TRUE
 #' @import rlang
 #' @import vctrs
 #' @importFrom utils head tail
@@ -17,8 +16,3 @@
 #' @importFrom ggplot2 scale_x_continuous scale_y_continuous theme labs
 #' @importFrom ggplot2 element_blank GeomLine GeomPoint facet_wrap
 "_PACKAGE"
-
-## usethis namespace: start
-#' @importFrom Rcpp sourceCpp
-## usethis namespace: end
-NULL

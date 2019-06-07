@@ -83,6 +83,22 @@ na_rle_table <- function(x) {
   )
 }
 
+continuous_rle_impl <- function(x, const) {
+  x <- as.double(x)
+  if (has_length(x, 0)) {
+    0L
+  } else if (has_length(x, 1)) {
+    1L
+  } else {
+    diff_x <- diff(x) == const
+    n <- length(x)
+    tail_lgl <- tail(diff_x, 1)
+    diff_x[n] <- if ((x[n] - x[n - 1]) == const) !tail_lgl else tail_lgl
+    idx_switch <- which(!diff_x)
+    c(idx_switch[1], diff(idx_switch))
+  }
+}
+
 tbl_to_na_rle <- function(data) {
   if (is_empty(data)) {
     return(na_rle(x = data[["indices"]], index_by = data[["lengths"]]))

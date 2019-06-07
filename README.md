@@ -32,8 +32,8 @@ remotes::install_github("earowang/mists")
 
 ## Get started with `na_rle()` and `list_of_na_rle()`
 
-The `na_rle()` gives a sparser representation for runs of missings, a
-special type of run length encoding (`rle`).
+The `na_rle()` gives a sparser representation for indexing runs of
+missings, a special type of run length encoding (`rle`).
 
 ``` r
 library(mists)

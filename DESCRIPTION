@@ -25,7 +25,6 @@ Depends:
 Imports: 
     dplyr (>= 0.8.0),
     ggplot2,
-    Rcpp,
     rlang,
     tsibble (>= 0.8.0),
     vctrs
@@ -35,8 +34,6 @@ Suggests:
     knitr,
     nycflights13,
     spelling
-LinkingTo: 
-    Rcpp (>= 0.12.0)
 VignetteBuilder: 
     knitr
 Remotes:

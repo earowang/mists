@@ -100,8 +100,8 @@ na_polish_index2 <- function(data, cutoff) {
 #'
 #' @inheritParams na_polish_measures
 #' @param tol A tolerance value near zero as stopping rule. It compares to
-#' an evaluation metric defined as `prop_na * prop_removed` to be minimised.
-#' See [`na_polish_metrics()`] for details.
+#' the loss defined as `prop_na * prop_removed` to be minimised.  See 
+#' [`na_polish_metrics()`] for details.
 #' @param funs A list of `na_polish_*()` functions to go through.
 #' @param quiet If `FALSE`, report metrics while automatically polishing, and
 #' requires the "cliapp" package to be installed.
@@ -209,7 +209,7 @@ na_polish_funs <- function() {
 #' * `prop_removed`, `nobs_removed`, `nrows_removed`, & `ncols_removed`: The
 #' proportion of removed observations over the overall observations.
 #' @details
-#' The evaluation metric defined for the effect of polishing events is
+#' The metric used for measuring the effect of polishing events is
 #' `prop_na * prop_removed`. We'd like to minimise the loss by minimising both
 #' `prop_na` and `prop_removed` over sequential polishing events.
 #' @export

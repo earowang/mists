@@ -22,7 +22,7 @@ proportion of removed observations over the overall observations.
 Evaluation metrics for missing data polishing
 }
 \details{
-The evaluation metric defined for the effect of polishing events is
+The metric used for measuring the effect of polishing events is
 \code{prop_na * prop_removed}. We'd like to minimise the loss by minimising both
 \code{prop_na} and \code{prop_removed} over sequential polishing events.
 }

@@ -159,13 +159,17 @@ otherwise a supplied "interval" class. See <code><a href='https://tsibble.tidyve
 <span class='fu'>na_rle_lengths</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 1 1 4 1</div><div class='input'><span class='fu'>na_rle_values</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 2000 2005 2012 2018
 #&gt; attr(,"interval")
 #&gt; 1Y</div><div class='input'>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>x</span>) <span class='co'># the total number of runs</span></div><div class='output co'>#&gt; [1] 4</div><div class='input'><span class='co'># Summary group generics</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum</a></span>(<span class='no'>x</span>) <span class='co'># the total number of `NA`s</span></div><div class='output co'>#&gt; [1] 7</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 1.75</div><div class='input'>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>dplyr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='co'># list_of_na_rle() is useful when working with tabular data</span>
-<span class='fu'><a href='https://dplyr.tidyverse.org/reference/reexports.html'>as_tibble</a></span>(<span class='no'>df</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span>(<span class='kw'>na_runs</span> <span class='kw'>=</span> <span class='fu'>list_of_na_rle</span>(<span class='no'>temp</span>, <span class='no'>year</span>))</div><div class='output co'>#&gt; # A tibble: 1 x 1
+<span class='no'>na_rle_df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/reexports.html'>as_tibble</a></span>(<span class='no'>df</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span>(<span class='kw'>na_runs</span> <span class='kw'>=</span> <span class='fu'>list_of_na_rle</span>(<span class='no'>temp</span>, <span class='no'>year</span>))
+<span class='no'>na_rle_df</span></div><div class='output co'>#&gt; # A tibble: 1 x 1
 #&gt;           na_runs
 #&gt;   &lt;list&lt;rle&lt;NA&gt;&gt;&gt;
-#&gt; 1             [4]</div></pre>
+#&gt; 1             [4]</div><div class='input'>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>na_rle_df</span>$<span class='no'>na_runs</span>)</div><div class='output co'>#&gt; [1] 1</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum</a></span>(<span class='no'>na_rle_df</span>$<span class='no'>na_runs</span>)</div><div class='output co'>#&gt; [1] 7</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span>(<span class='no'>na_rle_df</span>$<span class='no'>na_runs</span>)</div><div class='output co'>#&gt; [1] 1.75</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

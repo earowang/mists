@@ -1,8 +1,8 @@
 globalVariables(c("indices", "group", "n", "nobs", "frac", "n.x", "overlap",
   "start", "end"))
 
-distinct_groups <- function(x) {
-  rle_cont <- continuous_rle_impl(x, tunit(x))
+distinct_groups <- function(x, interval) {
+  rle_cont <- continuous_rle_impl(x, time_unit(interval))
   rep.int(cumsum(rle_cont), rle_cont)
 }
 
@@ -39,10 +39,12 @@ na_rle_rangeplot <- function(data, x, y = NULL, ...) {
   } else {
     y <- eval_tidy(y, data = data)
   }
+  tbl_exp <- na_rle_expand(x, y = y)
+  int <- tbl_exp$indices %@% "interval"
   data <- 
     ungroup(mutate(
-      group_by(na_rle_expand(x, y = y), y), 
-      "group" := paste(y, distinct_groups(indices), sep = "-")
+      group_by(tbl_exp, y), 
+      "group" := paste(y, distinct_groups(indices, int), sep = "-")
     ))
   ends <- 
     summarise(

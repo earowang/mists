@@ -60,7 +60,7 @@ na_rle_expand.mists_rle_na <- function(x, ...) {
   rep_lengths <- rep.int(rle_lengths, map_int(full_seq, vec_size))
   full_seq <- do.call("c", full_seq)
   res <- tibble("lengths" = rep_lengths, "indices" = full_seq)
-  interval_restore(res, x)
+  indices_restore(res, x)
 }
 
 #' @export
@@ -71,7 +71,7 @@ na_rle_expand.mists_list_of_rle_na <- function(x, ...) {
   res <- bind_rows(
     map2(x, y, function(.x, .y) mutate(na_rle_expand(.x), !! names(qs) := .y))
   )
-  interval_restore(res, x[[1L]])
+  indices_restore(res, x[[1L]])
 }
 
 #' @rdname mists-na-rle-tbl
@@ -84,7 +84,7 @@ na_rle_table <- function(x) {
 }
 
 continuous_rle_impl <- function(x, const) {
-  x <- as.double(x)
+  x <- units_since(x)
   if (has_length(x, 0)) {
     0L
   } else if (has_length(x, 1)) {
@@ -107,11 +107,12 @@ tbl_to_na_rle <- function(data) {
   rle_cont <- continuous_rle_impl(data[["indices"]], tunit(data[["indices"]]))
   add_len <- mutate(data, lengths = rep.int(cumsum(rle_cont), rle_cont))
   red_data <- summarise(group_by(add_len, lengths), indices = min(indices))
-  red_data <- interval_restore(red_data, data)
+  red_data <- indices_restore(red_data, data)
   new_mists_rle_na(as_list(mutate(red_data, lengths = rle_cont)))
 }
 
-interval_restore <- function(x, to) {
+indices_restore <- function(x, to) {
+  class(x$indices) <- class(to$indices)
   attr(x$indices, "interval") <- attr(to$indices, "interval")
   x
 }
@@ -140,7 +141,7 @@ intersect.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)[, "indices"]
   y_full <- na_rle_expand(y)[, "indices"]
   res <- intersect(x_full, y_full) # dplyr::intersect for data frame
-  tbl_to_na_rle(interval_restore(res, x))
+  tbl_to_na_rle(indices_restore(res, x))
 }
 
 #' @method intersect mists_list_of_rle_na
@@ -156,7 +157,7 @@ union.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)[, "indices"]
   y_full <- na_rle_expand(y)[, "indices"]
   res <- arrange(union(x_full, y_full), indices)
-  tbl_to_na_rle(interval_restore(res, x))
+  tbl_to_na_rle(indices_restore(res, x))
 }
 
 #' @method union mists_list_of_rle_na
@@ -172,7 +173,7 @@ setdiff.mists_rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)[, "indices"]
   y_full <- na_rle_expand(y)[, "indices"]
   res <- setdiff(x_full, y_full)
-  tbl_to_na_rle(interval_restore(res, x))
+  tbl_to_na_rle(indices_restore(res, x))
 }
 
 #' @method setdiff mists_list_of_rle_na

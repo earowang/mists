@@ -108,7 +108,7 @@
 
 <span class='fu'>na_rle_lengths</span>(<span class='no'>x</span>)
 
-<span class='fu'>na_rle_values</span>(<span class='no'>x</span>)
+<span class='fu'>na_rle_indices</span>(<span class='no'>x</span>)
 
 <span class='fu'>list_of_na_rle</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/double'>double</a></span>(), <span class='kw'>index_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq_along</a></span>(<span class='no'>x</span>),
   <span class='kw'>interval</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
@@ -142,7 +142,7 @@ otherwise a supplied "interval" class. See <code><a href='https://tsibble.tidyve
 
     <p>A named list of</p><ul>
 <li><p><code>lengths</code>: the lengths of <code>NA</code> runs</p></li>
-<li><p><code>values</code>: the starting indices of runs</p></li>
+<li><p><code>indices</code>: the starting indices of runs</p></li>
 </ul>
 
     
@@ -159,10 +159,10 @@ of the <em>lengths</em> of runs only.</p>
 
 <span class='fu'>na_rle</span>(<span class='no'>df</span>$<span class='no'>temp</span>) <span class='co'># indexed by the default positions</span></div><div class='output co'>#&gt; &lt;Run Length Encoding &lt;NA&gt;[4]&gt;
 #&gt; $lengths: &lt;int&gt; 1 1 4 1 
-#&gt; $values : &lt;int&gt;  1  6 13 19</div><div class='input'>(<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>na_rle</span>(<span class='no'>df</span>$<span class='no'>temp</span>, <span class='kw'>index_by</span> <span class='kw'>=</span> <span class='no'>df</span>$<span class='no'>year</span>)) <span class='co'># indexed by a variable</span></div><div class='output co'>#&gt; &lt;Run Length Encoding &lt;NA&gt;[4]&gt;
+#&gt; $indices : &lt;int&gt;  1  6 13 19</div><div class='input'>(<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>na_rle</span>(<span class='no'>df</span>$<span class='no'>temp</span>, <span class='kw'>index_by</span> <span class='kw'>=</span> <span class='no'>df</span>$<span class='no'>year</span>)) <span class='co'># indexed by a variable</span></div><div class='output co'>#&gt; &lt;Run Length Encoding &lt;NA&gt;[4]&gt;
 #&gt; $lengths: &lt;int&gt; 1 1 4 1 
-#&gt; $values : &lt;int&gt; 2000 2005 2012 2018</div><div class='input'>
-<span class='fu'>na_rle_lengths</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 1 1 4 1</div><div class='input'><span class='fu'>na_rle_values</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 2000 2005 2012 2018
+#&gt; $indices : &lt;int&gt; 2000 2005 2012 2018</div><div class='input'>
+<span class='fu'>na_rle_lengths</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 1 1 4 1</div><div class='input'><span class='fu'>na_rle_indices</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 2000 2005 2012 2018
 #&gt; attr(,"interval")
 #&gt; 1Y</div><div class='input'>
 <span class='co'># subsetting like a vector (not working yet)</span>

@@ -112,7 +112,7 @@ leaves some of them in. The index should be kept intact by slicing the
 ends only due to the temporal ordering. The `na_polish_auto()` automates
 this polishing process by minimising the loss, defined as *the
 proportion of overall missings* weighted by *the proportion of removed
-observations*. It will go through the following passes several times:
+observations*. It will iterate the following passes:
 `na_polish_measures()`, `na_polish_key()`, `na_polish_index()` until a
 tolerance value close or equal to zero. The `na_polish_*()` family
 expects a [tsibble](http://tsibble.tidyverts.org), because polishing

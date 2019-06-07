@@ -99,9 +99,9 @@ na_polish_index2 <- function(data, cutoff) {
 #' * `na_polish_auto_trace()` returns a metric tibble for documenting the steps.
 #'
 #' @inheritParams na_polish_measures
-#' @param tol A tolerance value near zero as stopping rule. It compares to
-#' the loss defined as `prop_na * prop_removed` to be minimised.  See 
-#' [`na_polish_metrics()`] for details.
+#' @param tol A tolerance value close or equal to zero as stopping rule. It
+#' compares to the loss defined as `prop_na * prop_removed` to be minimised.
+#' See [`na_polish_metrics()`] for details.
 #' @param funs A list of `na_polish_*()` functions to go through.
 #' @param quiet If `FALSE`, report metrics while automatically polishing, and
 #' requires the "cliapp" package to be installed.

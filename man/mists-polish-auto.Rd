@@ -18,9 +18,9 @@ na_polish_auto_trace(data, cutoff, tol = 0.1, funs = na_polish_funs(),
 \item{cutoff}{A numeric between 0 and 1. Rows/cols will be kept, if the
 proportion of overall missings is less than the cutoff.}
 
-\item{tol}{A tolerance value near zero as stopping rule. It compares to
-the loss defined as \code{prop_na * prop_removed} to be minimised.  See
-\code{\link[=na_polish_metrics]{na_polish_metrics()}} for details.}
+\item{tol}{A tolerance value close or equal to zero as stopping rule. It
+compares to the loss defined as \code{prop_na * prop_removed} to be minimised.
+See \code{\link[=na_polish_metrics]{na_polish_metrics()}} for details.}
 
 \item{funs}{A list of \code{na_polish_*()} functions to go through.}
 

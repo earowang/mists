@@ -13,6 +13,10 @@ na_rle_impl <- function(x) {
 #' @return A named list of
 #' * `lengths`: the lengths of `NA` runs
 #' * `values`: the starting indices of runs
+#' @details
+#' Mathematical operations such as `sum()` and `range()` can be directly applied to
+#' `na_rle()` and `list_of_na_rle()`, and their returned values are the functions
+#' of the *lengths* of runs only.
 #'
 #' @rdname na-rle
 #' @examples
@@ -25,10 +29,13 @@ na_rle_impl <- function(x) {
 #' na_rle_lengths(x)
 #' na_rle_values(x)
 #'
-#' length(x) # the total number of runs
-#' # Summary group generics
+#' # subsetting like a vector (not working yet)
+#' # x[3:4]
+#' # the total number of runs
+#' length(x)
+#' # summary group generics
 #' sum(x) # the total number of `NA`s
-#' mean(x)
+#' range(x)
 #' 
 #' library(dplyr, warn.conflicts = FALSE)
 #' # list_of_na_rle() is useful when working with tabular data
@@ -38,7 +45,7 @@ na_rle_impl <- function(x) {
 #'
 #' length(na_rle_df$na_runs)
 #' sum(na_rle_df$na_runs)
-#' mean(na_rle_df$na_runs)
+#' range(na_rle_df$na_runs)
 #' @export
 na_rle <- function(x = double(), index_by = seq_along(x), interval = NULL) {
   stopifnot(vec_size(x) == vec_size(index_by))

@@ -40,6 +40,24 @@ vec_math.mists_list_of_rle_na <- function(fun, x, ...) {
   vec_math_base(fun, na_rle_lengths_x, ...)
 }
 
+# #' @rdname vctrs-compat
+# #' @keywords internal
+# #' @method vec_proxy mists_rle_na
+# #' @export
+# #' @export vec_proxy.mists_rle_na
+# vec_proxy.mists_rle_na <- function(x) {
+#   new_data_frame(unclass(x))
+# }
+
+# #' @rdname vctrs-compat
+# #' @keywords internal
+# #' @method vec_restore mists_rle_na
+# #' @export
+# #' @export vec_restore.mists_rle_na
+# vec_restore.mists_rle_na <- function(x, to, ..., i = NULL) {
+#   new_mists_rle_na(x)
+# }
+
 #' @rdname vctrs-compat
 #' @keywords internal
 #' @method obj_print_data mists_rle_na

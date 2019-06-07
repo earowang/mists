@@ -39,6 +39,11 @@ A named list of
 \description{
 Run lengths encoding for missing values (\code{NA})
 }
+\details{
+Mathematical operations such as \code{sum()} and \code{range()} can be directly applied to
+\code{na_rle()} and \code{list_of_na_rle()}, and their returned values are the functions
+of the \emph{lengths} of runs only.
+}
 \examples{
 df <- data.frame(year = 2000:2019, temp = sample(0:30, size = 10))
 df[c(1, 6, 13:16, 19), "temp"] <- NA
@@ -49,10 +54,13 @@ na_rle(df$temp) # indexed by the default positions
 na_rle_lengths(x)
 na_rle_values(x)
 
-length(x) # the total number of runs
-# Summary group generics
+# subsetting like a vector (not working yet)
+# x[3:4]
+# the total number of runs
+length(x)
+# summary group generics
 sum(x) # the total number of `NA`s
-mean(x)
+range(x)
 
 library(dplyr, warn.conflicts = FALSE)
 # list_of_na_rle() is useful when working with tabular data
@@ -62,5 +70,5 @@ na_rle_df
 
 length(na_rle_df$na_runs)
 sum(na_rle_df$na_runs)
-mean(na_rle_df$na_runs)
+range(na_rle_df$na_runs)
 }

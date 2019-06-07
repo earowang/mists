@@ -3,8 +3,8 @@ globalVariables(c("n"))
 #' Shift run length encoding <`NA`>
 #'
 #' @param x An object returned by [`na_rle()`] or [`list_of_na_rle()`].
-#' @param n A positive integer shifts the starting indices forward, and negative
-#' backward.
+#' @param n An integer shifts the position. If positive, shifts to the right,
+#' otherwise to the left.
 #'
 #' @examples
 #' (x <- na_rle(c(1, NA, NA, 4:7, NA, NA, 10:15, NA)))
@@ -20,7 +20,7 @@ na_rle_shift <- function(x, n = 1L) {
 na_rle_shift.mists_rle_na <- function(x, n = 1L) {
   rle_values <- na_rle_values(x)
   tunit <- tunit(rle_values)
-  x$values <- rle_values + sign(n) * tunit
+  x$values <- rle_values + sign(n) * tunit * abs(n)
   x
 }
 

@@ -47,9 +47,10 @@ library(mists)
 #> $indices : <int> 2 9
 ```
 
-It returns a named list of `lengths` and `values` (the starting indices)
-of `NA` runs. Set operations can be applied: (1) `intersect(x, y)`, (2)
-`union(x, y)`, (3) `setdiff(x, y)`.
+It returns a named list of `lengths` and `indices` (the starting
+indices) of `NA` runs. Set operations can be applied: (1) `intersect(x,
+y)`, (2) `union(x, y)`, (3) `setdiff(x, y)`, along with other math
+operations.
 
 The `list_of_na_rle()` makes it easier to work with tibbles.
 
@@ -114,7 +115,7 @@ this polishing process by minimising the loss, defined as *the
 proportion of overall missings* weighted by *the proportion of removed
 observations*. It will iterate the following passes:
 `na_polish_measures()`, `na_polish_key()`, `na_polish_index()` until a
-tolerance value close or equal to zero. The `na_polish_*()` family
+tolerance value (close or equal to zero). The `na_polish_*()` family
 expects a [tsibble](http://tsibble.tidyverts.org), because polishing
 starts with tidy and clean data.
 

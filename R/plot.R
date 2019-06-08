@@ -98,17 +98,18 @@ na_rle_spinoplot <- function(data, x, y = NULL, facets = NULL, ...) {
   facets <- enquo(facets)
   lst_na_rle_x <- eval_tidy(x, data = data)
   if (quo_is_null(facets)) {
-    facets_vals <- as.factor(seq_along(lst_na_rle_x))
+    facets_vals <- as.factor(vec_seq_along(lst_na_rle_x))
   } else {
     facets_vals <- as.factor(eval_tidy(facets, data = data))
   }
   xlab <- paste("runs [frequency]", parenthesis(as_label(x)))
   
-  na_runs_x <- 
-    bind_rows(map2(
+  na_runs_lst_x <- 
+    map2(
       lst_na_rle_x, facets_vals, 
       function(.x, .y) mutate(na_rle_table(.x), "facets" := .y)
-    ))
+    )
+  na_runs_x <- vec_rbind(!!! na_runs_lst_x)
   na_runs_x <- 
     mutate(
       group_by(na_runs_x, facets), 
@@ -156,7 +157,7 @@ na_rle_spinoplot <- function(data, x, y = NULL, facets = NULL, ...) {
         group_by(frac_intersect, facets), 
         "frac" := 1 - frac, "overlap" := FALSE
       )
-    frac_xy <- bind_rows(frac_intersect, frac_diff)
+    frac_xy <- vec_rbind(frac_intersect, frac_diff)
     grped_x <- 
         group_by(
           left_join(na_runs_x, frac_xy, by = c("lengths", "facets")), 

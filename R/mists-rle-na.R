@@ -48,7 +48,7 @@ na_rle_impl <- function(x) {
 #' @export
 na_rle <- function(x = double(), index_by = seq_along(x), interval = NULL) {
   stopifnot(vec_size(x) == vec_size(index_by))
-  if (has_length(x, 0)) {
+  if (vec_is_empty(x)) {
     indices <- index_by
     attr(indices, "interval") <- interval_pull(index_by)
     return(new_mists_rle_na(list(lengths = integer(), indices = indices)))
@@ -57,7 +57,7 @@ na_rle <- function(x = double(), index_by = seq_along(x), interval = NULL) {
   if (vec_duplicate_any(index_by)) {
     abort("`index_by` only takes unique values.")
   }
-  ord <- order(index_by)
+  ord <- vec_order(index_by)
   x <- x[ord]
   if (is_null(interval)) {
     int <- interval_pull(index_by) 

@@ -50,7 +50,7 @@ na_rle_expand <- function(x, ...) {
 #' @export
 na_rle_expand.mists_rle_na <- function(x, ...) {
   if (is_empty(x)) {
-    return(tibble("lengths" = integer(0), "indices" = integer(0)))
+    return(tibble("lengths" := x$lengths, "indices" := x$indices))
   }
   rle_lengths <- na_rle_lengths(x)
   rle_indices <- na_rle_indices(x)
@@ -59,18 +59,23 @@ na_rle_expand.mists_rle_na <- function(x, ...) {
     function(.x, .y) seq(.x, by = tunit, length.out = .y))
   rep_lengths <- rep.int(rle_lengths, map_int(full_seq, vec_size))
   full_seq <- do.call("c", full_seq)
-  res <- tibble("lengths" = rep_lengths, "indices" = full_seq)
+  res <- tibble("lengths" := rep_lengths, "indices" := full_seq)
   indices_restore(res, x)
 }
 
 #' @export
 na_rle_expand.mists_list_of_rle_na <- function(x, ...) {
   qs <- enquos(..., .named = TRUE)
-  y <- eval_tidy(qs[[1]])
-  stopifnot(vec_size(x) == vec_size(y))
-  res <- bind_rows(
-    map2(x, y, function(.x, .y) mutate(na_rle_expand(.x), !! names(qs) := .y))
-  )
+  if (is_empty(qs)) {
+    y <- vec_seq_along(x)
+    new_col <- "id"
+  } else {
+    y <- eval_tidy(qs[[1]])
+    new_col <- names(qs)
+  }
+  res_lst <- 
+    map2(x, y, function(.x, .y) mutate(na_rle_expand(.x), !! new_col := .y))
+  res <- bind_rows(!!! res_lst) # vec_rbind() should work here
   indices_restore(res, x[[1L]])
 }
 
@@ -78,8 +83,8 @@ na_rle_expand.mists_list_of_rle_na <- function(x, ...) {
 #' @export
 na_rle_table <- function(x) {
   mutate(
-    count(tibble(lengths = na_rle_lengths(x)), lengths),
-    nobs = n * lengths
+    count(tibble("lengths" := na_rle_lengths(x)), lengths),
+    "nobs" := n * lengths
   )
 }
 
@@ -105,10 +110,10 @@ tbl_to_na_rle <- function(data) {
   }
 
   rle_cont <- continuous_rle_impl(data[["indices"]], tunit(data[["indices"]]))
-  add_len <- mutate(data, lengths = rep.int(cumsum(rle_cont), rle_cont))
-  red_data <- summarise(group_by(add_len, lengths), indices = min(indices))
+  add_len <- mutate(data, "lengths" := rep.int(cumsum(rle_cont), rle_cont))
+  red_data <- summarise(group_by(add_len, lengths), "indices" := min(indices))
   red_data <- indices_restore(red_data, data)
-  new_mists_rle_na(as_list(mutate(red_data, lengths = rle_cont)))
+  new_mists_rle_na(as_list(mutate(red_data, "lengths" := rle_cont)))
 }
 
 indices_restore <- function(x, to) {

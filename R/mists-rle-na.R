@@ -82,10 +82,8 @@ na_rle <- function(x = double(), index_by = seq_along(x), interval = NULL) {
 #' @export
 list_of_na_rle <- function(x = double(), index_by = seq_along(x),
   interval = NULL) {
-  new_list_of(
-    list(na_rle(x, index_by = index_by, interval = interval)),
-    ptype = list(),
-    class = "mists_list_of_rle_na"
+  new_mists_list_of_rle_na(
+    !!! list2(na_rle(x, index_by = index_by, interval = interval))
   )
 }
 
@@ -124,6 +122,14 @@ na_rle_indices.mists_list_of_rle_na <- function(x) {
 new_mists_rle_na <- function(x) {
   mists_rle_na_assert(x)
   new_vctr(x, class = c("mists_rle_na"))
+}
+
+new_mists_list_of_rle_na <- function(...) {
+  new_list_of(
+    list2(...),
+    ptype = list(),
+    class = "mists_list_of_rle_na"
+  )
 }
 
 mists_rle_na_assert <- function(x) {

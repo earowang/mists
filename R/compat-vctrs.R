@@ -17,11 +17,7 @@ NULL
 #' @export
 #' @export as_list_of.mists_rle_na
 as_list_of.mists_rle_na <- function(x, ...) {
-  new_list_of(
-    list(x, ...),
-    ptype = list(),
-    class = "mists_list_of_rle_na"
-  )
+  new_mists_list_of_rle_na(!!! list(x, ...))
 }
 
 # #' @rdname vctrs-compat
@@ -36,7 +32,7 @@ as_list_of.mists_rle_na <- function(x, ...) {
 # #' @method vec_type2.mists_rle_na mists_rle_na
 # #' @export
 # vec_type2.mists_rle_na.mists_rle_na <- function(x, y, ...) {
-#   list_of_na_rle(y)
+#   new_mists_list_of_rle_na(x, y)
 # }
 
 #' @rdname vctrs-compat

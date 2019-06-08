@@ -26,7 +26,7 @@ na_rle_shift.mists_rle_na <- function(x, n = 1L) {
 
 #' @export
 na_rle_shift.mists_list_of_rle_na <- function(x, n = 1L) {
-  as_list_of(map(x, na_rle_shift.mists_rle_na, n = n))
+  new_mists_list_of_rle_na(!!! map(x, na_rle_shift.mists_rle_na, n = n))
 }
 
 #' Expand and count run length encoding <`NA`>
@@ -55,7 +55,7 @@ na_rle_expand.mists_rle_na <- function(x, ...) {
   full_seq <- map2(rle_indices, rle_lengths,
     function(.x, .y) seq(.x, by = tunit, length.out = .y))
   rep_lengths <- rep.int(rle_lengths, map_int(full_seq, vec_size))
-  full_seq <- do.call("c", full_seq)
+  full_seq <- do.call("c", full_seq) # vec_c(!!! full_seq)
   res <- tibble("lengths" := rep_lengths, "indices" := full_seq)
   indices_restore(res, x)
 }
@@ -149,7 +149,7 @@ intersect.mists_rle_na <- function(x, y, ...) {
 #' @method intersect mists_list_of_rle_na
 #' @export
 intersect.mists_list_of_rle_na <- function(x, y, ...) {
-  as_list_of(map2(x, y, intersect.mists_rle_na, ...))
+  new_mists_list_of_rle_na(!!! map2(x, y, intersect.mists_rle_na, ...))
 }
 
 #' @rdname mists-set-op
@@ -165,7 +165,7 @@ union.mists_rle_na <- function(x, y, ...) {
 #' @method union mists_list_of_rle_na
 #' @export
 union.mists_list_of_rle_na <- function(x, y, ...) {
-  as_list_of(map2(x, y, union.mists_rle_na, ...))
+  new_mists_list_of_rle_na(map2(x, y, union.mists_rle_na, ...))
 }
 
 #' @rdname mists-set-op
@@ -181,7 +181,7 @@ setdiff.mists_rle_na <- function(x, y, ...) {
 #' @method setdiff mists_list_of_rle_na
 #' @export
 setdiff.mists_list_of_rle_na <- function(x, y, ...) {
-  as_list_of(map2(x, y, setdiff.mists_rle_na, ...))
+  new_mists_list_of_rle_na(map2(x, y, setdiff.mists_rle_na, ...))
 }
 
 #' @export

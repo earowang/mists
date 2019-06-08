@@ -2,7 +2,7 @@
 % Please edit documentation in R/polish.R
 \name{na_polish_metrics}
 \alias{na_polish_metrics}
-\title{Evaluation metrics for missing data polishing}
+\title{Report metrics for missing data polishing}
 \usage{
 na_polish_metrics(before, after)
 }
@@ -19,7 +19,7 @@ proportion of removed observations over the overall observations.
 }
 }
 \description{
-Evaluation metrics for missing data polishing
+Report metrics for missing data polishing
 }
 \details{
 The metric used for measuring the effect of polishing events is

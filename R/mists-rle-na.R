@@ -169,3 +169,13 @@ min.mists_list_of_rle_na <- function(x, ...) {
 max.mists_list_of_rle_na <- function(x, ...) {
   map_int(x, max)
 }
+
+#' @export
+median.mists_rle_na <- function(x, ...) {
+  median(na_rle_lengths(x))
+}
+
+#' @export
+median.mists_list_of_rle_na <- function(x, ...) {
+  map_dbl(x, median)
+}

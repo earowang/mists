@@ -48,9 +48,8 @@ library(mists)
 ```
 
 It returns a named list of `lengths` and `indices` (the starting
-indices) of `NA` runs. Set operations can be applied: (1) `intersect(x,
-y)`, (2) `union(x, y)`, (3) `setdiff(x, y)`, along with other math
-operations.
+indices) of `NA` runs. Set operations can be applied: `intersect(x, y)`,
+`union(x, y)`, and `setdiff(x, y)`, along with other math operations.
 
 The `list_of_na_rle()` makes it easier to work with tibbles.
 
@@ -74,8 +73,7 @@ na_runs_wind
 ## Range plots and extended spinoplots
 
 How do those missings distribute and associate with others? The range
-plot below shows many of single `NA` runs occurs to the `wind_dir`
-variable over the year of 2013.
+plot below shows many of single `NA` runs occurs to `wind_dir` in 2013.
 
 ``` r
 na_runs_wind %>% 

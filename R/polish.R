@@ -199,7 +199,7 @@ na_polish_funs <- function() {
   )
 }
 
-#' Evaluation metrics for missing data polishing
+#' Report metrics for missing data polishing
 #'
 #' @param before,after Tsibbles before and after polishing.
 #' @return

@@ -47,6 +47,7 @@ Many math operations can be applied to objects returned from \code{na_rle()} and
 \item \code{sum()}: the total number of \code{NA} over all runs.
 \item \code{mean()}: the average \code{NA}s per run.
 \item \code{min()} & \code{max()}: the minimum and maximum of runs.
+\item \code{median()} & \code{quantile()}
 }
 }
 

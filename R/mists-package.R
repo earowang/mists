@@ -4,7 +4,7 @@
 #' @import rlang
 #' @import vctrs
 #' @importFrom utils head tail
-#' @importFrom stats median
+#' @importFrom stats median quantile
 #' @importFrom tsibble is_tsibble key key_vars key_data key_rows index index_var
 #' @importFrom tsibble interval_pull time_unit group_by_key measures units_since
 #' @importFrom dplyr distinct mutate transmute new_grouped_df group_nest

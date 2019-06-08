@@ -20,6 +20,7 @@ na_rle_impl <- function(x) {
 #' * `sum()`: the total number of `NA` over all runs.
 #' * `mean()`: the average `NA`s per run.
 #' * `min()` & `max()`: the minimum and maximum of runs.
+#' * `median()` & `quantile()`
 #'
 #' @rdname na-rle
 #' @examples
@@ -178,4 +179,14 @@ median.mists_rle_na <- function(x, ...) {
 #' @export
 median.mists_list_of_rle_na <- function(x, ...) {
   map_dbl(x, median)
+}
+
+#' @export
+quantile.mists_rle_na <- function(x, ...) {
+  quantile(na_rle_lengths(x), ...)
+}
+
+#' @export
+quantile.mists_list_of_rle_na <- function(x, ...) {
+  map_dbl(x, quantile, ...)
 }

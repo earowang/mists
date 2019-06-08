@@ -115,7 +115,7 @@ na_polish_index2 <- function(data, cutoff) {
 #' na_polish_metrics(wdi_ts, wdi_after)
 #'
 #' # Trace down `na_polish_auto()`
-#' na_polish_auto_trace(wdi_ts, cutoff = .8)
+#' na_polish_auto_trace(wdi_ts, cutoff = .8, quiet = TRUE)
 #' }
 na_polish_auto <- function(data, cutoff, tol = .1, funs = na_polish_funs(),
   quiet = FALSE) {

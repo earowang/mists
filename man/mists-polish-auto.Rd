@@ -41,7 +41,7 @@ wdi_after <- na_polish_auto(wdi_ts, cutoff = .8)
 na_polish_metrics(wdi_ts, wdi_after)
 
 # Trace down `na_polish_auto()`
-na_polish_auto_trace(wdi_ts, cutoff = .8)
+na_polish_auto_trace(wdi_ts, cutoff = .8, quiet = TRUE)
 }
 }
 \keyword{internal}

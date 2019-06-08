@@ -24,8 +24,10 @@ na_rle_impl <- function(x) {
 #'
 #' @rdname na-rle
 #' @examples
-#' df <- data.frame(year = 2000:2019, temp = sample(0:30, size = 10))
+#' library(dplyr, warn.conflicts = FALSE)
+#' df <- tibble(year = 2000:2019, temp = sample(0:30, size = 20))
 #' df[c(1, 6, 13:16, 19), "temp"] <- NA
+#' df
 #'
 #' na_rle(df$temp) # indexed by the default positions
 #' (x <- na_rle(df$temp, index_by = df$year)) # indexed by a variable
@@ -37,13 +39,13 @@ na_rle_impl <- function(x) {
 #' sum(x) # the total number of `NA`
 #' range(x) # min & max runs
 #'
-#' library(dplyr, warn.conflicts = FALSE)
 #' # list_of_na_rle() is useful when working with tabular data
-#' na_rle_df <- as_tibble(df) %>%
+#' na_rle_df <- df %>% 
+#'   mutate(group = rep(letters[1:2], each = 10)) %>% 
+#'   group_by(group) %>% 
 #'   summarise(na_runs = list_of_na_rle(temp, year))
 #' na_rle_df
 #'
-#' length(na_rle_df$na_runs)
 #' sum(na_rle_df$na_runs)
 #' range(na_rle_df$na_runs)
 #' @export
@@ -78,6 +80,17 @@ na_rle <- function(x = double(), index_by = seq_along(x), interval = NULL) {
 
 #' @rdname na-rle
 #' @export
+list_of_na_rle <- function(x = double(), index_by = seq_along(x),
+  interval = NULL) {
+  new_list_of(
+    list(na_rle(x, index_by = index_by, interval = interval)),
+    ptype = list(),
+    class = "mists_list_of_rle_na"
+  )
+}
+
+#' @rdname na-rle
+#' @export
 na_rle_lengths <- function(x) {
   UseMethod("na_rle_lengths")
 }
@@ -106,29 +119,6 @@ na_rle_indices.mists_rle_na <- function(x) {
 #' @export
 na_rle_indices.mists_list_of_rle_na <- function(x) {
   as_list_of(map(x, na_rle_indices))
-}
-
-#' @rdname na-rle
-#' @export
-list_of_na_rle <- function(x = double(), index_by = seq_along(x),
-  interval = NULL) {
-  new_list_of(
-    list(na_rle(x, index_by = index_by, interval = interval)),
-    ptype = list(),
-    class = "mists_list_of_rle_na"
-  )
-}
-
-#' @rdname na-rle
-#' @method as_list_of mists_rle_na
-#' @export
-#' @export as_list_of.mists_rle_na
-as_list_of.mists_rle_na <- function(x, ...) {
-  new_list_of(
-    list(x, ...),
-    ptype = list(),
-    class = "mists_list_of_rle_na"
-  )
 }
 
 new_mists_rle_na <- function(x) {

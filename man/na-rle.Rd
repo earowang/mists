@@ -2,22 +2,19 @@
 % Please edit documentation in R/mists-rle-na.R
 \name{na_rle}
 \alias{na_rle}
+\alias{list_of_na_rle}
 \alias{na_rle_lengths}
 \alias{na_rle_indices}
-\alias{list_of_na_rle}
-\alias{as_list_of.mists_rle_na}
 \title{Run lengths encoding for missing values (\code{NA})}
 \usage{
 na_rle(x = double(), index_by = seq_along(x), interval = NULL)
 
-na_rle_lengths(x)
-
-na_rle_indices(x)
-
 list_of_na_rle(x = double(), index_by = seq_along(x),
   interval = NULL)
 
-\method{as_list_of}{mists_rle_na}(x, ...)
+na_rle_lengths(x)
+
+na_rle_indices(x)
 }
 \arguments{
 \item{x}{A vector.}
@@ -26,8 +23,6 @@ list_of_na_rle(x = double(), index_by = seq_along(x),
 
 \item{interval}{if \code{NULL}, determined by the greatest common denominator;
 otherwise a supplied "interval" class. See \code{?tsibble::tsibble} for details.}
-
-\item{...}{Vectors to coerce.}
 }
 \value{
 A named list of
@@ -52,8 +47,10 @@ Many math operations can be applied to objects returned from \code{na_rle()} and
 }
 
 \examples{
-df <- data.frame(year = 2000:2019, temp = sample(0:30, size = 10))
+library(dplyr, warn.conflicts = FALSE)
+df <- tibble(year = 2000:2019, temp = sample(0:30, size = 20))
 df[c(1, 6, 13:16, 19), "temp"] <- NA
+df
 
 na_rle(df$temp) # indexed by the default positions
 (x <- na_rle(df$temp, index_by = df$year)) # indexed by a variable
@@ -65,13 +62,13 @@ length(x) # the number of runs
 sum(x) # the total number of `NA`
 range(x) # min & max runs
 
-library(dplyr, warn.conflicts = FALSE)
 # list_of_na_rle() is useful when working with tabular data
-na_rle_df <- as_tibble(df) \%>\%
+na_rle_df <- df \%>\% 
+  mutate(group = rep(letters[1:2], each = 10)) \%>\% 
+  group_by(group) \%>\% 
   summarise(na_runs = list_of_na_rle(temp, year))
 na_rle_df
 
-length(na_rle_df$na_runs)
 sum(na_rle_df$na_runs)
 range(na_rle_df$na_runs)
 }

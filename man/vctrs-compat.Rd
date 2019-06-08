@@ -2,6 +2,7 @@
 % Please edit documentation in R/compat-vctrs.R
 \name{vctrs-compat}
 \alias{vctrs-compat}
+\alias{as_list_of.mists_rle_na}
 \alias{vec_cast.list.mists_rle_na}
 \alias{vec_math.mists_rle_na}
 \alias{vec_math.mists_list_of_rle_na}
@@ -12,6 +13,8 @@
 \alias{vec_ptype_full.mists_list_of_rle_na}
 \title{vctrs compatibility functions}
 \usage{
+\method{as_list_of}{mists_rle_na}(x, ...)
+
 \method{vec_cast.list}{mists_rle_na}(x, to)
 
 \method{vec_math}{mists_rle_na}(fun, x, ...)
@@ -31,9 +34,9 @@
 \arguments{
 \item{x}{Objects.}
 
-\item{to}{Type to cast to.}
-
 \item{...}{Used to pass along error message information.}
+
+\item{to}{Type to cast to.}
 }
 \description{
 These functions are the extensions that allow mists objects to

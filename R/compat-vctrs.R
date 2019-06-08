@@ -12,6 +12,19 @@
 NULL
 
 #' @rdname vctrs-compat
+#' @rdname vctrs-compat
+#' @method as_list_of mists_rle_na
+#' @export
+#' @export as_list_of.mists_rle_na
+as_list_of.mists_rle_na <- function(x, ...) {
+  new_list_of(
+    list(x, ...),
+    ptype = list(),
+    class = "mists_list_of_rle_na"
+  )
+}
+
+#' @rdname vctrs-compat
 #' @keywords internal
 #' @method vec_cast.list mists_rle_na
 #' @export
@@ -36,8 +49,13 @@ vec_math.mists_rle_na <- function(fun, x, ...) {
 #' @export
 #' @export vec_math.mists_list_of_rle_na
 vec_math.mists_list_of_rle_na <- function(fun, x, ...) {
-  na_rle_lengths_x <- unlist(na_rle_lengths(x), use.names = FALSE)
-  vec_math_base(fun, na_rle_lengths_x, ...)
+  na_rle_lengths_x <- na_rle_lengths(x)
+  # bug in vctrs::vec_math? `x` becomes a list of lists
+  if (vec_depth(na_rle_lengths_x) == 3) { # sum()
+    na_rle_lengths_x <- 
+      unlist(na_rle_lengths(x), recursive = FALSE, use.names = FALSE)
+  }
+  map(na_rle_lengths_x, function(.x) vec_math_base(fun, .x, ...))
 }
 
 # #' @rdname vctrs-compat

@@ -160,7 +160,7 @@ na_polish_auto_impl <- function(data, cutoff, tol = .1, funs = na_polish_funs(),
     before <- data
     fmt_steps <- 
       sprintf(
-        "{code {fun %s}} {strong %.3f * %.3f = %.3f}", names(lst_funs), 
+        "{code {fun %s}} {emph %.3f * %.3f = %.3f}", names(lst_funs), 
         step_na[!rm_funs], step_removed[!rm_funs], step_metrics[!rm_funs]
       )
     p <- pass()
@@ -174,7 +174,7 @@ na_polish_auto_impl <- function(data, cutoff, tol = .1, funs = na_polish_funs(),
         pass_metric = tol0
       )
     if (!quiet) {
-      fmt_tol <- sprintf("{strong %.3f}", tol0)
+      fmt_tol <- sprintf("{emph %.3f}", tol0)
       cli_report(p, fmt_steps, fmt_tol)
     }
   }
@@ -280,6 +280,7 @@ cli_report <- function(npass, step_fun, metric) {
     abort("`quiet = FALSE` requires the \"cliapp\" packge to be installed.")
   }
   cliapp::start_app(theme = cliapp::simple_theme())
+  cliapp::cli_div(theme = list(span.emph = list(color = "red")))
   cliapp::cli_h1(paste("Pass", npass))
   cliapp::cli_ol(step_fun)
   cliapp::cli_alert_success(metric)

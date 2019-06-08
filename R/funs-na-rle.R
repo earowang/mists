@@ -37,10 +37,7 @@ na_rle_shift.mists_list_of_rle_na <- function(x, n = 1L) {
 #' @rdname mists-na-rle-tbl
 #' @examples
 #' (x <- na_rle(c(1, NA, NA, 4:7, NA, NA, 10:15, NA)))
-#' (y <- na_rle(c(10, NA, NA, NA, 6:3, NA, 1)))
 #' na_rle_expand(x)
-#' na_rle_expand(y)
-#' na_rle_expand(as.list(x, y), group = c("x", "y"))
 #' na_rle_table(x)
 #' @export
 na_rle_expand <- function(x, ...) {

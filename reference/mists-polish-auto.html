@@ -34,7 +34,7 @@
 
 <meta property="og:description" content="It is an iterative process for minimising the loss until a tolerance value.
 na_polish_auto() returns the polished data.
-na_polish_auto_trace() returns a metric tibble for documenting the steps.
+na_polish_auto_trace() returns a tibble for documenting the steps and metrics.
 " />
 <meta name="twitter:card" content="summary" />
 
@@ -105,7 +105,7 @@ na_polish_auto_trace() returns a metric tibble for documenting the steps.
     
     <p>It is an iterative process for minimising the loss until a tolerance value.</p><ul>
 <li><p><code>na_polish_auto()</code> returns the polished data.</p></li>
-<li><p><code>na_polish_auto_trace()</code> returns a metric tibble for documenting the steps.</p></li>
+<li><p><code>na_polish_auto_trace()</code> returns a tibble for documenting the steps and metrics.</p></li>
 </ul>
     
     </div>
@@ -168,7 +168,35 @@ requires the "cliapp" package to be installed.</p></td>
 #&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='input'><span class='fu'><a href='na_polish_metrics.html'>na_polish_metrics</a></span>(<span class='no'>wdi_ts</span>, <span class='no'>wdi_after</span>)</div><div class='output co'>#&gt; # A tibble: 1 x 6
 #&gt;   prop_na nobs_na prop_removed nobs_removed nrows_removed ncols_removed
 #&gt;     &lt;dbl&gt;   &lt;int&gt;        &lt;dbl&gt;        &lt;int&gt;         &lt;int&gt;         &lt;int&gt;
-#&gt; 1   0.636  220533        0.581       346948          5752             6</div></pre>
+#&gt; 1   0.636  220533        0.581       346948          5752             6</div><div class='input'>
+<span class='co'># Trace down `na_polish_auto()`</span>
+<span class='fu'>na_polish_auto_trace</span>(<span class='no'>wdi_ts</span>, <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>.8</span>)</div><div class='output co'>#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
+#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610
+#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
+#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── Pass 1 ──────────────────────────────────────────────────────────────────────</span></div><div class='output co'>#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
+#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='output co'>#&gt; <span class='message'>1. `na_polish_index()` 0.673 * 0.335 = 0.225</span></div><div class='output co'>#&gt; <span class='message'>2. `na_polish_measures()` 0.881 * 0.109 = 0.096</span></div><div class='output co'>#&gt; <span class='message'>3. `na_polish_index2()` 0.570 * 0.113 = 0.064</span></div><div class='output co'>#&gt; <span class='message'>4. `na_polish_key()` 0.837 * 0.000 = 0.000</span></div><div class='output co'>#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
+#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='output co'>#&gt; <span class='message'>✔ 0.328</span></div><div class='output co'>#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
+#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610
+#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
+#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610
+#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
+#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610
+#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
+#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── Pass 2 ──────────────────────────────────────────────────────────────────────</span></div><div class='output co'>#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
+#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='output co'>#&gt; <span class='message'>1. `na_polish_index()` 0.432 * 0.157 = 0.068</span></div><div class='output co'>#&gt; <span class='message'>2. `na_polish_index2()` 0.256 * 0.055 = 0.014</span></div><div class='output co'>#&gt; <span class='message'>3. `na_polish_key()` 0.816 * 0.000 = 0.000</span></div><div class='output co'>#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
+#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='output co'>#&gt; <span class='message'>✔ 0.080</span></div><div class='output co'>#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
+#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610
+#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
+#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='output co'>#&gt; # A tibble: 7 x 6
+#&gt;    pass step               prop_na prop_removed step_metric pass_metric
+#&gt;   &lt;int&gt; &lt;chr&gt;                &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+#&gt; 1     1 na_polish_index      0.673     0.335       0.225         0.328 
+#&gt; 2     1 na_polish_measures   0.881     0.109       0.0961        0.328 
+#&gt; 3     1 na_polish_index2     0.570     0.113       0.0645        0.328 
+#&gt; 4     1 na_polish_key        0.837     0.000469    0.000392      0.328 
+#&gt; 5     2 na_polish_index      0.432     0.157       0.0678        0.0797
+#&gt; 6     2 na_polish_index2     0.256     0.0545      0.0139        0.0797
+#&gt; 7     2 na_polish_key        0.816     0.000196    0.000160      0.0797</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

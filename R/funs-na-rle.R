@@ -40,7 +40,7 @@ na_rle_shift.mists_list_of_rle_na <- function(x, n = 1L) {
 #' (y <- na_rle(c(10, NA, NA, NA, 6:3, NA, 1)))
 #' na_rle_expand(x)
 #' na_rle_expand(y)
-#' na_rle_expand(vctrs::as_list_of(x, y), group = c("x", "y"))
+#' na_rle_expand(as.list(x, y), group = c("x", "y"))
 #' na_rle_table(x)
 #' @export
 na_rle_expand <- function(x, ...) {
@@ -73,7 +73,7 @@ na_rle_expand.mists_list_of_rle_na <- function(x, ...) {
     y <- eval_tidy(qs[[1]])
     new_col <- names(qs)
   }
-  res_lst <- 
+  res_lst <-
     map2(x, y, function(.x, .y) mutate(na_rle_expand(.x), !! new_col := .y))
   res <- bind_rows(!!! res_lst) # vec_rbind() should work here
   indices_restore(res, x[[1L]])
@@ -185,4 +185,53 @@ setdiff.mists_rle_na <- function(x, y, ...) {
 #' @export
 setdiff.mists_list_of_rle_na <- function(x, y, ...) {
   as_list_of(map2(x, y, setdiff.mists_rle_na, ...))
+}
+
+#' @export
+length.mists_rle_na <- function(x) { # for displaying the size of runs
+  length(na_rle_lengths(x))
+}
+
+# `min()` and `max()` better to be defined through `vec_math()`, but seems that
+# they require the input to be orderable. Not the case for mists_rle_na, so
+# overwrite `vctrs_vctr`.
+
+#' @export
+min.mists_rle_na <- function(x, ...) {
+  vec_math_base("min", na_rle_lengths(x))
+}
+
+#' @export
+max.mists_rle_na <- function(x, ...) {
+  vec_math_base("max", na_rle_lengths(x))
+}
+
+#' @export
+min.mists_list_of_rle_na <- function(x, ...) {
+  map_int(x, min)
+}
+
+#' @export
+max.mists_list_of_rle_na <- function(x, ...) {
+  map_int(x, max)
+}
+
+#' @export
+median.mists_rle_na <- function(x, ...) {
+  median(na_rle_lengths(x))
+}
+
+#' @export
+median.mists_list_of_rle_na <- function(x, ...) {
+  map_dbl(x, median)
+}
+
+#' @export
+quantile.mists_rle_na <- function(x, ...) {
+  quantile(na_rle_lengths(x), ...)
+}
+
+#' @export
+quantile.mists_list_of_rle_na <- function(x, ...) {
+  map_dbl(x, quantile, ...)
 }

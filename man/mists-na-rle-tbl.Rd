@@ -22,6 +22,6 @@ Expand and count run length encoding <\code{NA}>
 (y <- na_rle(c(10, NA, NA, NA, 6:3, NA, 1)))
 na_rle_expand(x)
 na_rle_expand(y)
-na_rle_expand(vctrs::as_list_of(x, y), group = c("x", "y"))
+na_rle_expand(as.list(x, y), group = c("x", "y"))
 na_rle_table(x)
 }

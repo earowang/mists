@@ -144,12 +144,10 @@ na_rle_spinoplot <- function(data, x, y = NULL, facets = NULL, ...) {
     y_full <- na_rle_expand(lst_na_rle_y, facets = facets_vals)
     intersect_xy <- semi_join(x_full, y_full, by = c("indices", "facets"))
     overlaps_xy <- count(intersect_xy, lengths, facets)
+    inner_xy <- inner_join(overlaps_xy, na_runs_x, by = c("lengths", "facets"))
     frac_intersect <- 
       transmute(
-        group_by(
-          inner_join(overlaps_xy, na_runs_x, by = c("lengths", "facets")),
-          lengths, facets
-        ),
+        group_by(inner_xy, lengths, facets),
         "frac" := n.x / nobs, "overlap" := TRUE
       )
     frac_diff <- 
@@ -158,14 +156,10 @@ na_rle_spinoplot <- function(data, x, y = NULL, facets = NULL, ...) {
         "frac" := 1 - frac, "overlap" := FALSE
       )
     frac_xy <- vec_rbind(frac_intersect, frac_diff)
-    grped_x <- 
-        group_by(
-          left_join(na_runs_x, frac_xy, by = c("lengths", "facets")), 
-          facets
-        )
+    ljoin_xy <- left_join(na_runs_x, frac_xy, by = c("lengths", "facets"))
     na_runs_xy <- 
       mutate(
-        grped_x,
+        group_by(ljoin_xy, facets),
         "overlap" := ifelse(is.na(frac), FALSE, overlap),
         "frac" := ifelse(is.na(frac), 1, frac)
       )

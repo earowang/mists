@@ -67,7 +67,7 @@ range(x) # min & max runs
 
 library(dplyr, warn.conflicts = FALSE)
 # list_of_na_rle() is useful when working with tabular data
-na_rle_df <- as_tibble(df) \%>\% 
+na_rle_df <- as_tibble(df) \%>\%
   summarise(na_runs = list_of_na_rle(temp, year))
 na_rle_df
 

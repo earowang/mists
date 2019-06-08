@@ -9,13 +9,13 @@ na_rle_impl <- function(x) {
 #' @param interval if `NULL`, determined by the greatest common denominator;
 #' otherwise a supplied "interval" class. See `?tsibble::tsibble` for details.
 #' @inheritParams vctrs::as_list_of
-#' 
+#'
 #' @return A named list of
 #' * `lengths`: the lengths of `NA` runs
 #' * `indices`: the starting indices of runs
 #'
 #' @section Mathematical operations:
-#' Many math operations can be applied to objects returned from `na_rle()` and 
+#' Many math operations can be applied to objects returned from `na_rle()` and
 #' `list_of_na_rle()`, regarding the *lengths* of runs.
 #' * `sum()`: the total number of `NA` over all runs.
 #' * `mean()`: the average `NA`s per run.
@@ -26,20 +26,20 @@ na_rle_impl <- function(x) {
 #' @examples
 #' df <- data.frame(year = 2000:2019, temp = sample(0:30, size = 10))
 #' df[c(1, 6, 13:16, 19), "temp"] <- NA
-#' 
+#'
 #' na_rle(df$temp) # indexed by the default positions
 #' (x <- na_rle(df$temp, index_by = df$year)) # indexed by a variable
-#' 
+#'
 #' na_rle_lengths(x)
 #' na_rle_indices(x)
 #'
 #' length(x) # the number of runs
 #' sum(x) # the total number of `NA`
 #' range(x) # min & max runs
-#' 
+#'
 #' library(dplyr, warn.conflicts = FALSE)
 #' # list_of_na_rle() is useful when working with tabular data
-#' na_rle_df <- as_tibble(df) %>% 
+#' na_rle_df <- as_tibble(df) %>%
 #'   summarise(na_runs = list_of_na_rle(temp, year))
 #' na_rle_df
 #'
@@ -61,7 +61,7 @@ na_rle <- function(x = double(), index_by = seq_along(x), interval = NULL) {
   ord <- vec_order(index_by)
   x <- x[ord]
   if (is_null(interval)) {
-    int <- interval_pull(index_by) 
+    int <- interval_pull(index_by)
   } else {
     if (!inherits(interval, "interval")) {
       abort("`interval` must be class interval.")
@@ -140,53 +140,7 @@ mists_rle_na_assert <- function(x) {
   if (is_false(is_bare_list(x) && all(has_name(x, c("lengths", "indices"))))) {
     abort("Run length encoding must be a named list with `lengths` and `indices`.")
   }
-}
-
-#' @export
-length.mists_rle_na <- function(x) { # for displaying the size of runs
-  length(na_rle_lengths(x))
-}
-
-# `min()` and `max()` better to be defined through `vec_math()`, but seems that
-# they require the input to be orderable. Not the case for mists_rle_na, so
-# overwrite `vctrs_vctr`.
-
-#' @export
-min.mists_rle_na <- function(x, ...) {
-  vec_math_base("min", na_rle_lengths(x))
-}
-
-#' @export
-max.mists_rle_na <- function(x, ...) {
-  vec_math_base("max", na_rle_lengths(x))
-}
-
-#' @export
-min.mists_list_of_rle_na <- function(x, ...) {
-  map_int(x, min)
-}
-
-#' @export
-max.mists_list_of_rle_na <- function(x, ...) {
-  map_int(x, max)
-}
-
-#' @export
-median.mists_rle_na <- function(x, ...) {
-  median(na_rle_lengths(x))
-}
-
-#' @export
-median.mists_list_of_rle_na <- function(x, ...) {
-  map_dbl(x, median)
-}
-
-#' @export
-quantile.mists_rle_na <- function(x, ...) {
-  quantile(na_rle_lengths(x), ...)
-}
-
-#' @export
-quantile.mists_list_of_rle_na <- function(x, ...) {
-  map_dbl(x, quantile, ...)
+  if (is_null(x$indices %@% "interval")) {
+    abort("Missing \"interval\".")
+  }
 }

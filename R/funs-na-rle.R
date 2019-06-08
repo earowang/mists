@@ -165,7 +165,7 @@ union.mists_rle_na <- function(x, y, ...) {
 #' @method union mists_list_of_rle_na
 #' @export
 union.mists_list_of_rle_na <- function(x, y, ...) {
-  new_mists_list_of_rle_na(map2(x, y, union.mists_rle_na, ...))
+  new_mists_list_of_rle_na(!!! map2(x, y, union.mists_rle_na, ...))
 }
 
 #' @rdname mists-set-op
@@ -181,7 +181,7 @@ setdiff.mists_rle_na <- function(x, y, ...) {
 #' @method setdiff mists_list_of_rle_na
 #' @export
 setdiff.mists_list_of_rle_na <- function(x, y, ...) {
-  new_mists_list_of_rle_na(map2(x, y, setdiff.mists_rle_na, ...))
+  new_mists_list_of_rle_na(!!! map2(x, y, setdiff.mists_rle_na, ...))
 }
 
 #' @export

@@ -24,6 +24,21 @@ as_list_of.mists_rle_na <- function(x, ...) {
   )
 }
 
+# #' @rdname vctrs-compat
+# #' @keywords internal
+# #' @method vec_type2 mists_rle_na
+# #' @export
+# #' @export vec_type2.mists_rle_na
+# vec_type2.mists_rle_na <- function(x, y, ...) {
+#   UseMethod("vec_type2.mists_rle_na", y)
+# }
+#
+# #' @method vec_type2.mists_rle_na mists_rle_na
+# #' @export
+# vec_type2.mists_rle_na.mists_rle_na <- function(x, y, ...) {
+#   list_of_na_rle(y)
+# }
+
 #' @rdname vctrs-compat
 #' @keywords internal
 #' @method vec_cast.list mists_rle_na
@@ -55,7 +70,7 @@ vec_math.mists_list_of_rle_na <- function(fun, x, ...) {
     na_rle_lengths_x <- 
       unlist(na_rle_lengths(x), recursive = FALSE, use.names = FALSE)
   }
-  map(na_rle_lengths_x, function(.x) vec_math_base(fun, .x, ...))
+  as_list_of(map(na_rle_lengths_x, function(.x) vec_math_base(fun, .x, ...)))
 }
 
 # #' @rdname vctrs-compat

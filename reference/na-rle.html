@@ -106,15 +106,12 @@
 
     <pre class="usage"><span class='fu'>na_rle</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/double'>double</a></span>(), <span class='kw'>index_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq_along</a></span>(<span class='no'>x</span>), <span class='kw'>interval</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
-<span class='fu'>na_rle_lengths</span>(<span class='no'>x</span>)
-
-<span class='fu'>na_rle_indices</span>(<span class='no'>x</span>)
-
 <span class='fu'>list_of_na_rle</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/double'>double</a></span>(), <span class='kw'>index_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq_along</a></span>(<span class='no'>x</span>),
   <span class='kw'>interval</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
-<span class='co'># S3 method for mists_rle_na</span>
-<span class='fu'>as_list_of</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>na_rle_lengths</span>(<span class='no'>x</span>)
+
+<span class='fu'>na_rle_indices</span>(<span class='no'>x</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -131,10 +128,6 @@
       <th>interval</th>
       <td><p>if <code>NULL</code>, determined by the greatest common denominator;
 otherwise a supplied "interval" class. See <code><a href='https://tsibble.tidyverts.org/reference/tsibble.html'>?tsibble::tsibble</a></code> for details.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Vectors to coerce.</p></td>
     </tr>
     </table>
     
@@ -159,9 +152,32 @@ otherwise a supplied "interval" class. See <code><a href='https://tsibble.tidyve
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>year</span> <span class='kw'>=</span> <span class='fl'>2000</span>:<span class='fl'>2019</span>, <span class='kw'>temp</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='fl'>0</span>:<span class='fl'>30</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>10</span>))
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>dplyr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/reexports.html'>tibble</a></span>(<span class='kw'>year</span> <span class='kw'>=</span> <span class='fl'>2000</span>:<span class='fl'>2019</span>, <span class='kw'>temp</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/sample.html'>sample</a></span>(<span class='fl'>0</span>:<span class='fl'>30</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>20</span>))
 <span class='no'>df</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>6</span>, <span class='fl'>13</span>:<span class='fl'>16</span>, <span class='fl'>19</span>), <span class='st'>"temp"</span>] <span class='kw'>&lt;-</span> <span class='fl'>NA</span>
-
+<span class='no'>df</span></div><div class='output co'>#&gt; # A tibble: 20 x 2
+#&gt;     year  temp
+#&gt;    &lt;int&gt; &lt;int&gt;
+#&gt;  1  2000    NA
+#&gt;  2  2001    22
+#&gt;  3  2002    11
+#&gt;  4  2003     4
+#&gt;  5  2004     5
+#&gt;  6  2005    NA
+#&gt;  7  2006    25
+#&gt;  8  2007     3
+#&gt;  9  2008    26
+#&gt; 10  2009     8
+#&gt; 11  2010    27
+#&gt; 12  2011    20
+#&gt; 13  2012    NA
+#&gt; 14  2013    NA
+#&gt; 15  2014    NA
+#&gt; 16  2015    NA
+#&gt; 17  2016     6
+#&gt; 18  2017    10
+#&gt; 19  2018    NA
+#&gt; 20  2019    19</div><div class='input'>
 <span class='fu'>na_rle</span>(<span class='no'>df</span>$<span class='no'>temp</span>) <span class='co'># indexed by the default positions</span></div><div class='output co'>#&gt; &lt;Run Length Encoding &lt;NA&gt;[4]&gt;
 #&gt; $lengths: &lt;int&gt; 1 1 4 1 
 #&gt; $indices : &lt;int&gt;  1  6 13 19</div><div class='input'>(<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>na_rle</span>(<span class='no'>df</span>$<span class='no'>temp</span>, <span class='kw'>index_by</span> <span class='kw'>=</span> <span class='no'>df</span>$<span class='no'>year</span>)) <span class='co'># indexed by a variable</span></div><div class='output co'>#&gt; &lt;Run Length Encoding &lt;NA&gt;[4]&gt;
@@ -171,15 +187,27 @@ otherwise a supplied "interval" class. See <code><a href='https://tsibble.tidyve
 #&gt; attr(,"interval")
 #&gt; 1Y</div><div class='input'>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>x</span>) <span class='co'># the number of runs</span></div><div class='output co'>#&gt; [1] 4</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum</a></span>(<span class='no'>x</span>) <span class='co'># the total number of `NA`</span></div><div class='output co'>#&gt; [1] 7</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/range'>range</a></span>(<span class='no'>x</span>) <span class='co'># min &amp; max runs</span></div><div class='output co'>#&gt; [1] 1 4</div><div class='input'>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>dplyr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='co'># list_of_na_rle() is useful when working with tabular data</span>
-<span class='no'>na_rle_df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/reexports.html'>as_tibble</a></span>(<span class='no'>df</span>) <span class='kw'>%&gt;%</span>
+<span class='no'>na_rle_df</span> <span class='kw'>&lt;-</span> <span class='no'>df</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(<span class='kw'>group</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>2</span>], <span class='kw'>each</span> <span class='kw'>=</span> <span class='fl'>10</span>)) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span>(<span class='no'>group</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span>(<span class='kw'>na_runs</span> <span class='kw'>=</span> <span class='fu'>list_of_na_rle</span>(<span class='no'>temp</span>, <span class='no'>year</span>))
-<span class='no'>na_rle_df</span></div><div class='output co'>#&gt; # A tibble: 1 x 1
-#&gt;           na_runs
-#&gt;   &lt;list&lt;rle&lt;NA&gt;&gt;&gt;
-#&gt; 1             [4]</div><div class='input'>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>na_rle_df</span>$<span class='no'>na_runs</span>)</div><div class='output co'>#&gt; [1] 1</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum</a></span>(<span class='no'>na_rle_df</span>$<span class='no'>na_runs</span>)</div><div class='output co'>#&gt; [1] 7</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/range'>range</a></span>(<span class='no'>na_rle_df</span>$<span class='no'>na_runs</span>)</div><div class='output co'>#&gt; [1] 1 4</div></pre>
+<span class='no'>na_rle_df</span></div><div class='output co'>#&gt; # A tibble: 2 x 2
+#&gt;   group         na_runs
+#&gt;   &lt;chr&gt; &lt;list&lt;rle&lt;NA&gt;&gt;&gt;
+#&gt; 1 a                 [2]
+#&gt; 2 b                 [2]</div><div class='input'>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum</a></span>(<span class='no'>na_rle_df</span>$<span class='no'>na_runs</span>)</div><div class='output co'>#&gt; [[1]]
+#&gt; [1] 2
+#&gt; 
+#&gt; [[2]]
+#&gt; [1] 5
+#&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/range'>range</a></span>(<span class='no'>na_rle_df</span>$<span class='no'>na_runs</span>)</div><div class='output co'>#&gt; [[1]]
+#&gt; [1] 1 1
+#&gt; 
+#&gt; [[2]]
+#&gt; [1] 1 4
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

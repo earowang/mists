@@ -31,7 +31,7 @@ requires the "cliapp" package to be installed.}
 It is an iterative process for minimising the loss until a tolerance value.
 \itemize{
 \item \code{na_polish_auto()} returns the polished data.
-\item \code{na_polish_auto_trace()} returns a metric tibble for documenting the steps.
+\item \code{na_polish_auto_trace()} returns a tibble for documenting the steps and metrics.
 }
 }
 \examples{
@@ -39,6 +39,9 @@ It is an iterative process for minimising the loss until a tolerance value.
 wdi_ts <- tsibble::as_tsibble(wdi, key = country_code, index = year)
 wdi_after <- na_polish_auto(wdi_ts, cutoff = .8)
 na_polish_metrics(wdi_ts, wdi_after)
+
+# Trace down `na_polish_auto()`
+na_polish_auto_trace(wdi_ts, cutoff = .8)
 }
 }
 \keyword{internal}

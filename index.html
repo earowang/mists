@@ -91,7 +91,7 @@
 <a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt; &lt;Run Length Encoding &lt;NA&gt;[2]&gt;</span></a>
 <a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">#&gt; $lengths: &lt;int&gt; 3 1 </span></a>
 <a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">#&gt; $indices : &lt;int&gt; 2 9</span></a></code></pre></div>
-<p>It returns a named list of <code>lengths</code> and <code>indices</code> (the starting indices) of <code>NA</code> runs. Set operations can be applied: (1) <code><a href="https://dplyr.tidyverse.org/reference/setops.html">intersect(x, y)</a></code>, (2) <code><a href="https://dplyr.tidyverse.org/reference/setops.html">union(x, y)</a></code>, (3) <code><a href="https://dplyr.tidyverse.org/reference/setops.html">setdiff(x, y)</a></code>, along with other math operations.</p>
+<p>It returns a named list of <code>lengths</code> and <code>indices</code> (the starting indices) of <code>NA</code> runs. Set operations can be applied: <code><a href="https://dplyr.tidyverse.org/reference/setops.html">intersect(x, y)</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/setops.html">union(x, y)</a></code>, and <code><a href="https://dplyr.tidyverse.org/reference/setops.html">setdiff(x, y)</a></code>, along with other math operations.</p>
 <p>The <code><a href="reference/na-rle.html">list_of_na_rle()</a></code> makes it easier to work with tibbles.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">na_runs_wind &lt;-<span class="st"> </span>nycflights13<span class="op">::</span>weather <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -111,7 +111,7 @@
 <div id="range-plots-and-extended-spinoplots" class="section level2">
 <h2 class="hasAnchor">
 <a href="#range-plots-and-extended-spinoplots" class="anchor"></a>Range plots and extended spinoplots</h2>
-<p>How do those missings distribute and associate with others? The range plot below shows many of single <code>NA</code> runs occurs to the <code>wind_dir</code> variable over the year of 2013.</p>
+<p>How do those missings distribute and associate with others? The range plot below shows many of single <code>NA</code> runs occurs to <code>wind_dir</code> in 2013.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">na_runs_wind <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/mists-plot.html">na_rle_rangeplot</a></span>(<span class="dt">x =</span> wind_dir, <span class="dt">y =</span> origin, <span class="dt">shape =</span> <span class="dv">4</span>)</a></code></pre></div>
 <p><img src="reference/figures/README-rangeplot-1.png" width="875" style="display: block; margin: auto;"></p>

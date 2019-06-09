@@ -8,15 +8,15 @@ distinct_groups <- function(x, interval) {
 
 #' Range plot and spinoplot for runs of missings
 #'
+#' `na_rle_spineplot()` is an alias of `na_rle_spinoplot()`.
+#'
 #' @param data A data frame that contains [`list_of_na_rle()`].
-#' @inheritParams ggplot2::autoplot
+#' @param x,y A bare variable contains [`list_of_na_rle()`] mapped to x and y.
+#' @param facets A facetting variable.
 #' @param ...
 #' * `na_rle_rangeplot()`: passed to `geom_line()` and `geom_point()`.
 #' * `na_rle_spinoplot()`: passed to `facet_wrap()`.
-#' @param x,y A bare variable contains [`list_of_na_rle()`] mapped to x and y.
-#' @param facets A facetting variable.
 #'
-#' @name mists-plot
 #' @rdname mists-plot
 #' @examples
 #' if (!requireNamespace("nycflights13", quietly = TRUE)) {
@@ -174,3 +174,8 @@ na_rle_spinoplot <- function(data, x, y = NULL, facets = NULL, ...) {
       labs(x = xlab, y = ylab)
   }
 }
+
+#' @rdname mists-plot
+#' @export
+#' @usage NULL
+na_rle_spineplot <- na_rle_spinoplot

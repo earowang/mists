@@ -17,7 +17,7 @@ na_rle_shift <- function(x, n = 1L) {
 }
 
 #' @export
-na_rle_shift.mists_rle_na <- function(x, n = 1L) {
+na_rle_shift.rle_na <- function(x, n = 1L) {
   rle_indices <- na_rle_indices(x)
   tunit <- tunit(rle_indices)
   x$indices <- rle_indices + sign(n) * tunit * abs(n)
@@ -25,8 +25,8 @@ na_rle_shift.mists_rle_na <- function(x, n = 1L) {
 }
 
 #' @export
-na_rle_shift.mists_list_of_rle_na <- function(x, n = 1L) {
-  new_mists_list_of_rle_na(!!! map(x, na_rle_shift.mists_rle_na, n = n))
+na_rle_shift.list_of_rle_na <- function(x, n = 1L) {
+  new_list_of_rle_na(!!! map(x, na_rle_shift.rle_na, n = n))
 }
 
 #' Expand and count run length encoding <`NA`>
@@ -45,7 +45,7 @@ na_rle_expand <- function(x, ...) {
 }
 
 #' @export
-na_rle_expand.mists_rle_na <- function(x, ...) {
+na_rle_expand.rle_na <- function(x, ...) {
   if (is_empty(x)) {
     return(tibble("lengths" := x$lengths, "indices" := x$indices))
   }
@@ -61,7 +61,7 @@ na_rle_expand.mists_rle_na <- function(x, ...) {
 }
 
 #' @export
-na_rle_expand.mists_list_of_rle_na <- function(x, ...) {
+na_rle_expand.list_of_rle_na <- function(x, ...) {
   qs <- enquos(..., .named = TRUE)
   if (is_empty(qs)) {
     y <- vec_seq_along(x)
@@ -110,7 +110,7 @@ tbl_to_na_rle <- function(data) {
   add_len <- mutate(data, "lengths" := rep.int(cumsum(rle_cont), rle_cont))
   red_data <- summarise(group_by(add_len, lengths), "indices" := min(indices))
   red_data <- indices_restore(red_data, data)
-  new_mists_rle_na(as_list(mutate(red_data, "lengths" := rle_cont)))
+  new_rle_na(as_list(mutate(red_data, "lengths" := rle_cont)))
 }
 
 indices_restore <- function(x, to) {
@@ -137,98 +137,98 @@ tunit <- function(indices) {
 #' union(x, y)
 #' setdiff(x, y)
 #' setdiff(y, x)
-#' @method intersect mists_rle_na
+#' @method intersect rle_na
 #' @export
-intersect.mists_rle_na <- function(x, y, ...) {
+intersect.rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)[, "indices"]
   y_full <- na_rle_expand(y)[, "indices"]
   res <- intersect(x_full, y_full) # dplyr::intersect for data frame
   tbl_to_na_rle(indices_restore(res, x))
 }
 
-#' @method intersect mists_list_of_rle_na
+#' @method intersect list_of_rle_na
 #' @export
-intersect.mists_list_of_rle_na <- function(x, y, ...) {
-  new_mists_list_of_rle_na(!!! map2(x, y, intersect.mists_rle_na, ...))
+intersect.list_of_rle_na <- function(x, y, ...) {
+  new_list_of_rle_na(!!! map2(x, y, intersect.rle_na, ...))
 }
 
 #' @rdname mists-set-op
-#' @method union mists_rle_na
+#' @method union rle_na
 #' @export
-union.mists_rle_na <- function(x, y, ...) {
+union.rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)[, "indices"]
   y_full <- na_rle_expand(y)[, "indices"]
   res <- arrange(union(x_full, y_full), indices)
   tbl_to_na_rle(indices_restore(res, x))
 }
 
-#' @method union mists_list_of_rle_na
+#' @method union list_of_rle_na
 #' @export
-union.mists_list_of_rle_na <- function(x, y, ...) {
-  new_mists_list_of_rle_na(!!! map2(x, y, union.mists_rle_na, ...))
+union.list_of_rle_na <- function(x, y, ...) {
+  new_list_of_rle_na(!!! map2(x, y, union.rle_na, ...))
 }
 
 #' @rdname mists-set-op
-#' @method setdiff mists_rle_na
+#' @method setdiff rle_na
 #' @export
-setdiff.mists_rle_na <- function(x, y, ...) {
+setdiff.rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)[, "indices"]
   y_full <- na_rle_expand(y)[, "indices"]
   res <- setdiff(x_full, y_full)
   tbl_to_na_rle(indices_restore(res, x))
 }
 
-#' @method setdiff mists_list_of_rle_na
+#' @method setdiff list_of_rle_na
 #' @export
-setdiff.mists_list_of_rle_na <- function(x, y, ...) {
-  new_mists_list_of_rle_na(!!! map2(x, y, setdiff.mists_rle_na, ...))
+setdiff.list_of_rle_na <- function(x, y, ...) {
+  new_list_of_rle_na(!!! map2(x, y, setdiff.rle_na, ...))
 }
 
 #' @export
-length.mists_rle_na <- function(x) { # for displaying the size of runs
+length.rle_na <- function(x) { # for displaying the size of runs
   length(na_rle_lengths(x))
 }
 
 # `min()` and `max()` better to be defined through `vec_math()`, but seems that
-# they require the input to be orderable. Not the case for mists_rle_na, so
+# they require the input to be orderable. Not the case for rle_na, so
 # overwrite `vctrs_vctr`.
 
 #' @export
-min.mists_rle_na <- function(x, ...) {
+min.rle_na <- function(x, ...) {
   vec_math_base("min", na_rle_lengths(x))
 }
 
 #' @export
-max.mists_rle_na <- function(x, ...) {
+max.rle_na <- function(x, ...) {
   vec_math_base("max", na_rle_lengths(x))
 }
 
 #' @export
-min.mists_list_of_rle_na <- function(x, ...) {
+min.list_of_rle_na <- function(x, ...) {
   map_int(x, min)
 }
 
 #' @export
-max.mists_list_of_rle_na <- function(x, ...) {
+max.list_of_rle_na <- function(x, ...) {
   map_int(x, max)
 }
 
 #' @export
-median.mists_rle_na <- function(x, ...) {
+median.rle_na <- function(x, ...) {
   median(na_rle_lengths(x))
 }
 
 #' @export
-median.mists_list_of_rle_na <- function(x, ...) {
+median.list_of_rle_na <- function(x, ...) {
   map_dbl(x, median)
 }
 
 #' @export
-quantile.mists_rle_na <- function(x, ...) {
+quantile.rle_na <- function(x, ...) {
   quantile(na_rle_lengths(x), ...)
 }
 
 #' @export
-quantile.mists_list_of_rle_na <- function(x, ...) {
+quantile.list_of_rle_na <- function(x, ...) {
   map_dbl(x, quantile, ...)
 }

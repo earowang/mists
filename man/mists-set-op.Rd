@@ -2,16 +2,16 @@
 % Please edit documentation in R/funs-na-rle.R
 \name{set-op}
 \alias{set-op}
-\alias{intersect.mists_rle_na}
-\alias{union.mists_rle_na}
-\alias{setdiff.mists_rle_na}
+\alias{intersect.rle_na}
+\alias{union.rle_na}
+\alias{setdiff.rle_na}
 \title{Set operations for run length encoding <\code{NA}>}
 \usage{
-\method{intersect}{mists_rle_na}(x, y, ...)
+\method{intersect}{rle_na}(x, y, ...)
 
-\method{union}{mists_rle_na}(x, y, ...)
+\method{union}{rle_na}(x, y, ...)
 
-\method{setdiff}{mists_rle_na}(x, y, ...)
+\method{setdiff}{rle_na}(x, y, ...)
 }
 \arguments{
 \item{x, y}{Objects returned by \code{\link[=na_rle]{na_rle()}} or \code{\link[=list_of_na_rle]{list_of_na_rle()}}.}

@@ -32,7 +32,7 @@ remotes::install_github("earowang/mists")
 
 ## Get started with `na_rle()` and `list_of_na_rle()`
 
-The `na_rle()` gives a sparser representation for indexing runs of
+The `na_rle()` gives a sparse representation for indexing runs of
 missings, a special type of run length encoding (`rle`).
 
 ``` r
@@ -40,11 +40,11 @@ library(mists)
 (x <- na_rle(c(1, NA, NA, 4:7, NA, NA, 10:15, NA)))
 #> <Run Length Encoding <NA>[3]>
 #> $lengths: <int> 2 2 1 
-#> $indices : <int>  2  8 16
+#> $indices: <int>  2  8 16
 (y <- na_rle(c(10, NA, NA, NA, 6:3, NA, 1)))
 #> <Run Length Encoding <NA>[2]>
 #> $lengths: <int> 3 1 
-#> $indices : <int> 2 9
+#> $indices: <int> 2 9
 ```
 
 It returns a named list of `lengths` and `indices` (the starting

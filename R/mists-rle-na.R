@@ -21,6 +21,7 @@ na_rle_impl <- function(x) {
 #' * `mean()`: the average `NA`s per run.
 #' * `min()` & `max()`: the minimum and maximum of runs.
 #' * `median()` & `quantile()`
+#' * Other [Math] group generic
 #'
 #' @rdname na-rle
 #' @examples
@@ -54,7 +55,7 @@ na_rle <- function(x = double(), index_by = seq_along(x), interval = NULL) {
   if (vec_is_empty(x)) {
     indices <- index_by
     attr(indices, "interval") <- interval_pull(index_by)
-    return(new_mists_rle_na(list(lengths = integer(), indices = indices)))
+    return(new_rle_na(list(lengths = integer(), indices = indices)))
   }
 
   if (vec_duplicate_any(index_by)) {
@@ -75,14 +76,14 @@ na_rle <- function(x = double(), index_by = seq_along(x), interval = NULL) {
   from <- c(1L, head(cumsum(res$lengths), -1L) + 1L)[res$values]
   indices <- index_by[ord][from]
   attr(indices, "interval") <- int
-  new_mists_rle_na(list(lengths = res$lengths[res$values], indices = indices))
+  new_rle_na(list(lengths = res$lengths[res$values], indices = indices))
 }
 
 #' @rdname na-rle
 #' @export
 list_of_na_rle <- function(x = double(), index_by = seq_along(x),
   interval = NULL) {
-  new_mists_list_of_rle_na(
+  new_list_of_rle_na(
     !!! list2(na_rle(x, index_by = index_by, interval = interval))
   )
 }
@@ -94,12 +95,12 @@ na_rle_lengths <- function(x) {
 }
 
 #' @export
-na_rle_lengths.mists_rle_na <- function(x) {
+na_rle_lengths.rle_na <- function(x) {
   x$lengths
 }
 
 #' @export
-na_rle_lengths.mists_list_of_rle_na <- function(x) {
+na_rle_lengths.list_of_rle_na <- function(x) {
   as_list_of(map(x, na_rle_lengths))
 }
 
@@ -110,29 +111,29 @@ na_rle_indices <- function(x) {
 }
 
 #' @export
-na_rle_indices.mists_rle_na <- function(x) {
+na_rle_indices.rle_na <- function(x) {
   x$indices
 }
 
 #' @export
-na_rle_indices.mists_list_of_rle_na <- function(x) {
+na_rle_indices.list_of_rle_na <- function(x) {
   as_list_of(map(x, na_rle_indices))
 }
 
-new_mists_rle_na <- function(x) {
-  mists_rle_na_assert(x)
-  new_vctr(x, class = c("mists_rle_na"))
+new_rle_na <- function(x) {
+  rle_na_assert(x)
+  new_vctr(x, class = "rle_na")
 }
 
-new_mists_list_of_rle_na <- function(...) {
+new_list_of_rle_na <- function(...) {
   new_list_of(
     list2(...),
     ptype = list(),
-    class = "mists_list_of_rle_na"
+    class = "list_of_rle_na"
   )
 }
 
-mists_rle_na_assert <- function(x) {
+rle_na_assert <- function(x) {
   if (is_false(is_bare_list(x) && all(has_name(x, c("lengths", "indices"))))) {
     abort("Run length encoding must be a named list with `lengths` and `indices`.")
   }

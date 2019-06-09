@@ -1,6 +1,6 @@
-test_that("as.list() for mists_list_of_rle_na", {
+test_that("as.list() for list_of_rle_na", {
   x <- na_rle(c(1, rep(NA, 4), 6:7, NA, 9:10)) 
-  expect_is(as.list(x), "mists_list_of_rle_na")
+  expect_is(as.list(x), "list_of_rle_na")
   expect_identical(
     list_of_na_rle(c(1, rep(NA, 4), 6:7, NA, 9:10)),
     as.list(x)
@@ -17,7 +17,7 @@ df <- df %>%
 test_that("list_of_na_rle()", {
   expect_is(
     summarise(df, na_runs = list_of_na_rle(temp, year))$na_runs,
-    "mists_list_of_rle_na"
+    "list_of_rle_na"
   )
   expect_length(
     summarise(df, na_runs = list_of_na_rle(temp, year))$na_runs,

@@ -27,9 +27,9 @@ test_that("list_of_na_rle()", {
 
 test_that("list_of_na_rle() math operations", {
   x <- summarise(df, na_runs = list_of_na_rle(temp, year))$na_runs
-  expect_is(sum(x), "vctrs_list_of")
-  expect_equal(sum(x), vctrs::list_of(2L, 5L))
-  expect_equal(mean(x), vctrs::list_of(2 / 2, 5 / 2))
+  expect_is(range(x), "vctrs_list_of")
+  expect_equal(sum(x), c(2L, 5L))
+  expect_equal(mean(x), c(2 / 2, 5 / 2))
 })
 
 test_that("list_of_na_rle() getters", {

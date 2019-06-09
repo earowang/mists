@@ -66,7 +66,12 @@ vec_math.list_of_rle_na <- function(fun, x, ...) {
     na_rle_lengths_x <- 
       unlist(na_rle_lengths_x, recursive = FALSE, use.names = FALSE)
   }
-  as_list_of(map(na_rle_lengths_x, function(.x) vec_math_base(fun, .x, ...)))
+  switch(fun,
+    range = as_list_of(
+      map(na_rle_lengths_x, function(.x) vec_math_base(fun, .x, ...))
+    ),
+    map_dbl(na_rle_lengths_x, function(.x) vec_math_base(fun, .x, ...))
+  )
 }
 
 # #' @rdname vctrs-compat

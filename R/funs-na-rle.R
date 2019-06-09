@@ -178,6 +178,17 @@ setdiff.rle_na <- function(x, y, ...) {
   tbl_to_na_rle(indices_restore(res, x))
 }
 
+#' @export
+as_tibble.rle_na <- function(x, ...) {
+  x <- unclass(x)
+  NextMethod()
+}
+
+#' @export
+as_tibble.list_of_rle_na <- function(x, ...) {
+  bind_rows(!!! map(x, as_tibble.rle_na))
+}
+
 #' @method setdiff list_of_rle_na
 #' @export
 setdiff.list_of_rle_na <- function(x, y, ...) {

@@ -81,7 +81,7 @@
 <h2 class="hasAnchor">
 <a href="#get-started-with-na_rle-and-list_of_na_rle" class="anchor"></a>Get started with <code><a href="reference/na-rle.html">na_rle()</a></code> and <code><a href="reference/na-rle.html">list_of_na_rle()</a></code>
 </h2>
-<p>The <code><a href="reference/na-rle.html">na_rle()</a></code> gives a sparser representation for indexing runs of missings, a special type of run length encoding (<code>rle</code>).</p>
+<p>The <code><a href="reference/na-rle.html">na_rle()</a></code> gives a sparse representation for indexing runs of missings, a special type of run length encoding (<code>rle</code>).</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(mists)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">(x &lt;-<span class="st"> </span><span class="kw"><a href="reference/na-rle.html">na_rle</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="dv">4</span><span class="op">:</span><span class="dv">7</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="dv">10</span><span class="op">:</span><span class="dv">15</span>, <span class="ot">NA</span>)))</a>
 <a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; &lt;Run Length Encoding &lt;NA&gt;[3]&gt;</span></a>

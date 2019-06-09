@@ -64,7 +64,7 @@ vec_math.list_of_rle_na <- function(fun, x, ...) {
   # bug in vctrs::vec_math? `x` becomes a list of lists
   if (vec_depth(na_rle_lengths_x) == 3) { # sum()
     na_rle_lengths_x <- 
-      unlist(na_rle_lengths(x), recursive = FALSE, use.names = FALSE)
+      unlist(na_rle_lengths_x, recursive = FALSE, use.names = FALSE)
   }
   as_list_of(map(na_rle_lengths_x, function(.x) vec_math_base(fun, .x, ...)))
 }

@@ -2,14 +2,14 @@
 % Please edit documentation in R/polish.R
 \name{na_polish_auto}
 \alias{na_polish_auto}
-\alias{na_polish_auto_trace}
+\alias{na_polish_autotrace}
 \alias{na_polish_funs}
 \title{Automate missing data polishing for tsibble}
 \usage{
 na_polish_auto(data, cutoff, tol = 0.1, funs = na_polish_funs(),
   quiet = FALSE)
 
-na_polish_auto_trace(data, cutoff, tol = 0.1, funs = na_polish_funs(),
+na_polish_autotrace(data, cutoff, tol = 0.1, funs = na_polish_funs(),
   quiet = FALSE)
 }
 \arguments{
@@ -31,7 +31,7 @@ process. It requires the "cliapp" package to be installed.}
 It is an iterative process for minimising the loss until a tolerance value.
 \itemize{
 \item \code{na_polish_auto()} returns the polished data.
-\item \code{na_polish_auto_trace()} returns a tibble for documenting the steps and metrics.
+\item \code{na_polish_autotrace()} returns a tibble for documenting the steps and metrics.
 }
 }
 \examples{
@@ -41,7 +41,7 @@ wdi_after <- na_polish_auto(wdi_ts, cutoff = .8)
 na_polish_metrics(wdi_ts, wdi_after)
 
 # Trace down `na_polish_auto()`
-na_polish_auto_trace(wdi_ts, cutoff = .8, quiet = TRUE)
+na_polish_autotrace(wdi_ts, cutoff = .8, quiet = TRUE)
 }
 }
 \keyword{internal}

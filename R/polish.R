@@ -96,7 +96,7 @@ na_polish_index2 <- function(data, cutoff) {
 #'
 #' It is an iterative process for minimising the loss until a tolerance value.
 #' * `na_polish_auto()` returns the polished data.
-#' * `na_polish_auto_trace()` returns a tibble for documenting the steps and metrics.
+#' * `na_polish_autotrace()` returns a tibble for documenting the steps and metrics.
 #'
 #' @inheritParams na_polish_measures
 #' @param tol A tolerance value close or equal to zero as stopping rule. It
@@ -115,7 +115,7 @@ na_polish_index2 <- function(data, cutoff) {
 #' na_polish_metrics(wdi_ts, wdi_after)
 #'
 #' # Trace down `na_polish_auto()`
-#' na_polish_auto_trace(wdi_ts, cutoff = .8, quiet = TRUE)
+#' na_polish_autotrace(wdi_ts, cutoff = .8, quiet = TRUE)
 #' }
 na_polish_auto <- function(data, cutoff, tol = .1, funs = na_polish_funs(),
   quiet = FALSE) {
@@ -124,7 +124,7 @@ na_polish_auto <- function(data, cutoff, tol = .1, funs = na_polish_funs(),
 
 #' @rdname mists-polish-auto
 #' @export
-na_polish_auto_trace <- function(data, cutoff, tol = .1, funs = na_polish_funs(),
+na_polish_autotrace <- function(data, cutoff, tol = .1, funs = na_polish_funs(),
   quiet = FALSE) {
   na_polish_auto_impl(data, cutoff, tol, funs, quiet, expect = "report")
 }

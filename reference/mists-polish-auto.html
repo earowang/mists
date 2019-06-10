@@ -34,7 +34,7 @@
 
 <meta property="og:description" content="It is an iterative process for minimising the loss until a tolerance value.
 na_polish_auto() returns the polished data.
-na_polish_auto_trace() returns a tibble for documenting the steps and metrics.
+na_polish_autotrace() returns a tibble for documenting the steps and metrics.
 " />
 <meta name="twitter:card" content="summary" />
 
@@ -105,7 +105,7 @@ na_polish_auto_trace() returns a tibble for documenting the steps and metrics.
     
     <p>It is an iterative process for minimising the loss until a tolerance value.</p><ul>
 <li><p><code>na_polish_auto()</code> returns the polished data.</p></li>
-<li><p><code>na_polish_auto_trace()</code> returns a tibble for documenting the steps and metrics.</p></li>
+<li><p><code>na_polish_autotrace()</code> returns a tibble for documenting the steps and metrics.</p></li>
 </ul>
     
     </div>
@@ -113,7 +113,7 @@ na_polish_auto_trace() returns a tibble for documenting the steps and metrics.
     <pre class="usage"><span class='fu'>na_polish_auto</span>(<span class='no'>data</span>, <span class='no'>cutoff</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>funs</span> <span class='kw'>=</span> <span class='fu'>na_polish_funs</span>(),
   <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>na_polish_auto_trace</span>(<span class='no'>data</span>, <span class='no'>cutoff</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>funs</span> <span class='kw'>=</span> <span class='fu'>na_polish_funs</span>(),
+<span class='fu'>na_polish_autotrace</span>(<span class='no'>data</span>, <span class='no'>cutoff</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>funs</span> <span class='kw'>=</span> <span class='fu'>na_polish_funs</span>(),
   <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -170,7 +170,7 @@ process. It requires the "cliapp" package to be installed.</p></td>
 #&gt;     &lt;dbl&gt;   &lt;int&gt;        &lt;dbl&gt;        &lt;int&gt;         &lt;int&gt;         &lt;int&gt;
 #&gt; 1   0.636  220533        0.581       346948          5752             6</div><div class='input'>
 <span class='co'># Trace down `na_polish_auto()`</span>
-<span class='fu'>na_polish_auto_trace</span>(<span class='no'>wdi_ts</span>, <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>.8</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; # A tibble: 7 x 6
+<span class='fu'>na_polish_autotrace</span>(<span class='no'>wdi_ts</span>, <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>.8</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; # A tibble: 7 x 6
 #&gt;    pass step               prop_na prop_removed step_metric pass_metric
 #&gt;   &lt;int&gt; &lt;chr&gt;                &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
 #&gt; 1     1 na_polish_index      0.673     0.335       0.225         0.328 

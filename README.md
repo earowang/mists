@@ -136,3 +136,7 @@ na_polish_metrics(wdi_ts, wdi_after)
     Imputation of Missing Values
   - [naniar](http://naniar.njtierney.com): Data Structures, Summaries,
     and Visualisations for Missing Data
+
+## Acknowledgements
+
+Thanks Nicholas Tierney for coming up with the package name.

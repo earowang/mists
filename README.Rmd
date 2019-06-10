@@ -103,3 +103,7 @@ na_polish_metrics(wdi_ts, wdi_after)
 * [imputeTS](http://steffenmoritz.github.io/imputeTS/): Time Series Missing Value Imputation
 * [VIM](https://github.com/statistikat/VIM): Visualization and Imputation of Missing Values
 * [naniar](http://naniar.njtierney.com): Data Structures, Summaries, and Visualisations for Missing Data
+
+## Acknowledgements
+
+Thanks Nicholas Tierney for coming up with the package name.

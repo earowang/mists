@@ -10,9 +10,10 @@ na_rle_impl <- function(x) {
 #' otherwise a supplied "interval" class. See `?tsibble::tsibble` for details.
 #' @inheritParams vctrs::as_list_of
 #'
-#' @return A named list of
+#' @return A named list of:
 #' * `lengths`: the lengths of `NA` runs
 #' * `indices`: the starting indices of runs
+#' (an object of class `rle_na` or `list_of_rle_na`)
 #'
 #' @section Mathematical operations:
 #' Many math operations can be applied to objects returned from `na_rle()` and

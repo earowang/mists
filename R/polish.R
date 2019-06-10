@@ -103,8 +103,8 @@ na_polish_index2 <- function(data, cutoff) {
 #' compares to the loss defined as `prop_na * prop_removed` to be minimised.
 #' See [`na_polish_metrics()`] for details.
 #' @param funs A list of `na_polish_*()` functions to go through.
-#' @param quiet If `FALSE`, report metrics while automatically polishing, and
-#' requires the "cliapp" package to be installed.
+#' @param quiet If `FALSE`, report metrics at each step and pass of the polishing
+#' process. It requires the "cliapp" package to be installed.
 #'
 #' @rdname mists-polish-auto
 #' @export

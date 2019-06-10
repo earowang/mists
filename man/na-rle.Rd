@@ -25,10 +25,11 @@ na_rle_indices(x)
 otherwise a supplied "interval" class. See \code{?tsibble::tsibble} for details.}
 }
 \value{
-A named list of
+A named list of:
 \itemize{
 \item \code{lengths}: the lengths of \code{NA} runs
 \item \code{indices}: the starting indices of runs
+(an object of class \code{rle_na} or \code{list_of_rle_na})
 }
 }
 \description{

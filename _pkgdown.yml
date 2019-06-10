@@ -24,7 +24,8 @@ reference:
 
 - title: Range plots and spinoplots
   contents:
-    - mists-plot
+    - na_rle_rangeplot
+    - na_rle_spinoplot
 
 - title: Missing data polishing
   contents:

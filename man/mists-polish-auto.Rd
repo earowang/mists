@@ -24,8 +24,8 @@ See \code{\link[=na_polish_metrics]{na_polish_metrics()}} for details.}
 
 \item{funs}{A list of \code{na_polish_*()} functions to go through.}
 
-\item{quiet}{If \code{FALSE}, report metrics while automatically polishing, and
-requires the "cliapp" package to be installed.}
+\item{quiet}{If \code{FALSE}, report metrics at each step and pass of the polishing
+process. It requires the "cliapp" package to be installed.}
 }
 \description{
 It is an iterative process for minimising the loss until a tolerance value.

@@ -180,13 +180,14 @@ setdiff.rle_na <- function(x, y, ...) {
 
 #' @export
 as_tibble.rle_na <- function(x, ...) {
-  x <- unclass(x)
-  NextMethod()
+  as_tibble(unclass(x))
 }
 
 #' @export
 as_tibble.list_of_rle_na <- function(x, ...) {
-  bind_rows(!!! map(x, as_tibble.rle_na))
+  y <- seq_along(x)
+  res <- map2(x, y, function(.x, .y) mutate(as_tibble.rle_na(.x), "id" := .y))
+  vec_rbind(!!! res)
 }
 
 #' @method setdiff list_of_rle_na

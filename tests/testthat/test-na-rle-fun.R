@@ -50,7 +50,7 @@ test_that("set operations", {
   y <- c(1:2, rep(NA, 5), 8:9, NA)
   expect_identical(
     intersect(na_rle(x), na_rle(y)),
-    dplyr::intersect(na_rle(y), na_rle(x))
+    intersect(na_rle(y), na_rle(x))
   )
   expect_identical(
     na_rle_expand(intersect(na_rle(x), na_rle(y)))$indices,
@@ -62,7 +62,7 @@ test_that("set operations", {
   )
   expect_identical(
     union(na_rle(x), na_rle(y)),
-    dplyr::union(na_rle(y), na_rle(x))
+    union(na_rle(y), na_rle(x))
   )
   expect_equivalent(
     na_rle_expand(union(na_rle(x), na_rle(y)))$indices,
@@ -74,10 +74,10 @@ test_that("set operations", {
   )
   expect_equivalent(
     setdiff(na_rle(x), na_rle(y))$indices,
-    dplyr::setdiff(which(is.na(x)), which(is.na(y)))
+    setdiff(which(is.na(x)), which(is.na(y)))
   )
   expect_equivalent(
     setdiff(na_rle(y), na_rle(x))$indices,
-    dplyr::setdiff(which(is.na(y)), which(is.na(x)))[-2]
+    setdiff(which(is.na(y)), which(is.na(x)))[-2]
   )
 })

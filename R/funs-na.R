@@ -11,8 +11,8 @@ na_starts_with <- function(x) {
   na_rle <- na_rle_impl(x)
   if (is_rle_empty(na_rle)) return(0L)
 
-  if (na_rle$values[1L]) {
-    na_rle$lengths[1L]
+  if (na_rle[["values"]][1L]) {
+    na_rle[["lengths"]][1L]
   } else {
     0L
   }
@@ -26,8 +26,8 @@ na_ends_with <- function(x) {
   na_rle <- na_rle_impl(x)
   if (is_rle_empty(na_rle)) return(0L)
 
-  if (tail(na_rle$values, 1L)) {
-    tail(na_rle$lengths, 1L)
+  if (tail(na_rle[["values"]], 1L)) {
+    tail(na_rle[["lengths"]], 1L)
   } else {
     0L
   }
@@ -41,14 +41,22 @@ na_elsewhere <- function(x) {
   na_rle <- na_rle_impl(x)
   if (is_rle_empty(na_rle)) return(0L)
 
-  na_starts <- if (head(na_rle$values, 1L)) head(na_rle$lengths, 1L) else 0L
-  na_ends <- if (tail(na_rle$values, 1L)) tail(na_rle$lengths, 1L) else 0L
-  na_ttl <- sum(na_rle$lengths[na_rle$values])
+  if (head(na_rle[["values"]], 1L)) {
+    na_starts <- head(na_rle[["lenghts"]], 1L)
+  } else {
+    na_starts <- 0L
+  }
+  if (tail(na_rle[["values"]], 1L)) {
+    na_ends <- tail(na_rle[["lengths"]], 1L)
+  } else {
+    na_ends <- 0L
+  }
+  na_ttl <- sum(na_rle[["lengths"]][na_rle[["values"]]])
   na_ttl - na_starts - na_ends
 }
 
 is_rle_empty <- function(x) {
-  is_empty(x$values)
+  is_empty(x[["values"]])
 }
 
 n_overall_na <- function(x) {
@@ -74,8 +82,12 @@ phi_coef <- function(...) {
 }
 
 na_acf <- function(x, lag_max = NULL) {
+  x <- is.na(x)
   if (is_null(lag_max)) {
     lag_max <- floor(10 * log10(length(x)))
   }
-  map_dbl(seq_len(lag_max), function(.x) phi_coef(x, dplyr::lag(x, .x)))
+  seq_lag <- seq_len(lag_max)
+  res <- map_dbl(seq_lag, function(.x) phi_coef(x, dplyr::lag(x, .x)))
+  names(res) <- seq_lag
+  res
 }

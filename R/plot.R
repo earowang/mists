@@ -31,7 +31,7 @@ distinct_groups <- function(x, interval) {
 #' na_runs_wind %>% 
 #'   na_rle_rangeplot(wind_dir, origin, shape = 4)
 #' # autoplot() method
-#' autoplot(na_runs_wind$wind_gust)
+#' autoplot(na_runs_wind$wind_gust, y = na_runs_wind$origin)
 #' @export
 na_rle_rangeplot <- function(data, x, y = NULL, ...) {
   stopifnot(is.data.frame(data))

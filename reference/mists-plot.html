@@ -106,7 +106,10 @@
 
     <pre class="usage"><span class='fu'>na_rle_rangeplot</span>(<span class='no'>data</span>, <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
 
-<span class='fu'>na_rle_spinoplot</span>(<span class='no'>data</span>, <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>facets</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>na_rle_spinoplot</span>(<span class='no'>data</span>, <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>facets</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for rle_na</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/ggplot2/topics/autoplot'>autoplot</a></span>(<span class='no'>object</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>as.factor</a></span>(<span class='fl'>1L</span>), <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -130,6 +133,10 @@
       <th>facets</th>
       <td><p>A facetting variable.</p></td>
     </tr>
+    <tr>
+      <th>object</th>
+      <td><p>an object, whose class will determine the behaviour of autoplot</p></td>
+    </tr>
     </table>
     
 
@@ -143,9 +150,10 @@
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise_all.html'>summarise_at</a></span>(<span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='fu'><a href='https://dplyr.tidyverse.org/reference/reexports.html'>contains</a></span>(<span class='st'>"wind"</span>)), ~ <span class='fu'><a href='na-rle.html'>list_of_na_rle</a></span>(<span class='no'>.</span>, <span class='no'>time_hour</span>))
 
 <span class='no'>na_runs_wind</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>na_rle_rangeplot</span>(<span class='no'>wind_dir</span>, <span class='no'>origin</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='img'><img src='mists-plot-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>na_runs_wind</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>na_rle_spinoplot</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>wind_dir</span>, <span class='kw'>facets</span> <span class='kw'>=</span> <span class='no'>origin</span>)</div><div class='img'><img src='mists-plot-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>na_runs_wind</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>na_rle_spinoplot</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>wind_dir</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>wind_gust</span>, <span class='kw'>facets</span> <span class='kw'>=</span> <span class='no'>origin</span>)</div><div class='img'><img src='mists-plot-3.png' alt='' width='700' height='433' /></div></pre>
+  <span class='fu'>na_rle_rangeplot</span>(<span class='no'>wind_dir</span>, <span class='no'>origin</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='img'><img src='mists-plot-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># autoplot() method</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/ggplot2/topics/autoplot'>autoplot</a></span>(<span class='no'>na_runs_wind</span>$<span class='no'>wind_gust</span>)</div><div class='img'><img src='mists-plot-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>na_runs_wind</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'>na_rle_spinoplot</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>wind_dir</span>, <span class='kw'>facets</span> <span class='kw'>=</span> <span class='no'>origin</span>)</div><div class='img'><img src='mists-plot-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>na_runs_wind</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'>na_rle_spinoplot</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>wind_dir</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>wind_gust</span>, <span class='kw'>facets</span> <span class='kw'>=</span> <span class='no'>origin</span>)</div><div class='img'><img src='mists-plot-4.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

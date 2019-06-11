@@ -4,11 +4,14 @@
 \alias{na_rle_rangeplot}
 \alias{na_rle_spinoplot}
 \alias{na_rle_spineplot}
+\alias{autoplot.rle_na}
 \title{Range plot and spinoplot for runs of missings}
 \usage{
 na_rle_rangeplot(data, x, y = NULL, ...)
 
 na_rle_spinoplot(data, x, y = NULL, facets = NULL, ...)
+
+\method{autoplot}{rle_na}(object, y = as.factor(1L), ...)
 }
 \arguments{
 \item{data}{A data frame that contains \code{\link[=list_of_na_rle]{list_of_na_rle()}}.}
@@ -21,6 +24,8 @@ na_rle_spinoplot(data, x, y = NULL, facets = NULL, ...)
 }}
 
 \item{facets}{A facetting variable.}
+
+\item{object}{an object, whose class will determine the behaviour of autoplot}
 }
 \description{
 \code{na_rle_spineplot()} is an alias of \code{na_rle_spinoplot()}.
@@ -36,6 +41,8 @@ na_runs_wind <- nycflights13::weather \%>\%
 
 na_runs_wind \%>\% 
   na_rle_rangeplot(wind_dir, origin, shape = 4)
+# autoplot() method
+autoplot(na_runs_wind$wind_gust)
 na_runs_wind \%>\%
   na_rle_spinoplot(x = wind_dir, facets = origin)
 na_runs_wind \%>\%

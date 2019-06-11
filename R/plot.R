@@ -1,5 +1,5 @@
 globalVariables(c("indices", "group", "n", "nobs", "frac", "n.x", "overlap",
-  "start", "end"))
+  "start", "end", "x"))
 
 distinct_groups <- function(x, interval) {
   rle_cont <- continuous_rle_impl(x, time_unit(interval))
@@ -13,6 +13,7 @@ distinct_groups <- function(x, interval) {
 #' @param data A data frame that contains [`list_of_na_rle()`].
 #' @param x,y A bare variable contains [`list_of_na_rle()`] mapped to x and y.
 #' @param facets A facetting variable.
+#' @inheritParams ggplot2::autoplot
 #' @param ...
 #' * `na_rle_rangeplot()`: passed to `geom_line()` and `geom_point()`.
 #' * `na_rle_spinoplot()`: passed to `facet_wrap()`.
@@ -29,6 +30,8 @@ distinct_groups <- function(x, interval) {
 #' 
 #' na_runs_wind %>% 
 #'   na_rle_rangeplot(wind_dir, origin, shape = 4)
+#' # autoplot() method
+#' autoplot(na_runs_wind$wind_gust)
 #' @export
 na_rle_rangeplot <- function(data, x, y = NULL, ...) {
   stopifnot(is.data.frame(data))
@@ -179,3 +182,17 @@ na_rle_spinoplot <- function(data, x, y = NULL, facets = NULL, ...) {
 #' @export
 #' @usage NULL
 na_rle_spineplot <- na_rle_spinoplot
+
+#' @rdname mists-plot
+#' @method autoplot rle_na
+#' @export
+autoplot.rle_na <- function(object, y = as.factor(1L), ...) {
+  autoplot.list_of_rle_na(as_list_of(object), y = y, ...)
+}
+
+#' @method autoplot list_of_rle_na
+#' @export
+autoplot.list_of_rle_na <- function(object, y = seq_along(object), ...) {
+  data <- tibble("x" := object, "y" = y)
+  na_rle_rangeplot(data, x = x, y = y)
+}

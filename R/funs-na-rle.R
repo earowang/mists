@@ -20,7 +20,7 @@ na_rle_shift <- function(x, n = 1L) {
 na_rle_shift.rle_na <- function(x, n = 1L) {
   rle_indices <- na_rle_indices(x)
   tunit <- tunit(rle_indices)
-  x$indices <- rle_indices + sign(n) * tunit * abs(n)
+  x[["indices"]] <- rle_indices + sign(n) * tunit * abs(n)
   x
 }
 
@@ -47,7 +47,7 @@ na_rle_expand <- function(x, ...) {
 #' @export
 na_rle_expand.rle_na <- function(x, ...) {
   if (is_empty(x)) {
-    return(tibble("lengths" := x$lengths, "indices" := x$indices))
+    return(tibble("lengths" := x[["lengths"]], "indices" := x[["indices"]]))
   }
   rle_lengths <- na_rle_lengths(x)
   rle_indices <- na_rle_indices(x)

@@ -74,10 +74,13 @@ na_rle <- function(x = double(), index_by = seq_along(x), interval = NULL) {
   }
 
   res <- na_rle_impl(x)
-  from <- c(1L, head(cumsum(res$lengths), -1L) + 1L)[res$values]
+  from <- c(1L, head(cumsum(res[["lengths"]]), -1L) + 1L)[res[["values"]]]
   indices <- index_by[ord][from]
   attr(indices, "interval") <- int
-  new_rle_na(list(lengths = res$lengths[res$values], indices = indices))
+  new_rle_na(list(
+    lengths = res[["lengths"]][res[["values"]]],
+    indices = indices
+  ))
 }
 
 #' @rdname na-rle
@@ -97,7 +100,7 @@ na_rle_lengths <- function(x) {
 
 #' @export
 na_rle_lengths.rle_na <- function(x) {
-  x$lengths
+  x[["lengths"]]
 }
 
 #' @export
@@ -113,7 +116,7 @@ na_rle_indices <- function(x) {
 
 #' @export
 na_rle_indices.rle_na <- function(x) {
-  x$indices
+  x[["indices"]]
 }
 
 #' @export
@@ -138,7 +141,7 @@ rle_na_assert <- function(x) {
   if (is_false(is_bare_list(x) && all(has_name(x, c("lengths", "indices"))))) {
     abort("Run length encoding must be a named list with `lengths` and `indices`.")
   }
-  if (is_null(x$indices %@% "interval")) {
+  if (is_null(x[["indices"]] %@% "interval")) {
     abort("Missing \"interval\".")
   }
 }

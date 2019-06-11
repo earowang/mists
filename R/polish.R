@@ -142,7 +142,7 @@ na_polish_auto_impl <- function(data, cutoff, tol = .1, funs = na_polish_funs(),
     step_metrics <- # carry out individual steps to determine the order
       map_dbl(lst_funs, function(.f) {
         metrics <- na_polish_metrics(data, .f(data, cutoff = cutoff))
-        metrics[[1]] * metrics[[3]]
+        metrics[["prop_na"]] * metrics[["prop_removed"]]
       })
 
     lst_funs <- lst_funs[order(step_metrics, decreasing = TRUE)]
@@ -152,14 +152,14 @@ na_polish_auto_impl <- function(data, cutoff, tol = .1, funs = na_polish_funs(),
       data0 <- data
       data <- lst_funs[[i]](data, cutoff = cutoff)
       tmp_metrics <- na_polish_metrics(data0, data)
-      step_na[i] <- tmp_metrics[[1]]
-      step_removed[i] <- tmp_metrics[[3]]
+      step_na[i] <- tmp_metrics[["prop_na"]]
+      step_removed[i] <- tmp_metrics[["prop_removed"]]
       step_metrics[i] <- step_na[i] * step_removed[i]
     }
     rm_funs <- step_metrics == 0 # should this be less than tol?
     lst_funs <- lst_funs[!rm_funs]
     pass_metrics <- na_polish_metrics(before, data)
-    tol0 <- pass_metrics[[1]] * pass_metrics[[3]]
+    tol0 <- pass_metrics[["prop_na"]] * pass_metrics[["prop_removed"]]
     before <- data
     fmt_steps <- 
       sprintf(

@@ -136,10 +136,7 @@ na_rle_ends.rle_na <- function(x) {
   rle_lengths <- na_rle_lengths(x)
   rle_indices <- na_rle_indices(x)
   tunit <- tunit(rle_indices)
-  as_list_of(
-    map2(rle_indices, rle_lengths,
-    function(.x, .y) seq(.x, by = tunit, length.out = .y))
-  )
+  vec_c(!!! map2(rle_indices, rle_lengths, function(.x, .y) .x + tunit * .y))
 }
 
 #' @export

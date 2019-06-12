@@ -69,6 +69,7 @@ vec_math.list_of_rle_na <- function(fun, x, ...) {
     range = as_list_of(
       map(na_rle_lengths_x, function(.x) vec_math_base(fun, .x, ...))
     ),
+    is.finite = TRUE,
     map_dbl(na_rle_lengths_x, function(.x) vec_math_base(fun, .x, ...))
   )
 }

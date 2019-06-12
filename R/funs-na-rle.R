@@ -257,10 +257,9 @@ start.list_of_rle_na <- function(x, ...) {
 
 #' @importFrom stats end
 end.rle_na <- function(x, ...) {
-  do.call("c", na_rle_ends(x)) # vec_c(!!! full_seq)
+  vec_c(!!! na_rle_ends(x))
 }
 
 end.list_of_rle_na <- function(x, ...) {
-  res <- map(x, end.rle_na)
-  do.call("c", res) # vec_c(!!! res)
+  vec_c(!!! map(x, end.rle_na))
 }

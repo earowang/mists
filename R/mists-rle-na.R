@@ -106,7 +106,7 @@ na_rle_lengths.rle_na <- function(x) {
 
 #' @export
 na_rle_lengths.list_of_rle_na <- function(x) {
-  as_list_of(map(x, na_rle_lengths.rle_na))
+  as_list_of(map(x, na_rle_lengths))
 }
 
 #' @rdname na-rle

@@ -251,7 +251,7 @@ start.rle_na <- function(x, ...) {
 }
 
 start.list_of_rle_na <- function(x, ...) {
-  res <- map(x, start.rle_na)
+  res <- map(x, start)
   vec_c(!!! res)
 }
 
@@ -261,5 +261,5 @@ end.rle_na <- function(x, ...) {
 }
 
 end.list_of_rle_na <- function(x, ...) {
-  vec_c(!!! map(x, end.rle_na))
+  vec_c(!!! map(x, end))
 }

@@ -244,3 +244,29 @@ quantile.rle_na <- function(x, ...) {
 quantile.list_of_rle_na <- function(x, ...) {
   map_dbl(x, quantile, ...)
 }
+
+#' @importFrom stats start
+#' @export
+start.rle_na <- function(x, ...) {
+  na_rle_indices(x)
+}
+
+#' @export
+start.list_of_rle_na <- start.rle_na
+
+#' @importFrom stats end
+#' @export
+end.rle_na <- function(x, ...) {
+  rle_lengths <- na_rle_lengths(x)
+  rle_indices <- na_rle_indices(x)
+  tunit <- tunit(rle_indices)
+  full_seq <- map2(rle_indices, rle_lengths,
+    function(.x, .y) seq(.x, by = tunit, length.out = .y))
+  do.call("c", full_seq) # vec_c(!!! full_seq)
+}
+
+#' @export
+end.list_of_rle_na <- function(x, ...) {
+  res <- map(x, end.rle_na)
+  do.call("c", res) # vec_c(!!! res)
+}

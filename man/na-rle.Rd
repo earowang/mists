@@ -5,6 +5,7 @@
 \alias{list_of_na_rle}
 \alias{na_rle_lengths}
 \alias{na_rle_indices}
+\alias{na_rle_ends}
 \title{Run lengths encoding for missing values (\code{NA})}
 \usage{
 na_rle(x = double(), index_by = seq_along(x), interval = NULL)
@@ -15,6 +16,8 @@ list_of_na_rle(x = double(), index_by = seq_along(x),
 na_rle_lengths(x)
 
 na_rle_indices(x)
+
+na_rle_ends(x)
 }
 \arguments{
 \item{x}{A vector.}
@@ -58,6 +61,7 @@ na_rle(df$temp) # indexed by the default positions
 
 na_rle_lengths(x)
 na_rle_indices(x)
+na_rle_ends(x)
 
 length(x) # the number of runs
 sum(x) # the total number of `NA`

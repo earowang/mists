@@ -36,6 +36,7 @@ na_rle_impl <- function(x) {
 #'
 #' na_rle_lengths(x)
 #' na_rle_indices(x)
+#' na_rle_ends(x)
 #'
 #' length(x) # the number of runs
 #' sum(x) # the total number of `NA`
@@ -105,7 +106,7 @@ na_rle_lengths.rle_na <- function(x) {
 
 #' @export
 na_rle_lengths.list_of_rle_na <- function(x) {
-  as_list_of(map(x, na_rle_lengths))
+  as_list_of(map(x, na_rle_lengths.rle_na))
 }
 
 #' @rdname na-rle
@@ -121,7 +122,29 @@ na_rle_indices.rle_na <- function(x) {
 
 #' @export
 na_rle_indices.list_of_rle_na <- function(x) {
-  as_list_of(map(x, na_rle_indices))
+  as_list_of(map(x, na_rle_indices.rle_na))
+}
+
+#' @rdname na-rle
+#' @export
+na_rle_ends <- function(x) {
+  UseMethod("na_rle_ends")
+}
+
+#' @export
+na_rle_ends.rle_na <- function(x) {
+  rle_lengths <- na_rle_lengths(x)
+  rle_indices <- na_rle_indices(x)
+  tunit <- tunit(rle_indices)
+  as_list_of(
+    map2(rle_indices, rle_lengths,
+    function(.x, .y) seq(.x, by = tunit, length.out = .y))
+  )
+}
+
+#' @export
+na_rle_ends.list_of_rle_na <- function(x) {
+  as_list_of(map(x, na_rle_ends.rle_na))
 }
 
 new_rle_na <- function(x) {

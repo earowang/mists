@@ -42,7 +42,7 @@ na_elsewhere <- function(x) {
   if (is_rle_empty(na_rle)) return(0L)
 
   if (head(na_rle[["values"]], 1L)) {
-    na_starts <- head(na_rle[["lenghts"]], 1L)
+    na_starts <- head(na_rle[["lengths"]], 1L)
   } else {
     na_starts <- 0L
   }

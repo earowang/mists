@@ -19,8 +19,8 @@ na_rle_spinoplot(data, x, y = NULL, facets = NULL, ...)
 \item{x, y}{A bare variable contains \code{\link[=list_of_na_rle]{list_of_na_rle()}} mapped to x and y.}
 
 \item{...}{\itemize{
-\item \code{na_rle_rangeplot()}: passed to \code{geom_segment()} & \code{geom_point()}.
-\item \code{na_rle_spinoplot()}: passed to \code{facet_wrap()}.
+\item \code{na_rle_rangeplot()}: passed to \code{\link[=geom_segment]{geom_segment()}} & \code{\link[=geom_point]{geom_point()}}.
+\item \code{na_rle_spinoplot()}: passed to \code{\link[=facet_wrap]{facet_wrap()}}.
 }}
 
 \item{facets}{A facetting variable.}

@@ -11,7 +11,7 @@ layer_na_rle(var, data, ...)
 
 \item{data}{A data frame.}
 
-\item{...}{Passed to \code{geom_rect()}.}
+\item{...}{Passed to \code{\link[=geom_rect]{geom_rect()}}.}
 }
 \description{
 Add a layer of \code{list_of_na_rle()} to an existing ggplot
@@ -31,7 +31,7 @@ na_runs_wind <- weather \%>\%
 
 library(ggplot2)
 ggplot(weather, aes(x = time_hour, y = wind_gust)) +
-  geom_line() +
+  geom_line(na.rm = TRUE) +
   layer_na_rle(wind_gust, data = na_runs_wind, fill = "red", alpha = .5) +
   facet_grid(origin ~ .)
 }

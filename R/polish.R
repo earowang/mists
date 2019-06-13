@@ -23,7 +23,9 @@ globalVariables(c("n_na", "pct_overall_na"))
 #' @rdname mists-polish
 #' @examples
 #' wdi_ts <- tsibble::as_tsibble(wdi, key = country_code, index = year)
-#' na_polish_measures(wdi_ts, cutoff = .7)
+#' (wdi_cols <- na_polish_measures(wdi_ts, cutoff = .7))
+#' # columns removed
+#' setdiff(names(wdi_ts), names(wdi_cols))
 #' @export
 na_polish_measures <- function(data, cutoff) {
   na_polish_assert(data, cutoff)

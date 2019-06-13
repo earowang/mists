@@ -42,7 +42,9 @@ by the number of \strong{measurements} (i.e. excluding key and index).
 }
 \examples{
 wdi_ts <- tsibble::as_tsibble(wdi, key = country_code, index = year)
-na_polish_measures(wdi_ts, cutoff = .7)
+(wdi_cols <- na_polish_measures(wdi_ts, cutoff = .7))
+# columns removed
+setdiff(names(wdi_ts), names(wdi_cols))
 na_polish_key(wdi_ts, cutoff = .7)
 na_polish_index(wdi_ts, cutoff = .7)
 na_polish_index2(wdi_ts, cutoff = .7)

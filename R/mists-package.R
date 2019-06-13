@@ -13,7 +13,7 @@
 #' @importFrom dplyr select select_if
 #' @importFrom dplyr summarise summarise_all count
 #' @importFrom dplyr tibble as_tibble
-#' @importFrom ggplot2 ggplot geom_segment geom_point geom_bar aes
+#' @importFrom ggplot2 ggplot geom_segment geom_point geom_bar geom_rect aes
 #' @importFrom ggplot2 scale_x_continuous scale_y_continuous theme labs
 #' @importFrom ggplot2 element_blank GeomSegment GeomPoint facet_wrap
 #' @importFrom ggplot2 autoplot

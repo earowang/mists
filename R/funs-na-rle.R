@@ -123,6 +123,11 @@ tunit <- function(indices) {
   time_unit(indices %@% "interval")
 }
 
+# ToDo: a homogeneous interval (unknown or one)
+common_tunit <- function(x) {
+  max(map_dbl(x, tunit))
+}
+
 #' Set operations for run length encoding <`NA`>
 #'
 #' @param x,y Objects returned by [`na_rle()`] or [`list_of_na_rle()`].
@@ -266,4 +271,8 @@ end.rle_na <- function(x, ...) {
 #' @export
 end.list_of_rle_na <- function(x, ...) {
   vec_c(!!! map(x, end))
+}
+
+is_list_of_rle_na <- function(x) {
+  inherits(x, "list_of_rle_na")
 }

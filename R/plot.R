@@ -186,6 +186,53 @@ autoplot.rle_na <- function(object, y = as.factor(1L), ...) {
 #' @method autoplot list_of_rle_na
 #' @export
 autoplot.list_of_rle_na <- function(object, y = seq_along(object), ...) {
-  data <- tibble("x" := object, "y" = y)
+  data <- tibble("x" := object, "y" := y)
   na_rle_rangeplot(data, x = x, y = y)
+}
+
+#' Add a layer of `list_of_na_rle()` to an existing ggplot
+#'
+#' @param var A variable that contains `list_of_na_rle()`.
+#' @param data A data frame.
+#' @param ... Passed to `geom_rect()`.
+#' @examples
+#' if (!requireNamespace("nycflights13", quietly = TRUE)) {
+#'   stop("Please install the nycflights13 package to run these following examples.")
+#' }
+#' library(dplyr, warn.conflicts = FALSE)
+#' weather <- nycflights13::weather
+#' na_runs_wind <- weather %>% 
+#'   group_by(origin) %>% 
+#'   summarise_at(
+#'     vars(contains("wind")), 
+#'     ~ list_of_na_rle(., index_by = time_hour)
+#'   )
+#' 
+#' library(ggplot2)
+#' ggplot(weather, aes(x = time_hour, y = wind_gust)) +
+#'   geom_line() +
+#'   layer_na_rle(wind_gust, data = na_runs_wind, fill = "red", alpha = .5) +
+#'   facet_grid(origin ~ .)
+#' @export
+layer_na_rle <- function(var, data, ...) {
+  var_eval <- eval_tidy(enquo(var), data)
+  if (!is_list_of_rle_na(var_eval)) {
+    abort("`var` must be an object of `list_of_na_rle()`.")
+  }
+  cols_non_na_rle <- names(data[!map_lgl(data, is_list_of_rle_na)])
+  data <- data[cols_non_na_rle]
+  na_rle_df <- 
+    tibble(
+      "start" := start(var_eval) - common_tunit(na_rle_indices(var_eval)),
+      "end" := end(var_eval)
+    )
+  base_idx <- vec_seq_along(data)
+  rep_times <- map_int(var_eval, length)
+  df_idx <- rep.int(base_idx, times = rep_times)
+  data <- data[df_idx, ]
+  data <- vec_cbind(data, na_rle_df)
+  geom_rect(
+    aes(xmin = start, xmax = end), ymin = -Inf, ymax = Inf, 
+    data = data, ..., inherit.aes = FALSE
+  )
 }

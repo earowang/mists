@@ -22,10 +22,11 @@ reference:
   contents:
     - set-op
 
-- title: Range plots and spinoplots
+- title: Plotting
   contents:
     - na_rle_rangeplot
     - na_rle_spinoplot
+    - layer_na_rle
 
 - title: Missing data polishing
   contents:

@@ -106,7 +106,7 @@ na_rle_lengths.rle_na <- function(x) {
 
 #' @export
 na_rle_lengths.list_of_rle_na <- function(x) {
-  as_list_of(map(x, na_rle_lengths))
+  map(x, na_rle_lengths)
 }
 
 #' @rdname na-rle
@@ -123,7 +123,7 @@ na_rle_indices.rle_na <- function(x) {
 
 #' @export
 na_rle_indices.list_of_rle_na <- function(x) {
-  as_list_of(map(x, na_rle_indices.rle_na))
+  map(x, na_rle_indices)
 }
 
 #' @rdname na-rle
@@ -148,7 +148,7 @@ na_rle_ends.rle_na <- function(x) {
 
 #' @export
 na_rle_ends.list_of_rle_na <- function(x) {
-  as_list_of(map(x, na_rle_ends.rle_na))
+  map(x, na_rle_ends.rle_na)
 }
 
 new_rle_na <- function(x) {

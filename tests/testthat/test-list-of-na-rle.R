@@ -24,7 +24,7 @@ test_that("list_of_na_rle() math operations", {
 
 test_that("list_of_na_rle() getters", {
   actual <- summarise(df, na_runs = list_of_na_rle(temp, year))$na_runs
-  expect_is(na_rle_indices(actual), "vctrs_list_of")
+  expect_is(na_rle_indices(actual), "list")
   expect_length(na_rle_indices(actual), 2)
 })
 

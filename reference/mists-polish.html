@@ -156,7 +156,7 @@ by the number of <strong>measurements</strong> (i.e. excluding key and index).</
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>wdi_ts</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tsibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tsibble.tidyverts.org/reference/as-tsibble.html'>as_tsibble</a></span>(<span class='no'>wdi</span>, <span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>country_code</span>, <span class='kw'>index</span> <span class='kw'>=</span> <span class='no'>year</span>)
-<span class='fu'>na_polish_measures</span>(<span class='no'>wdi_ts</span>, <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>.7</span>)</div><div class='output co'>#&gt; # A tsibble: 10,850 x 46 [1Y]
+(<span class='no'>wdi_cols</span> <span class='kw'>&lt;-</span> <span class='fu'>na_polish_measures</span>(<span class='no'>wdi_ts</span>, <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>.7</span>))</div><div class='output co'>#&gt; # A tsibble: 10,850 x 46 [1Y]
 #&gt; # Key:       country_code [217]
 #&gt;    country_code  year ag_lnd_frst_k2 ag_srf_totl_k2 bx_klt_dinv_cd_…
 #&gt;    &lt;fct&gt;        &lt;int&gt;          &lt;dbl&gt;          &lt;dbl&gt;            &lt;dbl&gt;
@@ -184,7 +184,10 @@ by the number of <strong>measurements</strong> (i.e. excluding key and index).</
 #&gt; #   sh_imm_meas &lt;dbl&gt;, sp_ado_tfrt &lt;dbl&gt;, sp_dyn_le00_in &lt;dbl&gt;,
 #&gt; #   sp_dyn_tfrt_in &lt;dbl&gt;, sp_pop_grow &lt;dbl&gt;, sp_pop_totl &lt;dbl&gt;,
 #&gt; #   sp_urb_grow &lt;dbl&gt;, tg_val_totl_gd_zs &lt;dbl&gt;, tt_pri_mrch_xd_wd &lt;dbl&gt;,
-#&gt; #   tx_val_tech_mf_zs &lt;dbl&gt;</div><div class='input'><span class='fu'>na_polish_key</span>(<span class='no'>wdi_ts</span>, <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>.7</span>)</div><div class='output co'>#&gt; # A tsibble: 9,600 x 57 [1Y]
+#&gt; #   tx_val_tech_mf_zs &lt;dbl&gt;</div><div class='input'><span class='co'># columns removed</span>
+<span class='fu'><a href='https://dplyr.tidyverse.org/reference/setops.html'>setdiff</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>wdi_ts</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>wdi_cols</span>))</div><div class='output co'>#&gt;  [1] "er_h2o_fwtl_zs" "er_ptd_totl_zs" "ic_reg_durs"    "iq_sci_ovrl"   
+#&gt;  [5] "sh_sta_brtc_zs" "sh_sta_maln_zs" "si_dst_frst_20" "si_pov_dday"   
+#&gt;  [9] "si_pov_nahc"    "sm_pop_netm"    "sp_dyn_conu_zs"</div><div class='input'><span class='fu'>na_polish_key</span>(<span class='no'>wdi_ts</span>, <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>.7</span>)</div><div class='output co'>#&gt; # A tsibble: 9,600 x 57 [1Y]
 #&gt; # Key:       country_code [192]
 #&gt;    country_code  year ag_lnd_frst_k2 ag_srf_totl_k2 bx_klt_dinv_cd_…
 #&gt;    &lt;fct&gt;        &lt;int&gt;          &lt;dbl&gt;          &lt;dbl&gt;            &lt;dbl&gt;

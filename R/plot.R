@@ -1,11 +1,6 @@
 globalVariables(c("indices", "group", "n", "nobs", "frac", "n.x", "overlap",
   "start", "end", "x"))
 
-distinct_groups <- function(x, interval) {
-  rle_cont <- continuous_rle_impl(x, time_unit(interval))
-  rep.int(cumsum(rle_cont), rle_cont)
-}
-
 #' Range plot and spinoplot for runs of missings
 #'
 #' `na_rle_spineplot()` is an alias of `na_rle_spinoplot()`.
@@ -15,7 +10,7 @@ distinct_groups <- function(x, interval) {
 #' @param facets A facetting variable.
 #' @inheritParams ggplot2::autoplot
 #' @param ...
-#' * `na_rle_rangeplot()`: passed to `geom_line()` and `geom_point()`.
+#' * `na_rle_rangeplot()`: passed to `geom_segment()` & `geom_point()`.
 #' * `na_rle_spinoplot()`: passed to `facet_wrap()`.
 #'
 #' @rdname mists-plot
@@ -29,7 +24,7 @@ distinct_groups <- function(x, interval) {
 #'   summarise_at(vars(contains("wind")), ~ list_of_na_rle(., time_hour))
 #' 
 #' na_runs_wind %>% 
-#'   na_rle_rangeplot(wind_dir, origin, shape = 4)
+#'   na_rle_rangeplot(wind_dir, origin)
 #' # autoplot() method
 #' autoplot(na_runs_wind$wind_gust, y = na_runs_wind$origin)
 #' @export
@@ -42,46 +37,44 @@ na_rle_rangeplot <- function(data, x, y = NULL, ...) {
   } else {
     y <- eval_tidy(y, data = data)
   }
-  tbl_exp <- na_rle_expand(x, y = y)
-  int <- tbl_exp$indices %@% "interval"
+  tbl_rng <- 
+    tibble(
+      "start" := start(x),
+      "end" := end(x),
+      "y" := rep(y, times = map_int(x, length))
+    )
   data <- 
     ungroup(mutate(
-      group_by(tbl_exp, y), 
-      "group" := paste(y, distinct_groups(indices, int), sep = "-")
+      group_by(tbl_rng, y), 
+      "group" := paste(y, n(), sep = "-")
     ))
-  ends <- 
-    summarise(
-      group_by(data, y, group), 
-      "start" := min(indices), "end" := max(indices)
-    )
-  unique_grp <- filter(count(data, group), n == 1)[["group"]]
-  rngs <- filter(data, !(group %in% unique_grp))
 
-  # separate params for geom_line and geom_point from ...
+  # separate params for geom_segment and geom_point from ...
   params_list <- list2(...)
   if (has_length(params_list, 0)) {
-    line_params <- point_params <- list2()
+    segment_params <- point_params <- list2()
   } else {
     names_params <- names(params_list)
-    line_all <- c(GeomLine$aesthetics(), GeomLine$parameters(TRUE))
+    segment_all <- c(GeomSegment$aesthetics(), GeomSegment$parameters(TRUE))
     point_all <- c(GeomPoint$aesthetics(), GeomPoint$parameters(TRUE))
-    line_params <- params_list[which(names_params %in% line_all)]
+    segment_params <- params_list[which(names_params %in% segment_all)]
     point_params <- params_list[which(names_params %in% point_all)]
   }
 
-  plot <- ggplot()
-  line_params$data <- rngs
-  line_params$mapping <- aes(x = indices, y = y, group = group)
-  line_params$inherit.aes <- FALSE
-  plot <- plot + do.call(geom_line, line_params)
+	plot <- ggplot()
+  segment_params$data <- data
+  segment_params$mapping <- 
+    aes(x = start, xend = end, y = y, yend = y, group = group)
+  segment_params$inherit.aes <- FALSE
+  plot <- plot + do.call(geom_segment, segment_params)
 
-  point_params$data <- ends
+  point_params$data <- data
   point_params$inherit.aes <- FALSE
   point_params$mapping <- aes(x = start, y = y)
   plot <- plot + do.call(geom_point, point_params)
   point_params$mapping <- aes(x = end, y = y)
   plot <- plot + do.call(geom_point, point_params)
-  plot + labs(x = vec_ptype_full(data$indices), y = "")
+  plot + labs(x = vec_ptype_full(data$start), y = "")
 }
 
 #' @rdname mists-plot

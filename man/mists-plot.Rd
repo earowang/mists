@@ -19,7 +19,7 @@ na_rle_spinoplot(data, x, y = NULL, facets = NULL, ...)
 \item{x, y}{A bare variable contains \code{\link[=list_of_na_rle]{list_of_na_rle()}} mapped to x and y.}
 
 \item{...}{\itemize{
-\item \code{na_rle_rangeplot()}: passed to \code{geom_line()} and \code{geom_point()}.
+\item \code{na_rle_rangeplot()}: passed to \code{geom_segment()} & \code{geom_point()}.
 \item \code{na_rle_spinoplot()}: passed to \code{facet_wrap()}.
 }}
 
@@ -40,7 +40,7 @@ na_runs_wind <- nycflights13::weather \%>\%
   summarise_at(vars(contains("wind")), ~ list_of_na_rle(., time_hour))
 
 na_runs_wind \%>\% 
-  na_rle_rangeplot(wind_dir, origin, shape = 4)
+  na_rle_rangeplot(wind_dir, origin)
 # autoplot() method
 autoplot(na_runs_wind$wind_gust, y = na_runs_wind$origin)
 na_runs_wind \%>\%

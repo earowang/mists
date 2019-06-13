@@ -246,20 +246,24 @@ quantile.list_of_rle_na <- function(x, ...) {
 }
 
 #' @importFrom stats start
+#' @export
 start.rle_na <- function(x, ...) {
   na_rle_indices(x)
 }
 
+#' @export
 start.list_of_rle_na <- function(x, ...) {
   res <- map(x, start)
   vec_c(!!! res)
 }
 
 #' @importFrom stats end
+#' @export
 end.rle_na <- function(x, ...) {
   vec_c(!!! na_rle_ends(x))
 }
 
+#' @export
 end.list_of_rle_na <- function(x, ...) {
   vec_c(!!! map(x, end))
 }

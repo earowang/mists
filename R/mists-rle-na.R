@@ -35,7 +35,7 @@ na_rle_impl <- function(x) {
 #' (x <- na_rle(df$temp, index_by = df$year)) # indexed by a variable
 #'
 #' na_rle_lengths(x)
-#' na_rle_indices(x)
+#' na_rle_starts(x)
 #' na_rle_ends(x)
 #'
 #' length(x) # the number of runs
@@ -110,6 +110,7 @@ na_rle_lengths.list_of_rle_na <- function(x) {
 }
 
 #' @rdname na-rle
+#' @usage NULL
 #' @export
 na_rle_indices <- function(x) {
   UseMethod("na_rle_indices")
@@ -123,6 +124,12 @@ na_rle_indices.rle_na <- function(x) {
 #' @export
 na_rle_indices.list_of_rle_na <- function(x) {
   as_list_of(map(x, na_rle_indices.rle_na))
+}
+
+#' @rdname na-rle
+#' @export
+na_rle_starts <- function(x) {
+  UseMethod("na_rle_indices")
 }
 
 #' @rdname na-rle

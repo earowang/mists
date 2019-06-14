@@ -52,14 +52,9 @@ na_rle_expand.rle_na <- function(x, ...) {
 
 #' @export
 na_rle_expand.list_of_rle_na <- function(x, ...) {
-  qs <- enquos(..., .named = TRUE)
-  if (is_empty(qs)) {
-    y <- vec_seq_along(x)
-    new_col <- "id"
-  } else {
-    y <- eval_tidy(qs[[1]])
-    new_col <- names(qs)
-  }
+  tbl <- add_column_id(x, ...)
+  new_col <- names(tbl)
+  y <- tbl[[new_col]]
   res_lst <-
     map2(x, y, function(.x, .y) mutate(na_rle_expand(.x), !! new_col := .y))
   res <- bind_rows(!!! res_lst) # vec_rbind() should work here
@@ -68,11 +63,38 @@ na_rle_expand.list_of_rle_na <- function(x, ...) {
 
 #' @rdname mists-na-rle-tbl
 #' @export
-na_rle_table <- function(x) {
+na_rle_table <- function(x, ...) {
+  UseMethod("na_rle_table")
+}
+
+#' @export
+na_rle_table.rle_na <- function(x, ...) {
   mutate(
     count(tibble("lengths" := na_rle_lengths(x)), lengths),
     "nobs" := n * lengths
   )
+}
+
+#' @export
+na_rle_table.list_of_rle_na <- function(x, ...) {
+  tbl <- add_column_id(x, ...)
+  new_col <- names(tbl)
+  y <- tbl[[new_col]]
+  res_lst <-
+    map2(x, y, function(.x, .y) mutate(na_rle_table(.x), !! new_col := .y))
+  bind_rows(!!! res_lst) # vec_rbind() should work here
+}
+
+add_column_id <- function(x, ...) {
+  qs <- enquos(..., .named = TRUE)
+  if (is_empty(qs)) {
+    y <- vec_seq_along(x)
+    new_col <- "id"
+  } else {
+    y <- eval_tidy(qs[[1]])
+    new_col <- names(qs)
+  }
+  tibble(!! new_col := y)
 }
 
 continuous_rle_impl <- function(x, const) {

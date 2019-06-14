@@ -7,7 +7,7 @@
 \usage{
 na_rle_expand(x, ...)
 
-na_rle_table(x)
+na_rle_table(x, ...)
 }
 \arguments{
 \item{x}{An object returned by \code{\link[=na_rle]{na_rle()}} or \code{\link[=list_of_na_rle]{list_of_na_rle()}}.}

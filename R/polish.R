@@ -163,11 +163,6 @@ na_polish_auto_impl <- function(data, cutoff, tol = .1, funs = na_polish_funs(),
     pass_metrics <- na_polish_metrics(before, data)
     tol0 <- pass_metrics[["prop_na"]] * pass_metrics[["prop_removed"]]
     before <- data
-    fmt_steps <- 
-      sprintf(
-        "{code {fun %s}} {emph %.3f * %.3f = %.3f}", names(lst_funs), 
-        step_na[!rm_funs], step_removed[!rm_funs], step_metrics[!rm_funs]
-      )
     p <- pass()
     results[[p]] <- 
       tibble(
@@ -179,8 +174,7 @@ na_polish_auto_impl <- function(data, cutoff, tol = .1, funs = na_polish_funs(),
         pass_metric = tol0
       )
     if (!quiet) {
-      fmt_tol <- sprintf("{emph %.3f}", tol0)
-      cli_report(p, fmt_steps, fmt_tol)
+      cli_report(p, results[[p]])
     }
   }
 
@@ -280,13 +274,23 @@ counter <- function() {
   }
 }
 
-cli_report <- function(npass, step_fun, metric) {
+cli_report <- function(npass, tbl) {
   if (!is_installed("cliapp")) {
     abort("`quiet = FALSE` requires the \"cliapp\" packge to be installed.")
   }
+  fmt_steps <- 
+    sprintf(
+      "{arg %s} {emph %.3f * %.3f = %.3f}", 
+      justify(
+        backticks(paste0(tbl[["step"]], parenthesis(""))),
+        right = FALSE, space = "\u00a0"
+      ), 
+      tbl[["prop_na"]], tbl[["prop_removed"]], tbl[["step_metric"]]
+    )
+  fmt_tol <- sprintf("{emph %.3f}", unique(tbl[["pass_metric"]]))
   cliapp::start_app(theme = cliapp::simple_theme())
   cliapp::cli_div(theme = list(span.emph = list(color = "red")))
   cliapp::cli_h1(paste("Pass", npass))
-  cliapp::cli_ol(step_fun)
-  cliapp::cli_alert_success(metric)
+  cliapp::cli_ol(fmt_steps)
+  cliapp::cli_alert_success(fmt_tol)
 }

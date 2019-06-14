@@ -45,3 +45,21 @@ vec_depth <- function(x) {
     abort("`x` must be a vector")
   }
 }
+
+# stolen from tibble
+justify <- function(x, right = TRUE, space = " ") {
+  if (length(x) == 0L) return(character())
+  width <- nchar_width(x)
+  max_width <- max(width)
+  spaces_template <- paste(rep(space, max_width), collapse = "")
+  spaces <- map_chr(max_width - width, substr, x = spaces_template, start = 1L)
+  if (right) {
+    paste0(spaces, x)
+  } else {
+    paste0(x, spaces)
+  }
+}
+
+nchar_width <- function(x) {
+  nchar(x, type = "width")
+}

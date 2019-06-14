@@ -32,7 +32,8 @@
 
 <meta property="og:title" content="Run lengths encoding for missing values (<code>NA</code>) — na_rle" />
 
-<meta property="og:description" content="Run lengths encoding for missing values (NA)" />
+<meta property="og:description" content="Compute the lengths and indices of runs of NA in a vector – or the reverse
+operation." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -100,7 +101,8 @@
 
     <div class="ref-description">
     
-    <p>Run lengths encoding for missing values (<code>NA</code>)</p>
+    <p>Compute the lengths and indices of runs of <code>NA</code> in a vector – or the reverse
+operation.</p>
     
     </div>
 
@@ -108,6 +110,8 @@
 
 <span class='fu'>list_of_na_rle</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/double'>double</a></span>(), <span class='kw'>index_by</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq_along</a></span>(<span class='no'>x</span>),
   <span class='kw'>interval</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+
+<span class='fu'>na_rle_inverse</span>(<span class='no'>x</span>)
 
 <span class='fu'>na_rle_lengths</span>(<span class='no'>x</span>)
 
@@ -186,7 +190,7 @@ otherwise a supplied "interval" class. See <code><a href='https://tsibble.tidyve
 #&gt; $indices: &lt;int&gt;  1  6 13 19</div><div class='input'>(<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>na_rle</span>(<span class='no'>df</span>$<span class='no'>temp</span>, <span class='kw'>index_by</span> <span class='kw'>=</span> <span class='no'>df</span>$<span class='no'>year</span>)) <span class='co'># indexed by a variable</span></div><div class='output co'>#&gt; &lt;Run Length Encoding &lt;NA&gt;[4]&gt;
 #&gt; $lengths: &lt;int&gt; 1 1 4 1 
 #&gt; $indices: &lt;int&gt; 2000 2005 2012 2018</div><div class='input'>
-<span class='fu'>na_rle_lengths</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 1 1 4 1</div><div class='input'><span class='fu'>na_rle_starts</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 2000 2005 2012 2018
+<span class='fu'>na_rle_inverse</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 2000 2005 2012 2013 2014 2015 2018</div><div class='input'><span class='fu'>na_rle_lengths</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 1 1 4 1</div><div class='input'><span class='fu'>na_rle_starts</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 2000 2005 2012 2018
 #&gt; attr(,"interval")
 #&gt; 1Y</div><div class='input'><span class='fu'>na_rle_ends</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 2001 2006 2016 2019</div><div class='input'>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>x</span>) <span class='co'># the number of runs</span></div><div class='output co'>#&gt; [1] 4</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum</a></span>(<span class='no'>x</span>) <span class='co'># the total number of `NA`</span></div><div class='output co'>#&gt; [1] 7</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/range'>range</a></span>(<span class='no'>x</span>) <span class='co'># min &amp; max runs</span></div><div class='output co'>#&gt; [1] 1 4</div><div class='input'>
@@ -200,7 +204,12 @@ otherwise a supplied "interval" class. See <code><a href='https://tsibble.tidyve
 #&gt;   &lt;chr&gt; &lt;list&lt;rle&lt;NA&gt;&gt;&gt;
 #&gt; 1 a                 [2]
 #&gt; 2 b                 [2]</div><div class='input'>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum</a></span>(<span class='no'>na_rle_df</span>$<span class='no'>na_runs</span>)</div><div class='output co'>#&gt; [1] 2 5</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/range'>range</a></span>(<span class='no'>na_rle_df</span>$<span class='no'>na_runs</span>)</div><div class='output co'>#&gt; &lt;list_of&lt;integer&gt;[2]&gt;
+<span class='fu'>na_rle_inverse</span>(<span class='no'>na_rle_df</span>$<span class='no'>na_runs</span>)</div><div class='output co'>#&gt; [[1]]
+#&gt; [1] 2000 2005
+#&gt; 
+#&gt; [[2]]
+#&gt; [1] 2012 2013 2014 2015 2018
+#&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum</a></span>(<span class='no'>na_rle_df</span>$<span class='no'>na_runs</span>)</div><div class='output co'>#&gt; [1] 2 5</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/range'>range</a></span>(<span class='no'>na_rle_df</span>$<span class='no'>na_runs</span>)</div><div class='output co'>#&gt; &lt;list_of&lt;integer&gt;[2]&gt;
 #&gt; [[1]]
 #&gt; [1] 1 1
 #&gt; 

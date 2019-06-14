@@ -140,7 +140,18 @@
 #&gt; $lengths: &lt;int&gt; 1 1 
 #&gt; $indices: &lt;int&gt;  8 16</div><div class='input'><span class='fu'><a href='https://dplyr.tidyverse.org/reference/setops.html'>setdiff</a></span>(<span class='no'>y</span>, <span class='no'>x</span>)</div><div class='output co'>#&gt; &lt;Run Length Encoding &lt;NA&gt;[1]&gt;
 #&gt; $lengths: &lt;int&gt; 1 
-#&gt; $indices: &lt;int&gt; 4</div></pre>
+#&gt; $indices: &lt;int&gt; 4</div><div class='input'><span class='no'>labels</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>, <span class='st'>"intersect(x, y)"</span>, <span class='st'>"union(x, y)"</span>, <span class='st'>"setdiff(x, y)"</span>,
+  <span class='st'>"setdiff(y, x)"</span>)
+<span class='no'>labels</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>factor</a></span>(<span class='no'>labels</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='no'>labels</span>)
+<span class='no'>lst_na_rle</span> <span class='kw'>&lt;-</span>
+  <span class='kw pkg'>vctrs</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/vctrs/topics/list_of'>as_list_of</a></span>(
+    <span class='no'>x</span>, <span class='no'>y</span>,
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/setops.html'>intersect</a></span>(<span class='no'>x</span>, <span class='no'>y</span>),
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/setops.html'>union</a></span>(<span class='no'>x</span>, <span class='no'>y</span>),
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/setops.html'>setdiff</a></span>(<span class='no'>x</span>, <span class='no'>y</span>),
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/setops.html'>setdiff</a></span>(<span class='no'>y</span>, <span class='no'>x</span>)
+  )
+<span class='fu'><a href='https://www.rdocumentation.org/packages/ggplot2/topics/autoplot'>autoplot</a></span>(<span class='no'>lst_na_rle</span>, <span class='no'>labels</span>)</div><div class='img'><img src='mists-set-op-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

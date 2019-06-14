@@ -28,4 +28,16 @@ intersect(x, y)
 union(x, y)
 setdiff(x, y)
 setdiff(y, x)
+labels <- c("x", "y", "intersect(x, y)", "union(x, y)", "setdiff(x, y)", 
+  "setdiff(y, x)")
+labels <- factor(labels, levels = labels)
+lst_na_rle <- 
+  vctrs::as_list_of(
+    x, y,
+    intersect(x, y),
+    union(x, y),
+    setdiff(x, y),
+    setdiff(y, x)
+  )
+autoplot(lst_na_rle, labels)
 }

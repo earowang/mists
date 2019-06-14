@@ -30,6 +30,13 @@ na_rle_spinoplot(data, x, y = NULL, facets = NULL, ...)
 \description{
 \code{na_rle_spineplot()} is an alias of \code{na_rle_spinoplot()}.
 }
+\section{Spinoplot}{
+
+\code{x}: lengths of runs of missings.
+\code{width}: the number of missing observations in the run.
+\code{y}: Either 1 or the fraction of intersections with other variables.
+}
+
 \examples{
 if (!requireNamespace("nycflights13", quietly = TRUE)) {
   stop("Please install the nycflights13 package to run these following examples.")
@@ -41,8 +48,6 @@ na_runs_wind <- nycflights13::weather \%>\%
 
 na_runs_wind \%>\% 
   na_rle_rangeplot(wind_dir, origin)
-# autoplot() method
-autoplot(na_runs_wind$wind_gust, y = na_runs_wind$origin)
 na_runs_wind \%>\%
   na_rle_spinoplot(x = wind_dir, facets = origin)
 na_runs_wind \%>\%

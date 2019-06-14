@@ -4,4 +4,6 @@
 #' @docType data
 #' @name wdi
 #' @usage wdi
+#' @examples
+#' wdi
 "wdi"

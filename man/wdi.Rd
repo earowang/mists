@@ -11,6 +11,9 @@ wdi
 \description{
 World development indicators
 }
+\examples{
+wdi
+}
 \references{
 \href{https://databank.worldbank.org/data/source/world-development-indicators/}{The world bank databank}
 }

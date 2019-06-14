@@ -13,6 +13,10 @@ globalVariables(c("indices", "group", "n", "nobs", "frac", "n.x", "overlap",
 #' * `na_rle_rangeplot()`: passed to [`ggplot2::geom_segment()`] & [`ggplot2::geom_point()`].
 #' * `na_rle_spinoplot()`: passed to [`ggplot2::facet_wrap()`].
 #'
+#' @section Spinoplot:
+#' `x`: lengths of runs of missings.
+#' `width`: the number of missing observations in the run.
+#' `y`: Either 1 or the fraction of intersections with other variables.
 #' @rdname mists-plot
 #' @examples
 #' if (!requireNamespace("nycflights13", quietly = TRUE)) {
@@ -25,8 +29,6 @@ globalVariables(c("indices", "group", "n", "nobs", "frac", "n.x", "overlap",
 #' 
 #' na_runs_wind %>% 
 #'   na_rle_rangeplot(wind_dir, origin)
-#' # autoplot() method
-#' autoplot(na_runs_wind$wind_gust, y = na_runs_wind$origin)
 #' @export
 na_rle_rangeplot <- function(data, x, y = NULL, ...) {
   stopifnot(is.data.frame(data))

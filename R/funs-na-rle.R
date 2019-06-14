@@ -46,17 +46,7 @@ na_rle_expand <- function(x, ...) {
 
 #' @export
 na_rle_expand.rle_na <- function(x, ...) {
-  if (is_empty(x)) {
-    return(tibble("lengths" := x[["lengths"]], "indices" := x[["indices"]]))
-  }
-  rle_lengths <- na_rle_lengths(x)
-  rle_indices <- na_rle_indices(x)
-  tunit <- tunit(rle_indices)
-  full_seq <- map2(rle_indices, rle_lengths,
-    function(.x, .y) seq(.x, by = tunit, length.out = .y))
-  rep_lengths <- rep.int(rle_lengths, map_int(full_seq, vec_size))
-  full_seq <- do.call("c", full_seq) # vec_c(!!! full_seq)
-  res <- tibble("lengths" := rep_lengths, "indices" := full_seq)
+  res <- as_tibble(na_rle_reverse(x))
   indices_restore(res, x)
 }
 
@@ -73,7 +63,7 @@ na_rle_expand.list_of_rle_na <- function(x, ...) {
   res_lst <-
     map2(x, y, function(.x, .y) mutate(na_rle_expand(.x), !! new_col := .y))
   res <- bind_rows(!!! res_lst) # vec_rbind() should work here
-  indices_restore(res, x[[1L]])
+  indices_restore(res, x[[1L]]) # TODO: find common interval
 }
 
 #' @rdname mists-na-rle-tbl
@@ -123,7 +113,7 @@ tunit <- function(indices) {
   time_unit(indices %@% "interval")
 }
 
-# ToDo: a homogeneous interval (unknown or one)
+# TODO: a homogeneous interval (unknown or one)
 common_tunit <- function(x) {
   max(map_dbl(x, tunit))
 }
@@ -275,4 +265,18 @@ end.list_of_rle_na <- function(x, ...) {
 
 is_list_of_rle_na <- function(x) {
   inherits(x, "list_of_rle_na")
+}
+
+na_rle_reverse <- function(x, ...) {
+  if (is_empty(x)) {
+    return(list("lengths" = x[["lengths"]], "indices" = x[["indices"]]))
+  }
+  rle_lengths <- na_rle_lengths(x)
+  rle_indices <- na_rle_indices(x)
+  tunit <- tunit(rle_indices)
+  full_seq <- map2(rle_indices, rle_lengths,
+    function(.x, .y) seq(.x, by = tunit, length.out = .y))
+  rep_lengths <- rep.int(rle_lengths, map_int(full_seq, vec_size))
+  full_seq <- do.call("c", full_seq) # vec_c(!!! full_seq)
+  list("lengths" = rep_lengths, "indices" = full_seq)
 }

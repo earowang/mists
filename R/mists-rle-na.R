@@ -4,6 +4,9 @@ na_rle_impl <- function(x) {
 
 #' Run lengths encoding for missing values (`NA`)
 #'
+#' Compute the lengths and indices of runs of `NA` in a vector – or the reverse
+#' operation.
+#'
 #' @param x A vector.
 #' @param index_by A vector of the same length as `x`.
 #' @param interval if `NULL`, determined by the greatest common denominator;
@@ -34,6 +37,7 @@ na_rle_impl <- function(x) {
 #' na_rle(df$temp) # indexed by the default positions
 #' (x <- na_rle(df$temp, index_by = df$year)) # indexed by a variable
 #'
+#' na_rle_inverse(x)
 #' na_rle_lengths(x)
 #' na_rle_starts(x)
 #' na_rle_ends(x)
@@ -49,6 +53,7 @@ na_rle_impl <- function(x) {
 #'   summarise(na_runs = list_of_na_rle(temp, year))
 #' na_rle_df
 #'
+#' na_rle_inverse(na_rle_df$na_runs)
 #' sum(na_rle_df$na_runs)
 #' range(na_rle_df$na_runs)
 #' @export
@@ -91,6 +96,22 @@ list_of_na_rle <- function(x = double(), index_by = seq_along(x),
   new_list_of_rle_na(
     !!! list2(na_rle(x, index_by = index_by, interval = interval))
   )
+}
+
+#' @rdname na-rle
+#' @export
+na_rle_inverse <- function(x) {
+  UseMethod("na_rle_inverse")
+}
+
+#' @export
+na_rle_inverse.rle_na <- function(x) {
+  na_rle_reverse(x)[["indices"]]
+}
+
+#' @export
+na_rle_inverse.list_of_rle_na <- function(x) {
+  map(x, na_rle_inverse)
 }
 
 #' @rdname na-rle

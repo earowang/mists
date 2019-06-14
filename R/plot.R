@@ -10,8 +10,8 @@ globalVariables(c("indices", "group", "n", "nobs", "frac", "n.x", "overlap",
 #' @param facets A facetting variable.
 #' @inheritParams ggplot2::autoplot
 #' @param ...
-#' * `na_rle_rangeplot()`: passed to [`geom_segment()`] & [`geom_point()`].
-#' * `na_rle_spinoplot()`: passed to [`facet_wrap()`].
+#' * `na_rle_rangeplot()`: passed to [`ggplot2::geom_segment()`] & [`ggplot2::geom_point()`].
+#' * `na_rle_spinoplot()`: passed to [`ggplot2::facet_wrap()`].
 #'
 #' @rdname mists-plot
 #' @examples
@@ -194,7 +194,7 @@ autoplot.list_of_rle_na <- function(object, y = seq_along(object), ...) {
 #'
 #' @param var A variable that contains `list_of_na_rle()`.
 #' @param data A data frame.
-#' @param ... Passed to [`geom_rect()`].
+#' @param ... Passed to [`ggplot2::geom_rect()`].
 #' @examples
 #' if (!requireNamespace("nycflights13", quietly = TRUE)) {
 #'   stop("Please install the nycflights13 package to run these following examples.")

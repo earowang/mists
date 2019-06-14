@@ -11,7 +11,7 @@ layer_na_rle(var, data, ...)
 
 \item{data}{A data frame.}
 
-\item{...}{Passed to \code{\link[=geom_rect]{geom_rect()}}.}
+\item{...}{Passed to \code{\link[ggplot2:geom_rect]{ggplot2::geom_rect()}}.}
 }
 \description{
 Add a layer of \code{list_of_na_rle()} to an existing ggplot

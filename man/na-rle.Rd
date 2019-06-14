@@ -3,6 +3,7 @@
 \name{na_rle}
 \alias{na_rle}
 \alias{list_of_na_rle}
+\alias{na_rle_inverse}
 \alias{na_rle_lengths}
 \alias{na_rle_indices}
 \alias{na_rle_starts}
@@ -13,6 +14,8 @@ na_rle(x = double(), index_by = seq_along(x), interval = NULL)
 
 list_of_na_rle(x = double(), index_by = seq_along(x),
   interval = NULL)
+
+na_rle_inverse(x)
 
 na_rle_lengths(x)
 
@@ -36,7 +39,8 @@ An object of class \code{rle_na} or \code{list_of_rle_na}. A named list of:
 }
 }
 \description{
-Run lengths encoding for missing values (\code{NA})
+Compute the lengths and indices of runs of \code{NA} in a vector – or the reverse
+operation.
 }
 \section{Mathematical operations}{
 
@@ -60,6 +64,7 @@ df
 na_rle(df$temp) # indexed by the default positions
 (x <- na_rle(df$temp, index_by = df$year)) # indexed by a variable
 
+na_rle_inverse(x)
 na_rle_lengths(x)
 na_rle_starts(x)
 na_rle_ends(x)
@@ -75,6 +80,7 @@ na_rle_df <- df \%>\%
   summarise(na_runs = list_of_na_rle(temp, year))
 na_rle_df
 
+na_rle_inverse(na_rle_df$na_runs)
 sum(na_rle_df$na_runs)
 range(na_rle_df$na_runs)
 }

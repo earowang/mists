@@ -12,7 +12,8 @@ na_rle_table(x, ...)
 \arguments{
 \item{x}{An object returned by \code{\link[=na_rle]{na_rle()}} or \code{\link[=list_of_na_rle]{list_of_na_rle()}}.}
 
-\item{...}{Passed to individual methods.}
+\item{...}{A name-value pair adding a new column as identifiers,
+if \code{\link[=list_of_na_rle]{list_of_na_rle()}}; otherwise ignored.}
 }
 \description{
 Expand and count run length encoding <\code{NA}>

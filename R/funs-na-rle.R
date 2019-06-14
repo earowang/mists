@@ -1,4 +1,19 @@
-globalVariables(c("n"))
+globalVariables(c("n", "indices2"))
+
+#' @export
+as_tibble.rle_na <- function(x, ...) {
+  as_tibble(unclass(x))
+}
+
+#' @export
+as_tibble.list_of_rle_na <- function(x, ...) {
+  tbl <- add_column_id(x, ...)
+  new_col <- names(tbl)
+  y <- tbl[[new_col]]
+  res_lst <-
+    map2(x, y, function(.x, .y) mutate(as_tibble(.x), !! new_col := .y))
+  vec_rbind(!!! res_lst)
+}
 
 #' Shift run length encoding <`NA`>
 #'
@@ -32,7 +47,8 @@ na_rle_shift.list_of_rle_na <- function(x, n = 1L) {
 #' Expand and count run length encoding <`NA`>
 #'
 #' @inheritParams na_rle_shift
-#' @param ... Passed to individual methods.
+#' @param ... A name-value pair adding a new column as identifiers,
+#' if [`list_of_na_rle()`]; otherwise ignored.
 #'
 #' @rdname mists-na-rle-tbl
 #' @examples
@@ -82,7 +98,57 @@ na_rle_table.list_of_rle_na <- function(x, ...) {
   y <- tbl[[new_col]]
   res_lst <-
     map2(x, y, function(.x, .y) mutate(na_rle_table(.x), !! new_col := .y))
-  bind_rows(!!! res_lst) # vec_rbind() should work here
+  vec_rbind(!!! res_lst)
+}
+
+#' Cut and aggregate run length encoding <`NA`>
+#'
+#' @inheritParams na_rle_expand
+#' @param by A function applied to `indices`, such as tsibble's period functions
+#' and lubridate's friends.
+#'
+#' @return
+#' A tibble contains:
+#' * `indices`: aggregated indices.
+#' * `n_run`: the number of unique runs for each `by`.
+#' * `n_na`: the total number of `NA`s for each `by`.
+#' @examples
+#' if (!requireNamespace("nycflights13", quietly = TRUE)) {
+#'   stop("Please install the nycflights13 package to run these following examples.")
+#' }
+#' library(dplyr, warn.conflicts = FALSE)
+#' na_runs_wind <- nycflights13::weather %>% 
+#'   group_by(origin) %>% 
+#'   summarise_at(vars(contains("wind")), ~ list_of_na_rle(., time_hour))
+#' na_rle_cut(na_runs_wind$wind_gust, by = tsibble::yearmonth)
+#' na_rle_cut(na_runs_wind$wind_gust, by = tsibble::yearmonth,
+#'   origin = na_runs_wind$origin)
+#' @export
+na_rle_cut <- function(x, by, ...) {
+  UseMethod("na_rle_cut")
+}
+
+#' @export
+na_rle_cut.rle_na <- function(x, by, ...) {
+  by <- as_function(by)
+  tbl <- mutate(na_rle_expand(x), "indices2" := indices)
+  tunit <- tunit(tbl[["indices"]])
+  grped_tbl <- group_by(tbl, "indices" := by(indices2))
+  summarise(
+    grped_tbl, 
+    "n_run" := length(continuous_rle_impl(indices2, tunit)), 
+    "n_na" := n()
+  )
+}
+
+#' @export
+na_rle_cut.list_of_rle_na <- function(x, by, ...) {
+  tbl <- add_column_id(x, ...)
+  new_col <- names(tbl)
+  y <- tbl[[new_col]]
+  res_lst <- map2(x, y, 
+    function(.x, .y) mutate(na_rle_cut(.x, by = by), !! new_col := .y))
+  vec_rbind(!!! res_lst)
 }
 
 add_column_id <- function(x, ...) {
@@ -205,18 +271,6 @@ setdiff.rle_na <- function(x, y, ...) {
   y_full <- na_rle_expand(y)[, "indices"]
   res <- setdiff(x_full, y_full)
   tbl_to_na_rle(indices_restore(res, x))
-}
-
-#' @export
-as_tibble.rle_na <- function(x, ...) {
-  as_tibble(unclass(x))
-}
-
-#' @export
-as_tibble.list_of_rle_na <- function(x, ...) {
-  y <- seq_along(x)
-  res <- map2(x, y, function(.x, .y) mutate(as_tibble.rle_na(.x), "id" := .y))
-  vec_rbind(!!! res)
 }
 
 #' @method setdiff list_of_rle_na

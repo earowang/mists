@@ -16,14 +16,12 @@ reference:
   contents:
     - na_rle
     - na_rle_shift
-
-- title: Set operations
-  contents:
     - set-op
 
 - title: Rectangling
   contents:
     - na_rle_expand
+    - na_rle_cut
 
 - title: Plotting
   contents:

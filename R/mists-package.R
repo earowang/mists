@@ -7,7 +7,7 @@
 #' @importFrom stats median quantile
 #' @importFrom tsibble is_tsibble key key_vars key_data key_rows index index_var
 #' @importFrom tsibble interval_pull time_unit group_by_key measures units_since
-#' @importFrom dplyr distinct mutate transmute new_grouped_df group_nest
+#' @importFrom dplyr distinct mutate transmute new_grouped_df group_nest n
 #' @importFrom dplyr arrange filter bind_rows bind_cols group_by ungroup
 #' @importFrom dplyr right_join left_join anti_join inner_join semi_join
 #' @importFrom dplyr select select_if

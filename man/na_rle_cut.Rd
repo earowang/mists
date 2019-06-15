@@ -4,16 +4,13 @@
 \alias{na_rle_cut}
 \title{Cut and aggregate run length encoding <\code{NA}>}
 \usage{
-na_rle_cut(x, by, ...)
+na_rle_cut(x, by)
 }
 \arguments{
-\item{x}{An object returned by \code{\link[=na_rle]{na_rle()}} or \code{\link[=list_of_na_rle]{list_of_na_rle()}}.}
+\item{x}{An object returned by \code{\link[=na_rle]{na_rle()}}.}
 
 \item{by}{A function applied to \code{indices}, such as tsibble's period functions
 and lubridate's friends.}
-
-\item{...}{A name-value pair adding a new column as identifiers,
-if \code{\link[=list_of_na_rle]{list_of_na_rle()}}; otherwise ignored.}
 }
 \value{
 A tibble contains:
@@ -30,11 +27,14 @@ Cut and aggregate run length encoding <\code{NA}>
 if (!requireNamespace("nycflights13", quietly = TRUE)) {
   stop("Please install the nycflights13 package to run these following examples.")
 }
+if (!requireNamespace("tidyr", quietly = TRUE)) {
+  stop("Please install the tidyr package to run these following examples.")
+}
 library(dplyr, warn.conflicts = FALSE)
-na_runs_wind <- nycflights13::weather \%>\% 
+nycflights13::weather \%>\% 
   group_by(origin) \%>\% 
-  summarise_at(vars(contains("wind")), ~ list_of_na_rle(., time_hour))
-na_rle_cut(na_runs_wind$wind_gust, by = tsibble::yearmonth)
-na_rle_cut(na_runs_wind$wind_gust, by = tsibble::yearmonth,
-  origin = na_runs_wind$origin)
+  summarise(wind_gust_na = list_of_na_rle(wind_gust, time_hour)) \%>\% 
+  group_by(origin) \%>\% 
+  mutate(wind_gust_na_cut = na_rle_cut(wind_gust_na, by = tsibble::yearmonth)) \%>\% 
+  tidyr::unnest(cols = wind_gust_na_cut)
 }

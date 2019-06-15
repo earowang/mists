@@ -5,15 +5,12 @@
 \alias{na_rle_table}
 \title{Expand and count run length encoding <\code{NA}>}
 \usage{
-na_rle_expand(x, ...)
+na_rle_expand(x)
 
-na_rle_table(x, ...)
+na_rle_table(x)
 }
 \arguments{
-\item{x}{An object returned by \code{\link[=na_rle]{na_rle()}} or \code{\link[=list_of_na_rle]{list_of_na_rle()}}.}
-
-\item{...}{A name-value pair adding a new column as identifiers,
-if \code{\link[=list_of_na_rle]{list_of_na_rle()}}; otherwise ignored.}
+\item{x}{An object returned by \code{\link[=na_rle]{na_rle()}}.}
 }
 \description{
 Expand and count run length encoding <\code{NA}>

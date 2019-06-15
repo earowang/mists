@@ -34,11 +34,13 @@ Suggests:
     knitr,
     nycflights13,
     spelling,
-    testthat (>= 2.1.0)
+    testthat (>= 2.1.0),
+    tidyr (>= 0.8.3.9000)
 VignetteBuilder: 
     knitr
 Remotes:
-    r-lib/vctrs
+    r-lib/vctrs,
+    tidyverse/tidyr
 ByteCompile: true
 Encoding: UTF-8
 Language: en-GB

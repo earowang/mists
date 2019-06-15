@@ -45,9 +45,7 @@ na_rle_shift.list_of_rle_na <- function(x, n = 1L) {
 
 #' Expand and count run length encoding <`NA`>
 #'
-#' @inheritParams na_rle_shift
-#' @param ... A name-value pair adding a new column as identifiers,
-#' if [`list_of_na_rle()`]; otherwise ignored.
+#' @param x An object returned by [`na_rle()`].
 #'
 #' @rdname mists-na-rle-tbl
 #' @examples
@@ -55,35 +53,29 @@ na_rle_shift.list_of_rle_na <- function(x, n = 1L) {
 #' na_rle_expand(x)
 #' na_rle_table(x)
 #' @export
-na_rle_expand <- function(x, ...) {
+na_rle_expand <- function(x) {
   UseMethod("na_rle_expand")
 }
 
 #' @export
-na_rle_expand.rle_na <- function(x, ...) {
+na_rle_expand.rle_na <- function(x) {
   res <- as_tibble(na_rle_reverse(x))
   indices_restore(res, x)
 }
 
 #' @export
-na_rle_expand.list_of_rle_na <- function(x, ...) {
-  tbl <- add_column_id(x, ...)
-  new_col <- names(tbl)
-  y <- tbl[[new_col]]
-  res_lst <-
-    map2(x, y, function(.x, .y) mutate(na_rle_expand(.x), !! new_col := .y))
-  res <- bind_rows(!!! res_lst) # vec_rbind() should work here
-  indices_restore(res, x[[1L]])
+na_rle_expand.list_of_rle_na <- function(x) {
+  as_list_of(map(x, na_rle_expand))
 }
 
 #' @rdname mists-na-rle-tbl
 #' @export
-na_rle_table <- function(x, ...) {
+na_rle_table <- function(x) {
   UseMethod("na_rle_table")
 }
 
 #' @export
-na_rle_table.rle_na <- function(x, ...) {
+na_rle_table.rle_na <- function(x) {
   mutate(
     count(tibble("lengths" := na_rle_lengths(x)), lengths),
     "nobs" := n * lengths
@@ -91,13 +83,8 @@ na_rle_table.rle_na <- function(x, ...) {
 }
 
 #' @export
-na_rle_table.list_of_rle_na <- function(x, ...) {
-  tbl <- add_column_id(x, ...)
-  new_col <- names(tbl)
-  y <- tbl[[new_col]]
-  res_lst <-
-    map2(x, y, function(.x, .y) mutate(na_rle_table(.x), !! new_col := .y))
-  vec_rbind(!!! res_lst)
+na_rle_table.list_of_rle_na <- function(x) {
+  as_list_of(map(x, na_rle_table))
 }
 
 #' Cut and aggregate run length encoding <`NA`>
@@ -115,20 +102,23 @@ na_rle_table.list_of_rle_na <- function(x, ...) {
 #' if (!requireNamespace("nycflights13", quietly = TRUE)) {
 #'   stop("Please install the nycflights13 package to run these following examples.")
 #' }
+#' if (!requireNamespace("tidyr", quietly = TRUE)) {
+#'   stop("Please install the tidyr package to run these following examples.")
+#' }
 #' library(dplyr, warn.conflicts = FALSE)
-#' na_runs_wind <- nycflights13::weather %>% 
+#' nycflights13::weather %>% 
 #'   group_by(origin) %>% 
-#'   summarise_at(vars(contains("wind")), ~ list_of_na_rle(., time_hour))
-#' na_rle_cut(na_runs_wind$wind_gust, by = tsibble::yearmonth)
-#' na_rle_cut(na_runs_wind$wind_gust, by = tsibble::yearmonth,
-#'   origin = na_runs_wind$origin)
+#'   summarise(wind_gust_na = list_of_na_rle(wind_gust, time_hour)) %>% 
+#'   group_by(origin) %>% 
+#'   mutate(wind_gust_na_cut = na_rle_cut(wind_gust_na, by = tsibble::yearmonth)) %>% 
+#'   tidyr::unnest(cols = wind_gust_na_cut)
 #' @export
-na_rle_cut <- function(x, by, ...) {
+na_rle_cut <- function(x, by) {
   UseMethod("na_rle_cut")
 }
 
 #' @export
-na_rle_cut.rle_na <- function(x, by, ...) {
+na_rle_cut.rle_na <- function(x, by) {
   by <- as_function(by)
   tbl <- mutate(na_rle_expand(x), "indices2" := indices)
   grped_tbl <- group_by(tbl, "indices" := by(indices2))
@@ -140,25 +130,8 @@ na_rle_cut.rle_na <- function(x, by, ...) {
 }
 
 #' @export
-na_rle_cut.list_of_rle_na <- function(x, by, ...) {
-  tbl <- add_column_id(x, ...)
-  new_col <- names(tbl)
-  y <- tbl[[new_col]]
-  res_lst <- map2(x, y, 
-    function(.x, .y) mutate(na_rle_cut(.x, by = by), !! new_col := .y))
-  vec_rbind(!!! res_lst)
-}
-
-add_column_id <- function(x, ...) {
-  qs <- enquos(..., .named = TRUE)
-  if (is_empty(qs)) {
-    y <- vec_seq_along(x)
-    new_col <- "id"
-  } else {
-    y <- eval_tidy(qs[[1]])
-    new_col <- names(qs)
-  }
-  list2(!! new_col := y)
+na_rle_cut.list_of_rle_na <- function(x, by) {
+  as_list_of(map(x, na_rle_cut, by))
 }
 
 continuous_rle_impl <- function(x, const) {
@@ -360,7 +333,7 @@ is_list_of_rle_na <- function(x) {
   inherits(x, "list_of_rle_na")
 }
 
-na_rle_reverse <- function(x, ...) {
+na_rle_reverse <- function(x) {
   if (is_empty(x)) {
     return(list("lengths" = x[["lengths"]], "indices" = x[["indices"]]))
   }

@@ -138,8 +138,8 @@ na_rle_spinoplot <- function(data, x, y = NULL, facets = NULL, ...) {
   } else {
     lst_na_rle_y <- eval_tidy(y, data = data)
     ylab <- paste("proportion of overlaps", parenthesis(as_label(y)))
-    x_full <- na_rle_expand(lst_na_rle_x, facets = facets_vals)
-    y_full <- na_rle_expand(lst_na_rle_y, facets = facets_vals)
+    x_full <- na_rle_expand2(lst_na_rle_x, facets = facets_vals)
+    y_full <- na_rle_expand2(lst_na_rle_y, facets = facets_vals)
     intersect_xy <- semi_join(x_full, y_full, by = c("indices", "facets"))
     overlaps_xy <- count(intersect_xy, lengths, facets)
     inner_xy <- inner_join(overlaps_xy, na_runs_x, by = c("lengths", "facets"))
@@ -238,3 +238,26 @@ layer_na_rle <- function(var, data, ...) {
     data = data, ..., inherit.aes = FALSE
   )
 }
+
+na_rle_expand2 <- function(x, ...) {
+  tbl <- add_column_id(x, ...)
+  new_col <- names(tbl)
+  y <- tbl[[new_col]]
+  res_lst <-
+    map2(x, y, function(.x, .y) mutate(na_rle_expand(.x), !! new_col := .y))
+  res <- bind_rows(!!! res_lst) # vec_rbind() should work here
+  indices_restore(res, x[[1L]])
+}
+
+add_column_id <- function(x, ...) {
+  qs <- enquos(..., .named = TRUE)
+  if (is_empty(qs)) {
+    y <- vec_seq_along(x)
+    new_col <- "id"
+  } else {
+    y <- eval_tidy(qs[[1]])
+    new_col <- names(qs)
+  }
+  list2(!! new_col := y)
+}
+

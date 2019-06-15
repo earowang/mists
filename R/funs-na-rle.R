@@ -109,7 +109,6 @@ na_rle_table.list_of_rle_na <- function(x) {
 #' nycflights13::weather %>% 
 #'   group_by(origin) %>% 
 #'   summarise(wind_gust_na = list_of_na_rle(wind_gust, time_hour)) %>% 
-#'   group_by(origin) %>% 
 #'   mutate(wind_gust_na_cut = na_rle_cut(wind_gust_na, by = tsibble::yearmonth)) %>% 
 #'   tidyr::unnest(cols = wind_gust_na_cut)
 #' @export

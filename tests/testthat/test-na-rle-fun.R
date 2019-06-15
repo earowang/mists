@@ -3,10 +3,6 @@ test_that("na_rle_expand()", {
   expected <- tibble(lengths = c(rep.int(4L, 4), 1L), indices = c(2:5, 8L))
   expect_identical(na_rle_expand(x)$lengths, expected$lengths)
   expect_equivalent(na_rle_expand(x)$indices, expected$indices)
-  expect_identical(
-    na_rle_expand(x)$indices %@% "interval",
-    tsibble::new_interval(unit = 1L)
-  )
 })
 
 test_that("na_rle_table()", {
@@ -23,16 +19,16 @@ test_that("na_rle_shift()", {
     expected$indices + 2L
   )
   expect_identical(
-    na_rle_shift(x, n = 2L)$indices %@% "interval",
-    x$indices %@% "interval"
+    interval2(na_rle_shift(x, n = 2L)),
+    x %@% "interval"
   )
   expect_equivalent(
     na_rle_shift(x, n = -2L)$indices,
     expected$indices - 2L
   )
   expect_identical(
-    na_rle_shift(x, n = -2L)$indices %@% "interval",
-    x$indices %@% "interval"
+    na_rle_shift(x, n = -2L) %@% "interval",
+    x %@% "interval"
   )
 })
 

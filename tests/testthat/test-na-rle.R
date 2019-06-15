@@ -4,8 +4,8 @@ test_that("na_rle() for empty `x` with default `index_by`", {
   expected <- list(lengths = integer(), indices = integer())
   expect_named(x <- na_rle(), names(expected))
   expect_identical(x$lengths, expected$lengths)
-  expect_equivalent(x$indices, expected$indices)
-  expect_identical(x$indices %@% "interval", new_interval())
+  expect_identical(x$indices, expected$indices)
+  expect_identical(x %@% "interval", new_interval())
 })
 
 test_that("na_rle() for empty `x` with custom `index_by`", {
@@ -35,7 +35,7 @@ test_that("na_rle() indexed by default positions", {
   x <- na_rle(c(1, rep(NA, 4), 6:7, NA, 9:10))
   expected <- list(lengths = c(4L, 1L), indices = c(2L, 8L))
   expect_identical(x$lengths, expected$lengths)
-  expect_equivalent(x$indices, expected$indices)
+  expect_identical(x$indices, expected$indices)
 })
 
 test_that("na_rle() indexed by dates", {
@@ -43,7 +43,7 @@ test_that("na_rle() indexed by dates", {
   actual <- na_rle(x[[1]], index_by = x[[2]])
   expected <- list(lengths = c(4L, 1L), indices = c(x[[2]][2], x[[2]][8]))
   expect_identical(actual$lengths, expected$lengths)
-  expect_equivalent(actual$indices, expected$indices)
+  expect_identical(actual$indices, expected$indices)
 })
 
 test_that("na_rle() getters", {

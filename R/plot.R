@@ -225,7 +225,7 @@ layer_na_rle <- function(var, data, ...) {
   data <- data[cols_non_na_rle]
   na_rle_df <- 
     tibble(
-      "start" := start(var_eval) - common_tunit(na_rle_indices(var_eval)),
+      "start" := start(var_eval) - common_tunit(var_eval),
       "end" := end(var_eval)
     )
   base_idx <- vec_seq_along(data)

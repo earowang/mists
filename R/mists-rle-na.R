@@ -61,8 +61,10 @@ na_rle <- function(x = double(), index_by = seq_along(x), interval = NULL) {
   stopifnot(vec_size(x) == vec_size(index_by))
   if (vec_is_empty(x)) {
     indices <- index_by
-    attr(indices, "interval") <- interval_pull(index_by)
-    return(new_rle_na(list(lengths = integer(), indices = indices)))
+    return(new_rle_na(
+      list(lengths = integer(), indices = indices),
+      interval = interval_pull(index_by)
+    ))
   }
 
   if (vec_duplicate_any(index_by)) {
@@ -82,11 +84,10 @@ na_rle <- function(x = double(), index_by = seq_along(x), interval = NULL) {
   res <- na_rle_impl(x)
   from <- c(1L, head(cumsum(res[["lengths"]]), -1L) + 1L)[res[["values"]]]
   indices <- index_by[ord][from]
-  attr(indices, "interval") <- int
   new_rle_na(list(
     lengths = res[["lengths"]][res[["values"]]],
     indices = indices
-  ))
+  ), interval = int)
 }
 
 #' @rdname na-rle
@@ -111,7 +112,7 @@ na_rle_inverse.rle_na <- function(x) {
 
 #' @export
 na_rle_inverse.list_of_rle_na <- function(x) {
-  map(x, na_rle_inverse)
+  map(x, na_rle_inverse) # should wrap into as_list_of(), but vctrs with integer date issue
 }
 
 #' @rdname na-rle
@@ -127,7 +128,7 @@ na_rle_lengths.rle_na <- function(x) {
 
 #' @export
 na_rle_lengths.list_of_rle_na <- function(x) {
-  map(x, na_rle_lengths)
+  as_list_of(map(x, na_rle_lengths))
 }
 
 #' @rdname na-rle
@@ -144,7 +145,7 @@ na_rle_indices.rle_na <- function(x) {
 
 #' @export
 na_rle_indices.list_of_rle_na <- function(x) {
-  map(x, na_rle_indices)
+  as_list_of(map(x, na_rle_indices))
 }
 
 #' @rdname na-rle
@@ -163,18 +164,18 @@ na_rle_ends <- function(x) {
 na_rle_ends.rle_na <- function(x) {
   rle_lengths <- na_rle_lengths(x)
   rle_indices <- na_rle_indices(x)
-  tunit <- tunit(rle_indices)
+  tunit <- tunit(x)
   vec_c(!!! map2(rle_indices, rle_lengths, function(.x, .y) .x + tunit * .y))
 }
 
 #' @export
 na_rle_ends.list_of_rle_na <- function(x) {
-  map(x, na_rle_ends.rle_na)
+  as_list_of(map(x, na_rle_ends.rle_na))
 }
 
-new_rle_na <- function(x) {
-  rle_na_assert(x)
-  new_vctr(x, class = "rle_na")
+new_rle_na <- function(x, interval) {
+  rle_na_assert(x, interval)
+  new_vctr(x, "interval" = interval, class = "rle_na")
 }
 
 new_list_of_rle_na <- function(...) {
@@ -185,11 +186,11 @@ new_list_of_rle_na <- function(...) {
   )
 }
 
-rle_na_assert <- function(x) {
+rle_na_assert <- function(x, interval) {
   if (is_false(is_bare_list(x) && all(has_name(x, c("lengths", "indices"))))) {
     abort("Run length encoding must be a named list with `lengths` and `indices`.")
   }
-  if (is_null(x[["indices"]] %@% "interval")) {
+  if (is_null(interval) || is_missing(interval)) {
     abort("Missing \"interval\".")
   }
 }

@@ -34,8 +34,7 @@ na_rle_shift <- function(x, n = 1L) {
 #' @export
 na_rle_shift.rle_na <- function(x, n = 1L) {
   rle_indices <- na_rle_indices(x)
-  tunit <- tunit(rle_indices)
-  x[["indices"]] <- rle_indices + sign(n) * tunit * abs(n)
+  x[["indices"]] <- rle_indices + sign(n) * tunit(x) * abs(n)
   x
 }
 
@@ -74,7 +73,7 @@ na_rle_expand.list_of_rle_na <- function(x, ...) {
   res_lst <-
     map2(x, y, function(.x, .y) mutate(na_rle_expand(.x), !! new_col := .y))
   res <- bind_rows(!!! res_lst) # vec_rbind() should work here
-  indices_restore(res, x[[1L]]) # TODO: find common interval
+  indices_restore(res, x[[1L]])
 }
 
 #' @rdname mists-na-rle-tbl
@@ -132,11 +131,10 @@ na_rle_cut <- function(x, by, ...) {
 na_rle_cut.rle_na <- function(x, by, ...) {
   by <- as_function(by)
   tbl <- mutate(na_rle_expand(x), "indices2" := indices)
-  tunit <- tunit(tbl[["indices"]])
   grped_tbl <- group_by(tbl, "indices" := by(indices2))
   summarise(
     grped_tbl, 
-    "n_run" := length(continuous_rle_impl(indices2, tunit)), 
+    "n_run" := length(continuous_rle_impl(indices2, tunit(x))), 
     "n_na" := n()
   )
 }
@@ -179,26 +177,26 @@ continuous_rle_impl <- function(x, const) {
   }
 }
 
-tbl_to_na_rle <- function(data) {
+tbl_to_na_rle <- function(data, interval) {
   if (is_empty(data)) {
     return(na_rle(x = data[["indices"]], index_by = data[["lengths"]]))
   }
 
-  rle_cont <- continuous_rle_impl(data[["indices"]], tunit(data[["indices"]]))
+  rle_cont <- continuous_rle_impl(data[["indices"]], time_unit(interval))
   add_len <- mutate(data, "lengths" := rep.int(cumsum(rle_cont), rle_cont))
   red_data <- summarise(group_by(add_len, lengths), "indices" := min(indices))
   red_data <- indices_restore(red_data, data)
-  new_rle_na(as_list(mutate(red_data, "lengths" := rle_cont)))
+  new_rle_na(as.list(mutate(red_data, "lengths" := rle_cont)), interval)
 }
 
+# Work around for tsibble period functions not integrating vctrs yet
 indices_restore <- function(x, to) {
   class(x$indices) <- class(to$indices)
-  attr(x$indices, "interval") <- attr(to$indices, "interval")
   x
 }
 
-tunit <- function(indices) {
-  time_unit(indices %@% "interval")
+tunit <- function(x) {
+  time_unit(x %@% "interval")
 }
 
 # TODO: a homogeneous interval (unknown or one)
@@ -238,7 +236,7 @@ intersect.rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)[, "indices"]
   y_full <- na_rle_expand(y)[, "indices"]
   res <- intersect(x_full, y_full) # dplyr::intersect for data frame
-  tbl_to_na_rle(indices_restore(res, x))
+  tbl_to_na_rle(indices_restore(res, x), interval2(x))
 }
 
 #' @method intersect list_of_rle_na
@@ -254,7 +252,7 @@ union.rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)[, "indices"]
   y_full <- na_rle_expand(y)[, "indices"]
   res <- arrange(union(x_full, y_full), indices)
-  tbl_to_na_rle(indices_restore(res, x))
+  tbl_to_na_rle(indices_restore(res, x), interval2(x))
 }
 
 #' @method union list_of_rle_na
@@ -270,7 +268,7 @@ setdiff.rle_na <- function(x, y, ...) {
   x_full <- na_rle_expand(x)[, "indices"]
   y_full <- na_rle_expand(y)[, "indices"]
   res <- setdiff(x_full, y_full)
-  tbl_to_na_rle(indices_restore(res, x))
+  tbl_to_na_rle(indices_restore(res, x), interval2(x))
 }
 
 #' @method setdiff list_of_rle_na
@@ -361,10 +359,13 @@ na_rle_reverse <- function(x, ...) {
   }
   rle_lengths <- na_rle_lengths(x)
   rle_indices <- na_rle_indices(x)
-  tunit <- tunit(rle_indices)
   full_seq <- map2(rle_indices, rle_lengths,
-    function(.x, .y) seq(.x, by = tunit, length.out = .y))
+    function(.x, .y) seq(.x, by = tunit(x), length.out = .y))
   rep_lengths <- rep.int(rle_lengths, map_int(full_seq, vec_size))
   full_seq <- do.call("c", full_seq) # vec_c(!!! full_seq)
   list("lengths" = rep_lengths, "indices" = full_seq)
+}
+
+interval2 <- function(x) {
+  x %@% "interval"
 }

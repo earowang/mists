@@ -141,10 +141,8 @@ and lubridate's friends.</p></td>
 <span class='kw pkg'>nycflights13</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/nycflights13/topics/weather'>weather</a></span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span>(<span class='no'>origin</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span>(<span class='kw'>wind_gust_na</span> <span class='kw'>=</span> <span class='fu'><a href='na-rle.html'>list_of_na_rle</a></span>(<span class='no'>wind_gust</span>, <span class='no'>time_hour</span>)) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span>(<span class='no'>origin</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(<span class='kw'>wind_gust_na_cut</span> <span class='kw'>=</span> <span class='fu'>na_rle_cut</span>(<span class='no'>wind_gust_na</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw pkg'>tsibble</span><span class='kw ns'>::</span><span class='no'><a href='https://tsibble.tidyverts.org/reference/period.html'>yearmonth</a></span>)) <span class='kw'>%&gt;%</span>
   <span class='kw pkg'>tidyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://tidyr.tidyverse.org/reference/nest.html'>unnest</a></span>(<span class='kw'>cols</span> <span class='kw'>=</span> <span class='no'>wind_gust_na_cut</span>)</div><div class='output co'>#&gt; # A tibble: 36 x 5
-#&gt; # Groups:   origin [3]
 #&gt;    origin    wind_gust_na indices    n_run  n_na
 #&gt;    &lt;chr&gt;  &lt;list&lt;rle&lt;NA&gt;&gt;&gt; &lt;date&gt;     &lt;int&gt; &lt;int&gt;
 #&gt;  1 EWR                [2] 2013-01-01    55   583

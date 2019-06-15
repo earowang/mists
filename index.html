@@ -84,7 +84,7 @@
 <p>The <code><a href="reference/na-rle.html">na_rle()</a></code> gives a sparse representation for indexing runs of missings, a special type of run length encoding (<code>rle</code>).</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(mists)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">(x &lt;-<span class="st"> </span><span class="kw"><a href="reference/na-rle.html">na_rle</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="dv">4</span><span class="op">:</span><span class="dv">7</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="dv">10</span><span class="op">:</span><span class="dv">15</span>, <span class="ot">NA</span>)))</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; &lt;Run Length Encoding &lt;NA&gt;[3]&gt;</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; &lt;Run Length Encoding &lt;NA&gt;[2]&gt;</span></a>
 <a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt; $lengths: &lt;int&gt; 2 2 1 </span></a>
 <a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt; $indices: &lt;int&gt;  2  8 16</span></a>
 <a class="sourceLine" id="cb2-6" data-line-number="6">(y &lt;-<span class="st"> </span><span class="kw"><a href="reference/na-rle.html">na_rle</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">10</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="dv">6</span><span class="op">:</span><span class="dv">3</span>, <span class="ot">NA</span>, <span class="dv">1</span>)))</a>
@@ -104,9 +104,9 @@
 <a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; # A tibble: 3 x 4</span></a>
 <a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt;   origin        wind_dir      wind_speed       wind_gust</span></a>
 <a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt;   &lt;chr&gt;  &lt;list&lt;rle&lt;NA&gt;&gt;&gt; &lt;list&lt;rle&lt;NA&gt;&gt;&gt; &lt;list&lt;rle&lt;NA&gt;&gt;&gt;</span></a>
-<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt; 1 EWR              [223]             [1]           [644]</span></a>
-<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; 2 JFK               [50]             [3]           [519]</span></a>
-<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt; 3 LGA              [138]             [0]           [670]</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt; 1 EWR                [2]             [2]             [2]</span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; 2 JFK                [2]             [2]             [2]</span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt; 3 LGA                [2]             [2]             [2]</span></a></code></pre></div>
 </div>
 <div id="range-plots-and-extended-spinoplots" class="section level2">
 <h2 class="hasAnchor">

@@ -158,7 +158,7 @@ add_column_id <- function(x, ...) {
     y <- eval_tidy(qs[[1]])
     new_col <- names(qs)
   }
-  tibble(!! new_col := y)
+  list2(!! new_col := y)
 }
 
 continuous_rle_impl <- function(x, const) {
@@ -195,13 +195,20 @@ indices_restore <- function(x, to) {
   x
 }
 
-tunit <- function(x) {
-  time_unit(x %@% "interval")
+interval2 <- function(x) {
+  x %@% "interval"
 }
 
-# TODO: a homogeneous interval (unknown or one)
+tunit <- function(x) {
+  time_unit(interval2(x))
+}
+
 common_tunit <- function(x) {
-  max(map_dbl(x, tunit))
+  res <- vec_unique(map_dbl(x, tunit))
+  if (vec_size(res) > 2) {
+    abort("Elements in `list_of_na_rle()` don't have common intervals.")
+  }
+  max(res)
 }
 
 #' Set operations for run length encoding <`NA`>
@@ -364,8 +371,4 @@ na_rle_reverse <- function(x, ...) {
   rep_lengths <- rep.int(rle_lengths, map_int(full_seq, vec_size))
   full_seq <- do.call("c", full_seq) # vec_c(!!! full_seq)
   list("lengths" = rep_lengths, "indices" = full_seq)
-}
-
-interval2 <- function(x) {
-  x %@% "interval"
 }

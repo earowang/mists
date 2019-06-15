@@ -40,11 +40,11 @@ na_rle_rangeplot <- function(data, x, y = NULL, ...) {
     y <- eval_tidy(y, data = data)
   }
   tbl_rng <- 
-    tibble(
-      "start" := start(x),
-      "end" := end(x),
-      "y" := rep(y, times = map_int(x, length))
-    )
+    new_data_frame(list(
+      start = start(x),
+      end = end(x),
+      y = rep(y, times = map_int(x, length))
+    ))
   data <- 
     ungroup(mutate(
       group_by(tbl_rng, y), 
@@ -111,8 +111,8 @@ na_rle_spinoplot <- function(data, x, y = NULL, facets = NULL, ...) {
   na_runs_x <- 
     mutate(
       group_by(na_runs_x, facets), 
-      xlabs = paste(lengths, brackets(n), sep = "\n"),
-      x = .5 * c(cumsum(nobs) + cumsum(dplyr::lag(nobs, default = 0)))
+      "xlabs" := paste(lengths, brackets(n), sep = "\n"),
+      "x" := .5 * c(cumsum(nobs) + cumsum(dplyr::lag(nobs, default = 0)))
     )
 
   count_label <- counter()
@@ -188,7 +188,7 @@ autoplot.rle_na <- function(object, y = as.factor(1L), ...) {
 #' @method autoplot list_of_rle_na
 #' @export
 autoplot.list_of_rle_na <- function(object, y = seq_along(object), ...) {
-  data <- tibble("x" := object, "y" := y)
+  data <- new_data_frame(list(x = object, y = y))
   na_rle_rangeplot(data, x = x, y = y)
 }
 
@@ -224,10 +224,10 @@ layer_na_rle <- function(var, data, ...) {
   cols_non_na_rle <- names(data[!map_lgl(data, is_list_of_rle_na)])
   data <- data[cols_non_na_rle]
   na_rle_df <- 
-    tibble(
-      "start" := start(var_eval) - common_tunit(var_eval),
-      "end" := end(var_eval)
-    )
+    new_data_frame(list(
+      start = start(var_eval) - common_tunit(var_eval),
+      end = end(var_eval)
+    ))
   base_idx <- vec_seq_along(data)
   rep_times <- map_int(var_eval, length)
   df_idx <- rep.int(base_idx, times = rep_times)

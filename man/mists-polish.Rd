@@ -49,3 +49,8 @@ na_polish_key(wdi_ts, cutoff = .7)
 na_polish_index(wdi_ts, cutoff = .7)
 na_polish_index2(wdi_ts, cutoff = .7)
 }
+\seealso{
+Other missing value polishing functions: \code{\link{na_polish_auto}},
+  \code{\link{na_polish_metrics}}
+}
+\concept{missing value polishing functions}

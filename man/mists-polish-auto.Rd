@@ -44,4 +44,9 @@ na_polish_metrics(wdi_ts, wdi_after)
 na_polish_autotrace(wdi_ts, cutoff = .8, quiet = TRUE)
 }
 }
+\seealso{
+Other missing value polishing functions: \code{\link{na_polish_measures}},
+  \code{\link{na_polish_metrics}}
+}
+\concept{missing value polishing functions}
 \keyword{internal}

@@ -17,6 +17,7 @@ globalVariables(c("n_na", "pct_overall_na"))
 #' proportion of overall missings is less than the cutoff.
 #' @param na_fun Either [`na_starts_with`] or [`na_ends_with`].
 #'
+#' @family missing value polishing functions
 #' @details
 #' The proportion of overall missings is defined as the number of `NA` divided
 #' by the number of **measurements** (i.e. excluding key and index).
@@ -108,6 +109,7 @@ na_polish_index2 <- function(data, cutoff) {
 #' @param quiet If `FALSE`, report metrics at each step and pass of the polishing
 #' process. It requires the "cliapp" package to be installed.
 #'
+#' @family missing value polishing functions
 #' @rdname mists-polish-auto
 #' @export
 #' @examples
@@ -207,6 +209,7 @@ na_polish_funs <- function() {
 #' (the difference between `before` and `after`).
 #' * `prop_removed`, `nobs_removed`, `nrows_removed`, & `ncols_removed`: The
 #' proportion of removed observations over the overall observations.
+#' @family missing value polishing functions
 #' @details
 #' The metric used for measuring the effect of polishing events is
 #' `prop_na * prop_removed`. We'd like to minimise the loss by minimising both

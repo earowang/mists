@@ -45,9 +45,10 @@ na_rle_shift.list_of_rle_na <- function(x, n = 1L) {
 
 #' Expand and count run length encoding <`NA`>
 #'
-#' @param x An object returned by [`na_rle()`].
+#' @inheritParams na_rle_shift
 #'
 #' @rdname mists-na-rle-tbl
+#' @family rectangling functions
 #' @examples
 #' (x <- na_rle(c(1, NA, NA, 4:7, NA, NA, 10:15, NA)))
 #' na_rle_expand(x)
@@ -93,6 +94,7 @@ na_rle_table.list_of_rle_na <- function(x) {
 #' @param by A function applied to `indices`, such as tsibble's period functions
 #' and lubridate's friends.
 #'
+#' @family rectangling functions
 #' @return
 #' A tibble contains:
 #' * `indices`: aggregated indices.
@@ -109,8 +111,8 @@ na_rle_table.list_of_rle_na <- function(x) {
 #' nycflights13::weather %>% 
 #'   group_by(origin) %>% 
 #'   summarise(wind_gust_na = list_of_na_rle(wind_gust, time_hour)) %>% 
-#'   mutate(wind_gust_na_cut = na_rle_cut(wind_gust_na, by = tsibble::yearmonth)) %>% 
-#'   tidyr::unnest(cols = wind_gust_na_cut)
+#'   mutate(wind_gust_na = na_rle_cut(wind_gust_na, by = tsibble::yearmonth)) %>% 
+#'   tidyr::unnest(cols = wind_gust_na)
 #' @export
 na_rle_cut <- function(x, by) {
   UseMethod("na_rle_cut")

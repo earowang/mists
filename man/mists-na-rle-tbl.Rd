@@ -10,7 +10,7 @@ na_rle_expand(x)
 na_rle_table(x)
 }
 \arguments{
-\item{x}{An object returned by \code{\link[=na_rle]{na_rle()}}.}
+\item{x}{An object returned by \code{\link[=na_rle]{na_rle()}} or \code{\link[=list_of_na_rle]{list_of_na_rle()}}.}
 }
 \description{
 Expand and count run length encoding <\code{NA}>
@@ -20,3 +20,7 @@ Expand and count run length encoding <\code{NA}>
 na_rle_expand(x)
 na_rle_table(x)
 }
+\seealso{
+Other rectangling functions: \code{\link{na_rle_cut}}
+}
+\concept{rectangling functions}

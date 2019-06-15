@@ -7,7 +7,7 @@
 na_rle_cut(x, by)
 }
 \arguments{
-\item{x}{An object returned by \code{\link[=na_rle]{na_rle()}}.}
+\item{x}{An object returned by \code{\link[=na_rle]{na_rle()}} or \code{\link[=list_of_na_rle]{list_of_na_rle()}}.}
 
 \item{by}{A function applied to \code{indices}, such as tsibble's period functions
 and lubridate's friends.}
@@ -34,6 +34,10 @@ library(dplyr, warn.conflicts = FALSE)
 nycflights13::weather \%>\% 
   group_by(origin) \%>\% 
   summarise(wind_gust_na = list_of_na_rle(wind_gust, time_hour)) \%>\% 
-  mutate(wind_gust_na_cut = na_rle_cut(wind_gust_na, by = tsibble::yearmonth)) \%>\% 
-  tidyr::unnest(cols = wind_gust_na_cut)
+  mutate(wind_gust_na = na_rle_cut(wind_gust_na, by = tsibble::yearmonth)) \%>\% 
+  tidyr::unnest(cols = wind_gust_na)
 }
+\seealso{
+Other rectangling functions: \code{\link{na_rle_expand}}
+}
+\concept{rectangling functions}

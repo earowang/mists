@@ -26,3 +26,8 @@ The metric used for measuring the effect of polishing events is
 \code{prop_na * prop_removed}. We'd like to minimise the loss by minimising both
 \code{prop_na} and \code{prop_removed} over sequential polishing events.
 }
+\seealso{
+Other missing value polishing functions: \code{\link{na_polish_auto}},
+  \code{\link{na_polish_measures}}
+}
+\concept{missing value polishing functions}

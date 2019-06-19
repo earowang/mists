@@ -108,35 +108,43 @@
 <a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; 2 JFK                [2]             [2]             [2]</span></a>
 <a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt; 3 LGA                [2]             [2]             [2]</span></a></code></pre></div>
 </div>
-<div id="range-plots-and-extended-spinoplots" class="section level2">
+<div id="visualising-missings" class="section level2">
 <h2 class="hasAnchor">
-<a href="#range-plots-and-extended-spinoplots" class="anchor"></a>Range plots and extended spinoplots</h2>
+<a href="#visualising-missings" class="anchor"></a>Visualising missings?</h2>
 <p>How do those missings distribute and associate with others? The range plot below shows many of single <code>NA</code> runs occurs to <code>wind_dir</code> in 2013.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">na_runs_wind <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/mists-plot.html">na_rle_rangeplot</a></span>(<span class="dt">x =</span> wind_dir, <span class="dt">y =</span> origin, <span class="dt">shape =</span> <span class="dv">4</span>)</a></code></pre></div>
 <p><img src="reference/figures/README-rangeplot-1.png" width="875" style="display: block; margin: auto;"></p>
+<p>To highlight missings along with the original data, <code><a href="reference/layer_na_rle.html">layer_na_rle()</a></code> adds the layer fitting into the <strong>ggplot2</strong> pipeline.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ggplot2)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(nycflights13<span class="op">::</span>weather, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> time_hour, <span class="dt">y =</span> wind_gust)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(<span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="reference/layer_na_rle.html">layer_na_rle</a></span>(wind_gust, <span class="dt">data =</span> na_runs_wind, <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span>(origin <span class="op">~</span><span class="st"> </span>.) <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</a></code></pre></div>
+<p><img src="reference/figures/README-layerplot-1.png" width="875" style="display: block; margin: auto;"></p>
 <p>The spinoplot has been extended to examine the association of missing runs with a second variable through temporal overlapping. A large amount of missings in <code>wind_dir</code> intersects with <code>wind_gust</code> missings at all three places.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">na_runs_wind <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/mists-plot.html">na_rle_spinoplot</a></span>(<span class="dt">x =</span> wind_dir, <span class="dt">y =</span> wind_gust, <span class="dt">facets =</span> origin)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">na_runs_wind <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/mists-plot.html">na_rle_spinoplot</a></span>(<span class="dt">x =</span> wind_dir, <span class="dt">y =</span> wind_gust, <span class="dt">facets =</span> origin)</a></code></pre></div>
 <p><img src="reference/figures/README-spinoplot-1.png" width="875" style="display: block; margin: auto;"></p>
 </div>
 <div id="missing-data-polishing" class="section level2">
 <h2 class="hasAnchor">
 <a href="#missing-data-polishing" class="anchor"></a>Missing data polishing</h2>
-<p>Too many missings spread across variables and observations like the <code>wdi</code> dataset (world development indicators)? Every observation and measured variable contains <code>NA</code>, and almost half of the data goes missing. We would end up with no data if using listwise deletion.</p>
+<p>Too many missings are scattered across variables and observations like the <code>wdi</code> dataset (world development indicators)? Every observation and measured variable contains <code>NA</code>, and almost half of the data goes missing. We would end up with no data if using listwise deletion.</p>
 <pre><code>#&gt; # A tibble: 1 x 5
 #&gt;   prop_overall_na prop_cols_na prop_rows_na data_ncols data_nrows
 #&gt;             &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;int&gt;      &lt;int&gt;
 #&gt; 1           0.449            1            1         57      10850</code></pre>
 <p>Polishing columns and rows iteratively sweeps out chunks of <code>NA</code> but leaves some of them in. The index should be kept intact by slicing the ends only due to the temporal ordering. The <code><a href="reference/mists-polish-auto.html">na_polish_auto()</a></code> automates this polishing process by minimising the loss, defined as <em>the proportion of overall missings</em> weighted by <em>the proportion of removed observations</em>. It will iterate the following passes: <code><a href="reference/mists-polish.html">na_polish_measures()</a></code>, <code><a href="reference/mists-polish.html">na_polish_key()</a></code>, <code><a href="reference/mists-polish.html">na_polish_index()</a></code> until a tolerance value (close or equal to zero). The <code>na_polish_*()</code> family expects a <a href="http://tsibble.tidyverts.org">tsibble</a>, provided that polishing starts with tidy data.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">wdi_ts &lt;-<span class="st"> </span>wdi <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="st">  </span>tsibble<span class="op">::</span><span class="kw"><a href="https://tsibble.tidyverts.org/reference/as-tsibble.html">as_tsibble</a></span>(<span class="dt">key =</span> country_code, <span class="dt">index =</span> year)</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">wdi_after &lt;-<span class="st"> </span><span class="kw"><a href="reference/mists-polish-auto.html">na_polish_auto</a></span>(wdi_ts, <span class="dt">cutoff =</span> <span class="fl">.8</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="kw"><a href="reference/na_polish_metrics.html">na_polish_metrics</a></span>(wdi_ts, wdi_after)</a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; # A tibble: 1 x 6</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt;   prop_na nobs_na prop_removed nobs_removed nrows_removed ncols_removed</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt;     &lt;dbl&gt;   &lt;int&gt;        &lt;dbl&gt;        &lt;int&gt;         &lt;int&gt;         &lt;int&gt;</span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt; 1   0.636  220533        0.581       346948          5752             6</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">wdi_ts &lt;-<span class="st"> </span>wdi <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="st">  </span>tsibble<span class="op">::</span><span class="kw"><a href="https://tsibble.tidyverts.org/reference/as-tsibble.html">as_tsibble</a></span>(<span class="dt">key =</span> country_code, <span class="dt">index =</span> year)</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">wdi_after &lt;-<span class="st"> </span><span class="kw"><a href="reference/mists-polish-auto.html">na_polish_auto</a></span>(wdi_ts, <span class="dt">cutoff =</span> <span class="fl">.8</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="kw"><a href="reference/na_polish_metrics.html">na_polish_metrics</a></span>(wdi_ts, wdi_after)</a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt; # A tibble: 1 x 6</span></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt;   prop_na nobs_na prop_removed nobs_removed nrows_removed ncols_removed</span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt;     &lt;dbl&gt;   &lt;int&gt;        &lt;dbl&gt;        &lt;int&gt;         &lt;int&gt;         &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt; 1   0.636  220533        0.581       346948          5752             6</span></a></code></pre></div>
 </div>
 <div id="related-work" class="section level2">
 <h2 class="hasAnchor">

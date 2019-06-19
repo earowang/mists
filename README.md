@@ -70,7 +70,7 @@ na_runs_wind
 #> 3 LGA              [138]             [0]           [670]
 ```
 
-## Range plots and extended spinoplots
+## Visualising missings?
 
 How do those missings distribute and associate with others? The range
 plot below shows many of single `NA` runs occurs to `wind_dir` in 2013.
@@ -81,6 +81,20 @@ na_runs_wind %>%
 ```
 
 <img src="man/figures/README-rangeplot-1.png" style="display: block; margin: auto;" />
+
+To highlight missings along with the original data, `layer_na_rle()`
+adds the layer fitting into the **ggplot2** pipeline.
+
+``` r
+library(ggplot2)
+ggplot(nycflights13::weather, aes(x = time_hour, y = wind_gust)) +
+  geom_line(na.rm = TRUE) +
+  layer_na_rle(wind_gust, data = na_runs_wind, alpha = 0.5) +
+  facet_grid(origin ~ .) +
+  theme_bw()
+```
+
+<img src="man/figures/README-layerplot-1.png" style="display: block; margin: auto;" />
 
 The spinoplot has been extended to examine the association of missing
 runs with a second variable through temporal overlapping. A large amount
@@ -96,8 +110,8 @@ na_runs_wind %>%
 
 ## Missing data polishing
 
-Too many missings spread across variables and observations like the
-`wdi` dataset (world development indicators)? Every observation and
+Too many missings are scattered across variables and observations like
+the `wdi` dataset (world development indicators)? Every observation and
 measured variable contains `NA`, and almost half of the data goes
 missing. We would end up with no data if using listwise deletion.
 

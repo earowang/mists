@@ -175,9 +175,8 @@ na_polish_auto_impl <- function(data, cutoff, tol = .1, funs = na_polish_funs(),
         step_metric = step_metrics[!rm_funs],
         pass_metric = tol0
       )
-    if (!quiet) {
-      cli_report(p, results[[p]])
-    }
+
+    if (!quiet) cli_report(p, results[[p]])
   }
 
   if (expect == "data") {
@@ -281,6 +280,7 @@ cli_report <- function(npass, tbl) {
   if (!is_installed("cliapp")) {
     abort("`quiet = FALSE` requires the \"cliapp\" packge to be installed.")
   }
+  if (vec_size(tbl) == 0) return()
   fmt_steps <- 
     sprintf(
       "{arg %s} {emph %.3f * %.3f = %.3f}", 

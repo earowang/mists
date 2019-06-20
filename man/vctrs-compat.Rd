@@ -17,9 +17,9 @@
 
 \method{vec_cast.list}{rle_na}(x, to, ...)
 
-\method{vec_math}{rle_na}(fun, x, ...)
+\method{vec_math}{rle_na}(.fn, x, ...)
 
-\method{vec_math}{list_of_rle_na}(fun, x, ...)
+\method{vec_math}{list_of_rle_na}(.fn, x, ...)
 
 \method{obj_print_data}{rle_na}(x, ...)
 

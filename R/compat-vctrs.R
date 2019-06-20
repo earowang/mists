@@ -40,7 +40,7 @@ as_list_of.rle_na <- function(x, ...) {
 #' @method vec_cast.list rle_na
 #' @export
 #' @export vec_cast.list.rle_na
-vec_cast.list.rle_na <- function(x, to) {
+vec_cast.list.rle_na <- function(x, to, ...) {
   as_list_of(x)
 }
 

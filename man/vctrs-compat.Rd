@@ -15,7 +15,7 @@
 \usage{
 \method{as_list_of}{rle_na}(x, ...)
 
-\method{vec_cast.list}{rle_na}(x, to)
+\method{vec_cast.list}{rle_na}(x, to, ...)
 
 \method{vec_math}{rle_na}(fun, x, ...)
 

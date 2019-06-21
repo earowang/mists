@@ -112,6 +112,16 @@ obj_print_data.rle_na <- function(x, ...) {
 
 #' @rdname vctrs-compat
 #' @keywords internal
+#' @method obj_print_header rle_na
+#' @export
+#' @export obj_print_header.rle_na
+obj_print_header.rle_na <- function(x, ...) {
+  cat_line("<", vec_ptype_full(x), "[", length(x), "]>")
+  invisible(x)
+}
+
+#' @rdname vctrs-compat
+#' @keywords internal
 #' @method vec_ptype_full rle_na
 #' @export
 #' @export vec_ptype_full.rle_na

@@ -7,6 +7,7 @@
 \alias{vec_math.rle_na}
 \alias{vec_math.list_of_rle_na}
 \alias{obj_print_data.rle_na}
+\alias{obj_print_header.rle_na}
 \alias{vec_ptype_full.rle_na}
 \alias{vec_ptype_abbr.rle_na}
 \alias{vec_ptype_abbr.list_of_rle_na}
@@ -22,6 +23,8 @@
 \method{vec_math}{list_of_rle_na}(.fn, x, ...)
 
 \method{obj_print_data}{rle_na}(x, ...)
+
+\method{obj_print_header}{rle_na}(x, ...)
 
 \method{vec_ptype_full}{rle_na}(x)
 

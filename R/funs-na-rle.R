@@ -278,6 +278,11 @@ max.rle_na <- function(x, ...) {
 }
 
 #' @export
+range.rle_na <- function(x, ...) {
+  vec_math_base("range", na_rle_lengths(x))
+}
+
+#' @export
 min.list_of_rle_na <- function(x, ...) {
   map_int(x, min)
 }
@@ -285,6 +290,11 @@ min.list_of_rle_na <- function(x, ...) {
 #' @export
 max.list_of_rle_na <- function(x, ...) {
   map_int(x, max)
+}
+
+#' @export
+range.list_of_rle_na <- function(x, ...) {
+  as_list_of(map(na_rle_lengths(x), function(.x) vec_math_base("range", .x, ...)))
 }
 
 #' @export

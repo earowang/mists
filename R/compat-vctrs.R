@@ -65,13 +65,7 @@ vec_math.list_of_rle_na <- function(.fn, x, ...) {
   if (vec_depth(na_rle_lengths_x) == 3) { # sum()
     na_rle_lengths_x <- vec_c(!!! na_rle_lengths_x)
   }
-  switch(.fn,
-    range = as_list_of(
-      map(na_rle_lengths_x, function(.x) vec_math_base(.fn, .x, ...))
-    ),
-    # is.finite = TRUE, # for ggplot2 internals
-    map_dbl(na_rle_lengths_x, function(.x) vec_math_base(.fn, .x, ...))
-  )
+  map_dbl(na_rle_lengths_x, function(.x) vec_math_base(.fn, .x, ...))
 }
 
 # #' @rdname vctrs-compat

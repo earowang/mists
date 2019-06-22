@@ -223,10 +223,11 @@ layer_na_rle <- function(var, data, ...) {
   }
   cols_non_na_rle <- names(data[!map_lgl(data, is_list_of_rle_na)])
   data <- data[cols_non_na_rle]
+  common_tunit <- common_tunit(var_eval)
   na_rle_df <- 
     new_data_frame(list(
-      start = start(var_eval) - common_tunit(var_eval),
-      end = end(var_eval)
+      start = start(var_eval) - common_tunit,
+      end = end(var_eval) + common_tunit
     ))
   base_idx <- vec_seq_along(data)
   rep_times <- map_int(var_eval, length)

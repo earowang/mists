@@ -168,7 +168,7 @@ na_rle_ends <- function(x) {
 #' @export
 na_rle_ends.rle_na <- function(x) {
   rle_lengths <- na_rle_lengths(x)
-  rle_indices <- na_rle_indices(x)
+  rle_indices <- na_rle_indices(x) - 1
   tunit <- tunit(x)
   vec_c(!!! map2(rle_indices, rle_lengths, function(.x, .y) .x + tunit * .y))
 }
@@ -187,7 +187,7 @@ new_rle_na <- function(x = list(lengths = integer(), indices = double()),
 new_list_of_rle_na <- function(...) {
   new_list_of(
     list2(...),
-    ptype = list(),
+    ptype = new_rle_na(),
     class = "list_of_rle_na"
   )
 }

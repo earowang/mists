@@ -3,11 +3,12 @@
 \name{vctrs-compat}
 \alias{vctrs-compat}
 \alias{as_list_of.rle_na}
+\alias{vec_type2.rle_na}
+\alias{vec_type2.list_of_rle_na}
 \alias{vec_cast.list.rle_na}
-\alias{vec_math.rle_na}
-\alias{vec_math.list_of_rle_na}
+\alias{vec_restore.rle_na}
+\alias{vec_proxy.rle_na}
 \alias{obj_print_data.rle_na}
-\alias{obj_print_header.rle_na}
 \alias{vec_ptype_full.rle_na}
 \alias{vec_ptype_abbr.rle_na}
 \alias{vec_ptype_abbr.list_of_rle_na}
@@ -16,15 +17,17 @@
 \usage{
 \method{as_list_of}{rle_na}(x, ...)
 
+\method{vec_type2}{rle_na}(x, y, ...)
+
+\method{vec_type2}{list_of_rle_na}(x, y, ...)
+
 \method{vec_cast.list}{rle_na}(x, to, ...)
 
-\method{vec_math}{rle_na}(.fn, x, ...)
+\method{vec_restore}{rle_na}(x, to, ..., n = NULL)
 
-\method{vec_math}{list_of_rle_na}(.fn, x, ...)
+\method{vec_proxy}{rle_na}(x)
 
 \method{obj_print_data}{rle_na}(x, ...)
-
-\method{obj_print_header}{rle_na}(x, ...)
 
 \method{vec_ptype_full}{rle_na}(x)
 

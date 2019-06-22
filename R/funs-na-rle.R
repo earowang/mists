@@ -34,7 +34,7 @@ na_rle_shift <- function(x, n = 1L) {
 #' @export
 na_rle_shift.rle_na <- function(x, n = 1L) {
   rle_indices <- na_rle_indices(x)
-  x[["indices"]] <- rle_indices + sign(n) * tunit(x) * abs(n)
+  field(x, "indices") <- rle_indices + sign(n) * tunit(x) * abs(n)
   x
 }
 
@@ -165,7 +165,7 @@ tbl_to_na_rle <- function(data, interval) {
 
 # Work around for tsibble period functions not integrating vctrs yet
 indices_restore <- function(x, to) {
-  class(x$indices) <- class(to$indices)
+  class(x$indices) <- class(field(to, "indices"))
   x
 }
 
@@ -258,11 +258,6 @@ setdiff.list_of_rle_na <- function(x, y, ...) {
   new_list_of_rle_na(!!! map2(x, y, setdiff.rle_na, ...))
 }
 
-#' @export
-length.rle_na <- function(x) { # for displaying the size of runs
-  length(na_rle_lengths(x))
-}
-
 # `min()` and `max()` better to be defined through `vec_math()`, but seems that
 # they require the input to be orderable. Not the case for rle_na, so
 # overwrite `vctrs_vctr`.
@@ -295,6 +290,26 @@ max.list_of_rle_na <- function(x, ...) {
 #' @export
 range.list_of_rle_na <- function(x, ...) {
   as_list_of(map(na_rle_lengths(x), function(.x) vec_math_base("range", .x, ...)))
+}
+
+#' @export
+sum.rle_na <- function(x, ...) {
+  vec_math_base("sum", na_rle_lengths(x))
+}
+
+#' @export
+sum.list_of_rle_na <- function(x, ...) {
+  map_dbl(x, sum)
+}
+
+#' @export
+mean.rle_na <- function(x, ...) {
+  vec_math_base("mean", na_rle_lengths(x))
+}
+
+#' @export
+mean.list_of_rle_na <- function(x, ...) {
+  map_dbl(x, mean)
 }
 
 #' @export

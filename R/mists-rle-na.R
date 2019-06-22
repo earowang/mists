@@ -25,7 +25,6 @@ na_rle_impl <- function(x) {
 #' * `mean()`: the average `NA`s per run.
 #' * `min()` & `max()`: the minimum and maximum of runs.
 #' * `median()` & `quantile()`
-#' * Other [Math] group generic
 #'
 #' @rdname na-rle
 #' @examples
@@ -37,11 +36,16 @@ na_rle_impl <- function(x) {
 #' na_rle(df$temp) # indexed by the default positions
 #' (x <- na_rle(df$temp, index_by = df$year)) # indexed by a variable
 #'
+#' # getters
 #' na_rle_inverse(x)
 #' na_rle_lengths(x)
 #' na_rle_starts(x)
 #' na_rle_ends(x)
 #'
+#' # subsetting
+#' x[1:2]
+#'
+#' # math operations
 #' length(x) # the number of runs
 #' sum(x) # the total number of `NA`
 #' range(x) # min & max runs
@@ -107,12 +111,13 @@ na_rle_inverse <- function(x) {
 
 #' @export
 na_rle_inverse.rle_na <- function(x) {
-  na_rle_reverse(x)[["indices"]]
+  field(na_rle_reverse(x), "indices")
 }
 
 #' @export
 na_rle_inverse.list_of_rle_na <- function(x) {
-  map(x, na_rle_inverse) # should wrap into as_list_of(), but vctrs with integer date issue
+ # TODO: should wrap into as_list_of(), but vctrs with integer date issue
+  map(x, na_rle_inverse)
 }
 
 #' @rdname na-rle
@@ -123,7 +128,7 @@ na_rle_lengths <- function(x) {
 
 #' @export
 na_rle_lengths.rle_na <- function(x) {
-  x[["lengths"]]
+  field(x, "lengths")
 }
 
 #' @export
@@ -140,7 +145,7 @@ na_rle_indices <- function(x) {
 
 #' @export
 na_rle_indices.rle_na <- function(x) {
-  x[["indices"]]
+  field(x, "indices")
 }
 
 #' @export
@@ -173,9 +178,10 @@ na_rle_ends.list_of_rle_na <- function(x) {
   as_list_of(map(x, na_rle_ends.rle_na))
 }
 
-new_rle_na <- function(x, interval) {
+new_rle_na <- function(x = list(lengths = integer(), indices = double()),
+  interval = new_interval()) {
   rle_na_assert(x, interval)
-  new_vctr(x, "interval" = interval, class = "rle_na")
+  new_rcrd(x, "interval" = interval, class = "rle_na")
 }
 
 new_list_of_rle_na <- function(...) {
@@ -187,7 +193,7 @@ new_list_of_rle_na <- function(...) {
 }
 
 rle_na_assert <- function(x, interval) {
-  if (is_false(is_bare_list(x) && all(has_name(x, c("lengths", "indices"))))) {
+  if (is_false(is_bare_list(x) && all(fields(x) == c("lengths", "indices")))) {
     abort("Run length encoding must be a named list with `lengths` and `indices`.")
   }
   if (is_null(interval) || is_missing(interval)) {

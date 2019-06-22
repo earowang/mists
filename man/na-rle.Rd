@@ -51,7 +51,6 @@ Many math operations can be applied to objects returned from \code{na_rle()} and
 \item \code{mean()}: the average \code{NA}s per run.
 \item \code{min()} & \code{max()}: the minimum and maximum of runs.
 \item \code{median()} & \code{quantile()}
-\item Other \link{Math} group generic
 }
 }
 
@@ -64,11 +63,16 @@ df
 na_rle(df$temp) # indexed by the default positions
 (x <- na_rle(df$temp, index_by = df$year)) # indexed by a variable
 
+# getters
 na_rle_inverse(x)
 na_rle_lengths(x)
 na_rle_starts(x)
 na_rle_ends(x)
 
+# subsetting
+x[1:2]
+
+# math operations
 length(x) # the number of runs
 sum(x) # the total number of `NA`
 range(x) # min & max runs

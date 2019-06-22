@@ -15,7 +15,7 @@ test_that("na_rle_shift()", {
   x <- na_rle(c(1, rep(NA, 4), 6:7, NA, 9:10))
   expected <- list(lengths = c(4L, 1L), indices = c(2L, 8L))
   expect_equivalent(
-    na_rle_shift(x, n = 2L)$indices,
+    na_rle_indices(na_rle_shift(x, n = 2L)),
     expected$indices + 2L
   )
   expect_identical(
@@ -23,7 +23,7 @@ test_that("na_rle_shift()", {
     x %@% "interval"
   )
   expect_equivalent(
-    na_rle_shift(x, n = -2L)$indices,
+    na_rle_indices(na_rle_shift(x, n = -2L)),
     expected$indices - 2L
   )
   expect_identical(
@@ -66,11 +66,11 @@ test_that("set operations", {
     )$indices)
   )
   expect_equivalent(
-    setdiff(x_rle, y_rle)$indices,
+    na_rle_indices(setdiff(x_rle, y_rle)),
     setdiff(which(is.na(x)), which(is.na(y)))
   )
   expect_equivalent(
-    setdiff(y_rle, x_rle)$indices,
+    na_rle_indices(setdiff(y_rle, x_rle)),
     setdiff(which(is.na(y)), which(is.na(x)))[-2]
   )
 })

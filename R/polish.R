@@ -42,6 +42,7 @@ na_polish_measures <- function(data, cutoff) {
 na_polish_key <- function(data, cutoff) {
   na_polish_assert(data, cutoff)
   key_vars <- key(data)
+  if (is_empty(key_vars)) return(data)
   non_idx_data <- select(as_tibble(data), setdiff(names(data), index_var(data)))
   keyed_data <- new_grouped_df(non_idx_data, groups = key_data(data))
   add_prop_na <- 
@@ -65,15 +66,20 @@ na_polish_index <- function(data, cutoff, na_fun = na_starts_with) {
   non_idx_data <- select(as_tibble(data), setdiff(names(data), index_var(data)))
 
   keyed_data <- new_grouped_df(data, groups = key_data(data))
-  na_blocks <- summarise_all(keyed_data, na_fun)
+  na_blocks <- group_by(summarise_all(keyed_data, na_fun), !!! key(data))
   add_prop_na <- 
     mutate(
-      group_nest(na_blocks, !!! key(data), .key = "n_na"),
+      group_nest(na_blocks, .key = "n_na"),
       "pct_overall_na" := map_dbl(n_na, sum) / keyed_nobs,
       "n_na" := floor(pct_overall_na * idx_len)
     )
   index_pass <- filter(add_prop_na, pct_overall_na < cutoff)
-  full_data <- left_join(data, index_pass, by = key_vars(data))
+  key_vars <- key_vars(data)
+  if (is_empty(key_vars)) {
+    full_data <- mutate(data, !!! index_pass)
+  } else {
+    full_data <- left_join(data, index_pass, by = key_vars)
+  }
   grped_data <- group_by_key(full_data)
   if (is_true(all.equal(na_fun, na_starts_with))) {
     filter_data <- filter(grped_data,

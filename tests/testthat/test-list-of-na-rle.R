@@ -36,4 +36,3 @@ test_that("as.list() for list_of_rle_na", {
     as.list(actual)
   )
 })
-

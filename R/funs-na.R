@@ -4,7 +4,7 @@
 #'
 #' @rdname mists-na-helpers
 #' @examples
-#' x <- c(rep(NA, 4), 10:6, NA, 4:1, NA)
+#' x <- c(rep(NA, 4), 10:6, NA, NA, 4:1, NA)
 #' na_starts_with(x)
 #' @export
 na_starts_with <- function(x) {

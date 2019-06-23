@@ -1,3 +1,9 @@
+test_that("as_tibble()", {
+  x <- na_rle(c(1, rep(NA, 4), 6:7, NA, 9:10))
+  expected <- tibble(lengths = c(4L, 1L), indices = c(2L, 8L))
+  expect_identical(as_tibble(x), expected)
+})
+
 test_that("na_rle_expand()", {
   x <- na_rle(c(1, rep(NA, 4), 6:7, NA, 9:10))
   expected <- tibble(lengths = c(rep.int(4L, 4), 1L), indices = c(2:5, 8L))
@@ -11,9 +17,21 @@ test_that("na_rle_table()", {
   expect_equal(na_rle_table(x), expected)
 })
 
+test_that("na_rle_cut()", {
+  x <- na_rle(c(1, rep(NA, 4), 6:7, NA, 9:10))
+  by1 <- function(x) x %/% 2
+  expected1 <- 
+    tibble(indices = c(1:2, 4), n_run = rep.int(1L, 3), n_na = c(2L, 2L, 1L))
+  expect_identical(na_rle_cut(x, by1), expected1)
+  by2 <- function(x) x %/% 10
+  expected2 <- tibble(indices = 0, n_run = 2L, n_na = 5L)
+  expect_identical(na_rle_cut(x, by2), expected2)
+})
+
 test_that("na_rle_shift()", {
   x <- na_rle(c(1, rep(NA, 4), 6:7, NA, 9:10))
   expected <- list(lengths = c(4L, 1L), indices = c(2L, 8L))
+  expect_identical(na_rle_shift(x, n = 0L), x)
   expect_equivalent(
     na_rle_indices(na_rle_shift(x, n = 2L)),
     expected$indices + 2L
@@ -38,6 +56,8 @@ test_that("math operations", {
   expect_identical(sum(actual), sum(is.na(x)))
   expect_true(mean(actual) != mean(is.na(x)))
   expect_identical(mean(actual), sum(is.na(x)) / 2)
+  expect_identical(median(actual), (4 + 1) / 2)
+  expect_identical(quantile(actual), quantile(na_rle_lengths(actual)))
   expect_identical(min(actual), 1L)
   expect_identical(max(actual), 4L)
 })

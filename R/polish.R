@@ -1,4 +1,4 @@
-globalVariables(c("n_na", "pct_overall_na"))
+globalVariables(c(".n_na", ".pct_overall_na"))
 
 #' Missing data polishing for tsibble
 #'
@@ -42,17 +42,20 @@ na_polish_measures <- function(data, cutoff) {
 na_polish_key <- function(data, cutoff) {
   na_polish_assert(data, cutoff)
   key_vars <- key(data)
-  if (is_empty(key_vars)) return(data)
   non_idx_data <- select(as_tibble(data), setdiff(names(data), index_var(data)))
   keyed_data <- new_grouped_df(non_idx_data, groups = key_data(data))
   add_prop_na <- 
     mutate(
-      group_nest(keyed_data, .key = "pct_overall_na"),
-      "pct_overall_na" := map_dbl(pct_overall_na, prop_overall_na)
+      group_nest(keyed_data, .key = ".pct_overall_na"),
+      ".pct_overall_na" := map_dbl(.pct_overall_na, prop_overall_na)
     )
-  key_vals <- filter(add_prop_na, pct_overall_na < cutoff)
-  key_df <- select(key_vals, !!! key_vars)
-  right_join(data, key_df, by = key_vars(data))
+  key_vals <- filter(add_prop_na, .pct_overall_na < cutoff)
+  if (is_empty(key_vars)) {
+    data[vec_size(key_vals) != 0, ]
+  } else {
+    key_df <- select(key_vals, !!! key_vars)
+    right_join(data, key_df, by = key_vars(data))
+  }
 }
 
 #' @rdname mists-polish
@@ -62,20 +65,22 @@ na_polish_key <- function(data, cutoff) {
 na_polish_index <- function(data, cutoff, na_fun = na_starts_with) {
   na_polish_assert(data, cutoff)
   idx_len <- map_int(key_rows(data), length)
-  keyed_nobs <- idx_len * NCOL(data)
+  key_vars <- key_vars(data)
+  keyed_nobs <- idx_len * (NCOL(data) - length(key_vars) - 1)
   non_idx_data <- select(as_tibble(data), setdiff(names(data), index_var(data)))
 
   keyed_data <- new_grouped_df(data, groups = key_data(data))
   na_blocks <- group_by(summarise_all(keyed_data, na_fun), !!! key(data))
   add_prop_na <- 
     mutate(
-      group_nest(na_blocks, .key = "n_na"),
-      "pct_overall_na" := map_dbl(n_na, sum) / keyed_nobs,
-      "n_na" := floor(pct_overall_na * idx_len)
+      group_nest(na_blocks, .key = ".n_na"),
+      ".pct_overall_na" := map_dbl(.n_na, sum) / keyed_nobs,
+      ".n_na" := floor(.pct_overall_na * idx_len)
     )
-  index_pass <- filter(add_prop_na, pct_overall_na < cutoff)
-  key_vars <- key_vars(data)
-  if (is_empty(key_vars)) {
+  index_pass <- filter(add_prop_na, .pct_overall_na < cutoff)
+  if (vec_size(index_pass) == 0) {
+    return(data[0L, ])
+  } else if (is_empty(key_vars)) {
     full_data <- mutate(data, !!! index_pass)
   } else {
     full_data <- left_join(data, index_pass, by = key_vars)
@@ -83,14 +88,14 @@ na_polish_index <- function(data, cutoff, na_fun = na_starts_with) {
   grped_data <- group_by_key(full_data)
   if (is_true(all.equal(na_fun, na_starts_with))) {
     filter_data <- filter(grped_data,
-      !! index(data) >= min(!! index(data)) + n_na)
+      !! index(data) >= min(!! index(data)) + .n_na)
   } else if (is_true(all.equal(na_fun, na_ends_with))) {
     filter_data <- filter(grped_data,
-      !! index(data) <= max(!! index(data)) - n_na)
+      !! index(data) <= max(!! index(data)) - .n_na)
   } else {
     abort("`na_fun` requires either `na_starts_with` or `na_ends_with`.")
   }
-  select(ungroup(filter_data), -n_na, -pct_overall_na)
+  select(ungroup(filter_data), -.n_na, -.pct_overall_na)
 }
 
 #' @rdname mists-polish
@@ -263,7 +268,7 @@ na_polish_metrics <- function(before, after) {
 }
 
 na_polish_assert <- function(data, cutoff) {
-  if (NROW(data) == 0L) {
+  if (vec_size(data) == 0L) {
     abort("`data` can't be empty.")
   }
   if (!is_tsibble(data)) {
@@ -284,7 +289,7 @@ counter <- function() {
 
 cli_report <- function(npass, tbl) {
   if (!is_installed("cliapp")) {
-    abort("`quiet = FALSE` requires the \"cliapp\" packge to be installed.")
+    abort("`quiet = FALSE` requires the \"cliapp\" package to be installed.")
   }
   if (vec_size(tbl) == 0) return()
   fmt_steps <- 

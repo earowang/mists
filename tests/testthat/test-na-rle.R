@@ -7,6 +7,7 @@ test_that("na_rle() for empty `x` with default `index_by`", {
   expect_identical(field(x, "lengths"), expected$lengths)
   expect_identical(field(x, "indices"), expected$indices)
   expect_identical(x %@% "interval", new_interval())
+  expect_identical(na_rle_inverse(x), integer())
 })
 
 test_that("na_rle() for empty `x` with custom `index_by`", {

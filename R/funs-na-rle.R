@@ -2,7 +2,7 @@ globalVariables(c("n", "indices2"))
 
 #' @export
 as_tibble.rle_na <- function(x, ...) {
-  as_tibble(unclass(x))
+  as_tibble(vec_data(x))
 }
 
 #' @export
@@ -360,11 +360,11 @@ is_list_of_rle_na <- function(x) {
 }
 
 na_rle_reverse <- function(x) {
-  if (is_empty(x)) {
-    return(list("lengths" = x[["lengths"]], "indices" = x[["indices"]]))
-  }
   rle_lengths <- na_rle_lengths(x)
   rle_indices <- na_rle_indices(x)
+  if (is_empty(x)) {
+    return(list("lengths" = rle_lengths, "indices" = rle_indices))
+  }
   full_seq <- map2(rle_indices, rle_lengths,
     function(.x, .y) seq(.x, by = tunit(x), length.out = .y))
   rep_lengths <- rep.int(rle_lengths, map_int(full_seq, vec_size))

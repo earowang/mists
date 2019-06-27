@@ -128,7 +128,7 @@ vec_proxy.rle_na <- function(x) {
 #' @export
 #' @export obj_print_data.rle_na
 obj_print_data.rle_na <- function(x, ...) {
-  over10 <- length(x) > 10
+  over10 <- vec_size(x) > 10
   len <- na_rle_lengths(x)
   idx <- na_rle_indices(x)
   cat(

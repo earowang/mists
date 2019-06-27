@@ -71,8 +71,8 @@ na_rle <- function(x = double(), index_by = seq_along(x), interval = NULL) {
     ))
   }
 
-  if (vec_duplicate_any(index_by)) {
-    abort("`index_by` only takes unique values.")
+  if (vec_duplicate_any(index_by) || anyNA(index_by)) {
+    abort("`index_by` requires unique non-NA indices.")
   }
   ord <- vec_order(index_by)
   x <- x[ord]

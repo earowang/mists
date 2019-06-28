@@ -22,22 +22,22 @@ as_list_of.rle_na <- function(x, ...) {
 
 #' @rdname vctrs-compat
 #' @keywords internal
-#' @method vec_type2 rle_na
+#' @method vec_ptype2 rle_na
 #' @export
-#' @export vec_type2.rle_na
-vec_type2.rle_na <- function(x, y, ...) {
-  UseMethod("vec_type2.rle_na", y)
+#' @export vec_ptype2.rle_na
+vec_ptype2.rle_na <- function(x, y, ...) {
+  UseMethod("vec_ptype2.rle_na", y)
 }
 
-#' @method vec_type2.rle_na default
+#' @method vec_ptype2.rle_na default
 #' @export
-vec_type2.rle_na.default <- function(x, y, ..., x_arg = "", y_arg = "") {
+vec_ptype2.rle_na.default <- function(x, y, ..., x_arg = "", y_arg = "") {
   stop_incompatible_type(x, y, ..., x_arg = x_arg, y_arg = y_arg)
 }
 
-#' @method vec_type2.rle_na rle_na
+#' @method vec_ptype2.rle_na rle_na
 #' @export
-vec_type2.rle_na.rle_na <- function(x, y, ...) {
+vec_ptype2.rle_na.rle_na <- function(x, y, ...) {
   stop_incompatible_type(
     x, y, ...,
     details = "Please use `vctrs::as_list_of()` instead."
@@ -46,28 +46,28 @@ vec_type2.rle_na.rle_na <- function(x, y, ...) {
 
 #' @rdname vctrs-compat
 #' @keywords internal
-#' @method vec_type2 list_of_rle_na
+#' @method vec_ptype2 list_of_rle_na
 #' @export
-#' @export vec_type2.list_of_rle_na
-vec_type2.list_of_rle_na <- function(x, y, ...) {
-  UseMethod("vec_type2.list_of_rle_na", y)
+#' @export vec_ptype2.list_of_rle_na
+vec_ptype2.list_of_rle_na <- function(x, y, ...) {
+  UseMethod("vec_ptype2.list_of_rle_na", y)
 }
 
-#' @method vec_type2.list_of_rle_na default
+#' @method vec_ptype2.list_of_rle_na default
 #' @export
-vec_type2.list_of_rle_na.default <- function(x, y, ..., x_arg = "", y_arg = "") {
+vec_ptype2.list_of_rle_na.default <- function(x, y, ..., x_arg = "", y_arg = "") {
   stop_incompatible_type(x, y, ..., x_arg = x_arg, y_arg = y_arg)
 }
 
-# #' @method vec_type2.list_of_rle_na rle_na
+# #' @method vec_ptype2.list_of_rle_na rle_na
 # #' @export
-# vec_type2.list_of_rle_na.rle_na <- function(x, y, ...) {
+# vec_ptype2.list_of_rle_na.rle_na <- function(x, y, ...) {
 #   new_list_of_rle_na(list2(!!! x, y))
 # }
 
-# #' @method vec_type2.list_of_rle_na list_of_rle_na
+# #' @method vec_ptype2.list_of_rle_na list_of_rle_na
 # #' @export
-# vec_type2.list_of_rle_na.list_of_rle_na <- function(x, y, ...) {
+# vec_ptype2.list_of_rle_na.list_of_rle_na <- function(x, y, ...) {
 #   new_list_of_rle_na()
 # }
 

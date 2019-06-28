@@ -3,8 +3,8 @@
 \name{vctrs-compat}
 \alias{vctrs-compat}
 \alias{as_list_of.rle_na}
-\alias{vec_type2.rle_na}
-\alias{vec_type2.list_of_rle_na}
+\alias{vec_ptype2.rle_na}
+\alias{vec_ptype2.list_of_rle_na}
 \alias{vec_cast.list.rle_na}
 \alias{vec_restore.rle_na}
 \alias{obj_print_data.rle_na}
@@ -16,9 +16,9 @@
 \usage{
 \method{as_list_of}{rle_na}(x, ...)
 
-\method{vec_type2}{rle_na}(x, y, ...)
+\method{vec_ptype2}{rle_na}(x, y, ...)
 
-\method{vec_type2}{list_of_rle_na}(x, y, ...)
+\method{vec_ptype2}{list_of_rle_na}(x, y, ...)
 
 \method{vec_cast.list}{rle_na}(x, to, ...)
 

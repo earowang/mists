@@ -27,7 +27,7 @@ Imports:
     ggplot2,
     rlang,
     tsibble (>= 0.8.0),
-    vctrs
+    vctrs (>= 0.1.99)
 Suggests: 
     cliapp,
     covr,

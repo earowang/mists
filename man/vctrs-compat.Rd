@@ -7,7 +7,6 @@
 \alias{vec_type2.list_of_rle_na}
 \alias{vec_cast.list.rle_na}
 \alias{vec_restore.rle_na}
-\alias{vec_proxy.rle_na}
 \alias{obj_print_data.rle_na}
 \alias{vec_ptype_full.rle_na}
 \alias{vec_ptype_abbr.rle_na}
@@ -24,8 +23,6 @@
 \method{vec_cast.list}{rle_na}(x, to, ...)
 
 \method{vec_restore}{rle_na}(x, to, ..., n = NULL)
-
-\method{vec_proxy}{rle_na}(x)
 
 \method{obj_print_data}{rle_na}(x, ...)
 

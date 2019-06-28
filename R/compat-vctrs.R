@@ -80,30 +80,6 @@ vec_cast.list.rle_na <- function(x, to, ...) {
   as_list_of(x)
 }
 
-# #' @rdname vctrs-compat
-# #' @keywords internal
-# #' @method vec_math rle_na
-# #' @export
-# #' @export vec_math.rle_na
-# vec_math.rle_na <- function(.fn, x, ...) {
-#   na_rle_lengths_x <- na_rle_lengths(x)
-#   vec_math_base(.fn, na_rle_lengths_x, ...)
-# }
-#
-# #' @rdname vctrs-compat
-# #' @keywords internal
-# #' @method vec_math list_of_rle_na
-# #' @export
-# #' @export vec_math.list_of_rle_na
-# vec_math.list_of_rle_na <- function(.fn, x, ...) {
-#   na_rle_lengths_x <- na_rle_lengths(x)
-#   # bug in vctrs::vec_math? `x` becomes a list of lists
-#   if (vec_depth(na_rle_lengths_x) == 3) { # sum()
-#     na_rle_lengths_x <- vec_c(!!! na_rle_lengths_x)
-#   }
-#   map_dbl(na_rle_lengths_x, function(.x) vec_math_base(.fn, .x, ...))
-# }
-
 #' @rdname vctrs-compat
 #' @keywords internal
 #' @method vec_restore rle_na
@@ -111,15 +87,6 @@ vec_cast.list.rle_na <- function(x, to, ...) {
 #' @export vec_restore.rle_na
 vec_restore.rle_na <- function(x, to, ..., n = NULL) {
   new_rle_na(vec_data(x), interval = to %@% "interval")
-}
-
-#' @rdname vctrs-compat
-#' @keywords internal
-#' @method vec_proxy rle_na
-#' @export
-#' @export vec_proxy.rle_na
-vec_proxy.rle_na <- function(x) {
-  new_data_frame(unclass(x))
 }
 
 #' @rdname vctrs-compat

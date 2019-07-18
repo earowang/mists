@@ -153,24 +153,23 @@ process. It requires the "cliapp" package to be installed.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>wdi_ts</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tsibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tsibble.tidyverts.org/reference/as-tsibble.html'>as_tsibble</a></span>(<span class='no'>wdi</span>, <span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>country_code</span>, <span class='kw'>index</span> <span class='kw'>=</span> <span class='no'>year</span>)
-<span class='no'>wdi_after</span> <span class='kw'>&lt;-</span> <span class='fu'>na_polish_auto</span>(<span class='no'>wdi_ts</span>, <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>.8</span>)</div><div class='output co'>#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
-#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610
-#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
-#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── Pass 1 ──────────────────────────────────────────────────────────────────────</span></div><div class='output co'>#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
-#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='output co'>#&gt; <span class='message'>1. `na_polish_index()`    0.671 * 0.352 = 0.236</span></div><div class='output co'>#&gt; <span class='message'>2. `na_polish_measures()` 0.879 * 0.109 = 0.096</span></div><div class='output co'>#&gt; <span class='message'>3. `na_polish_index2()`   0.547 * 0.114 = 0.062</span></div><div class='output co'>#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
-#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='output co'>#&gt; <span class='message'>✔ 0.334</span></div><div class='output co'>#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
-#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610
-#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
-#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610
-#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
-#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610
-#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
-#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── Pass 2 ──────────────────────────────────────────────────────────────────────</span></div><div class='output co'>#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
-#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='output co'>#&gt; <span class='message'>1. `na_polish_index()`  0.415 * 0.156 = 0.065</span></div><div class='output co'>#&gt; <span class='message'>2. `na_polish_index2()` 0.243 * 0.054 = 0.013</span></div><div class='output co'>#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
-#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='output co'>#&gt; <span class='message'>✔ 0.076</span></div><div class='output co'>#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
-#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610
-#&gt; Error in processx_conn_write(con, str, sep, encoding) : 
-#&gt;   Cannot write connection: Bad file descriptor at processx-connection.c:610</div><div class='input'><span class='fu'><a href='na_polish_metrics.html'>na_polish_metrics</a></span>(<span class='no'>wdi_ts</span>, <span class='no'>wdi_after</span>)</div><div class='output co'>#&gt; # A tibble: 1 x 6
+<span class='no'>wdi_after</span> <span class='kw'>&lt;-</span> <span class='fu'>na_polish_auto</span>(<span class='no'>wdi_ts</span>, <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>.8</span>)</div><div class='output co'>#&gt; Error : Cannot write to fd (system error 9, Bad file descriptor) @client.c:149
+#&gt; Error in mycall(sym_write, fd, data) : 
+#&gt;   Cannot write to fd (system error 9, Bad file descriptor) @client.c:149</div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── Pass 1 ──────────────────────────────────────────────────────────────────────</span></div><div class='output co'>#&gt; Error in mycall(sym_write, fd, data) : 
+#&gt;   Cannot write to fd (system error 9, Bad file descriptor) @client.c:149</div><div class='output co'>#&gt; <span class='message'>1. `na_polish_index()`    0.671 * 0.352 = 0.236</span></div><div class='output co'>#&gt; <span class='message'>2. `na_polish_measures()` 0.879 * 0.109 = 0.096</span></div><div class='output co'>#&gt; <span class='message'>3. `na_polish_index2()`   0.547 * 0.114 = 0.062</span></div><div class='output co'>#&gt; Error in mycall(sym_write, fd, data) : 
+#&gt;   Cannot write to fd (system error 9, Bad file descriptor) @client.c:149</div><div class='output co'>#&gt; <span class='message'>✔ 0.334</span></div><div class='output co'>#&gt; Error in mycall(sym_write, fd, data) : 
+#&gt;   Cannot write to fd (system error 9, Bad file descriptor) @client.c:149
+#&gt; Error in mycall(sym_write, fd, data) : 
+#&gt;   Cannot write to fd (system error 9, Bad file descriptor) @client.c:149
+#&gt; Error in mycall(sym_write, fd, data) : 
+#&gt;   Cannot write to fd (system error 9, Bad file descriptor) @client.c:149
+#&gt; Error in mycall(sym_write, fd, data) : 
+#&gt;   Cannot write to fd (system error 9, Bad file descriptor) @client.c:149</div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── Pass 2 ──────────────────────────────────────────────────────────────────────</span></div><div class='output co'>#&gt; Error in mycall(sym_write, fd, data) : 
+#&gt;   Cannot write to fd (system error 9, Bad file descriptor) @client.c:149</div><div class='output co'>#&gt; <span class='message'>1. `na_polish_index()`  0.415 * 0.156 = 0.065</span></div><div class='output co'>#&gt; <span class='message'>2. `na_polish_index2()` 0.243 * 0.054 = 0.013</span></div><div class='output co'>#&gt; Error in mycall(sym_write, fd, data) : 
+#&gt;   Cannot write to fd (system error 9, Bad file descriptor) @client.c:149</div><div class='output co'>#&gt; <span class='message'>✔ 0.076</span></div><div class='output co'>#&gt; Error in mycall(sym_write, fd, data) : 
+#&gt;   Cannot write to fd (system error 9, Bad file descriptor) @client.c:149
+#&gt; Error in mycall(sym_write, fd, data) : 
+#&gt;   Cannot write to fd (system error 9, Bad file descriptor) @client.c:149</div><div class='input'><span class='fu'><a href='na_polish_metrics.html'>na_polish_metrics</a></span>(<span class='no'>wdi_ts</span>, <span class='no'>wdi_after</span>)</div><div class='output co'>#&gt; # A tibble: 1 x 6
 #&gt;   prop_na nobs_na prop_removed nobs_removed nrows_removed ncols_removed
 #&gt;     &lt;dbl&gt;   &lt;int&gt;        &lt;dbl&gt;        &lt;int&gt;         &lt;int&gt;         &lt;int&gt;
 #&gt; 1   0.631  222758        0.592       353269          5881             6</div><div class='input'>

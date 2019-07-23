@@ -294,7 +294,7 @@ cli_report <- function(npass, tbl) {
   if (vec_size(tbl) == 0) return()
   fmt_steps <- 
     sprintf(
-      "{arg %s} {emph %.3f * %.3f = %.3f}", 
+      "{arg %s} {emph %.3f x %.3f = %.3f}", 
       justify(
         backticks(paste0(tbl[["step"]], parenthesis(""))),
         right = FALSE, space = "\u00a0"

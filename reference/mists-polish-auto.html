@@ -125,8 +125,7 @@ na_polish_autotrace() returns a tibble for documenting the steps and metrics.
     </tr>
     <tr>
       <th>cutoff</th>
-      <td><p>A numeric between 0 and 1. Rows/cols will be kept, if the
-proportion of overall missings is less than the cutoff.</p></td>
+      <td><p>Numerics of length 1 or length of <code>funs</code> between 0 and 1.</p></td>
     </tr>
     <tr>
       <th>tol</th>
@@ -136,7 +135,8 @@ See <code><a href='na_polish_metrics.html'>na_polish_metrics()</a></code> for de
     </tr>
     <tr>
       <th>funs</th>
-      <td><p>A list of <code>na_polish_*()</code> functions to go through.</p></td>
+      <td><p>A list of <code>na_polish_*()</code> functions to go through. By default,
+<code>na_polish_funs()</code> contains "measures", "key", "index", and "index2".</p></td>
     </tr>
     <tr>
       <th>quiet</th>

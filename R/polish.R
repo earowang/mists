@@ -32,7 +32,7 @@ na_polish_measures <- function(data, cutoff) {
   na_polish_assert(data, cutoff)
   prop_na_by_vars <- summarise_all(as_tibble(data), prop_overall_na)
   sel_data <- select_if(prop_na_by_vars, function(x) x < cutoff)
-  select(data, !!! names(sel_data))
+  select(data, !!!names(sel_data))
 }
 
 #' @rdname mists-polish
@@ -53,7 +53,7 @@ na_polish_key <- function(data, cutoff) {
   if (is_empty(key_vars)) {
     data[vec_size(key_vals) != 0, ]
   } else {
-    key_df <- select(key_vals, !!! key_vars)
+    key_df <- select(key_vals, !!!key_vars)
     right_join(data, key_df, by = key_vars(data))
   }
 }
@@ -70,7 +70,7 @@ na_polish_index <- function(data, cutoff, na_fun = na_starts_with) {
   non_idx_data <- select(as_tibble(data), setdiff(names(data), index_var(data)))
 
   keyed_data <- new_grouped_df(data, groups = key_data(data))
-  na_blocks <- group_by(summarise_all(keyed_data, na_fun), !!! key(data))
+  na_blocks <- group_by(summarise_all(keyed_data, na_fun), !!!key(data))
   add_prop_na <- 
     mutate(
       group_nest(na_blocks, .key = ".n_na"),
@@ -81,17 +81,17 @@ na_polish_index <- function(data, cutoff, na_fun = na_starts_with) {
   if (vec_size(index_pass) == 0) {
     return(data[0L, ])
   } else if (is_empty(key_vars)) {
-    full_data <- mutate(data, !!! index_pass)
+    full_data <- mutate(data, !!!index_pass)
   } else {
     full_data <- left_join(data, index_pass, by = key_vars)
   }
   grped_data <- group_by_key(full_data)
   if (is_true(all.equal(na_fun, na_starts_with))) {
     filter_data <- filter(grped_data,
-      !! index(data) >= min(!! index(data)) + .n_na)
+      !!index(data) >= min(!!index(data)) + .n_na)
   } else if (is_true(all.equal(na_fun, na_ends_with))) {
     filter_data <- filter(grped_data,
-      !! index(data) <= max(!! index(data)) - .n_na)
+      !!index(data) <= max(!!index(data)) - .n_na)
   } else {
     abort("`na_fun` requires either `na_starts_with` or `na_ends_with`.")
   }
@@ -113,10 +113,12 @@ na_polish_index2 <- function(data, cutoff) {
 #' * `na_polish_autotrace()` returns a tibble for documenting the steps and metrics.
 #'
 #' @inheritParams na_polish_measures
+#' @param cutoff Numerics of length 1 or length of `funs` between 0 and 1.
 #' @param tol A tolerance value close or equal to zero as stopping rule. It
 #' compares to the loss defined as `prop_na * prop_removed` to be minimised.
 #' See [`na_polish_metrics()`] for details.
-#' @param funs A list of `na_polish_*()` functions to go through.
+#' @param funs A list of `na_polish_*()` functions to go through. By default,
+#' `na_polish_funs()` contains "measures", "key", "index", and "index2".
 #' @param quiet If `FALSE`, report metrics at each step and pass of the polishing
 #' process. It requires the "cliapp" package to be installed.
 #'
@@ -147,32 +149,40 @@ na_polish_autotrace <- function(data, cutoff, tol = .1, funs = na_polish_funs(),
 na_polish_auto_impl <- function(data, cutoff, tol = .1, funs = na_polish_funs(),
   quiet = FALSE, expect = "data") {
   stopifnot(tol >= 0 && tol <= 1)
+  stopifnot((len1 <- has_length(cutoff, 1)) || has_length(cutoff, length(funs)))
+  if (len1) {
+    cutoff <- rep(cutoff, length(funs))
+  }
   before <- data
   tol0 <- 1
   pass <- counter()
 
   lst_funs <- funs
+  vec_cutoff <- cutoff
   results <- list()
   while (tol0 > tol) {
     step_metrics <- # carry out individual steps to determine the order
-      map_dbl(lst_funs, function(.f) {
-        metrics <- na_polish_metrics(data, .f(data, cutoff = cutoff))
+      map2_dbl(lst_funs, vec_cutoff, function(.f, .c) {
+        metrics <- na_polish_metrics(data, .f(data, cutoff = .c))
         metrics[["prop_na"]] * metrics[["prop_removed"]]
       })
 
-    lst_funs <- lst_funs[order(step_metrics, decreasing = TRUE)]
+    ord_step <- order(step_metrics, decreasing = TRUE)
+    lst_funs <- lst_funs[ord_step]
+    vec_cutoff <- vec_cutoff[ord_step]
     # a full pass
     step_na <- step_removed <- double(length(lst_funs))
     for (i in seq_along(lst_funs)) {
       data0 <- data
-      data <- lst_funs[[i]](data, cutoff = cutoff)
+      data <- lst_funs[[i]](data, cutoff = vec_cutoff[i])
       tmp_metrics <- na_polish_metrics(data0, data)
       step_na[i] <- tmp_metrics[["prop_na"]]
       step_removed[i] <- tmp_metrics[["prop_removed"]]
       step_metrics[i] <- step_na[i] * step_removed[i]
     }
-    rm_funs <- step_metrics == 0 # should this be less than tol?
-    lst_funs <- lst_funs[!rm_funs]
+    funs_left <- step_metrics != 0 # should this be less than tol?
+    lst_funs <- lst_funs[funs_left]
+    vec_cutoff <- vec_cutoff[funs_left]
     pass_metrics <- na_polish_metrics(before, data)
     tol0 <- pass_metrics[["prop_na"]] * pass_metrics[["prop_removed"]]
     before <- data
@@ -181,9 +191,9 @@ na_polish_auto_impl <- function(data, cutoff, tol = .1, funs = na_polish_funs(),
       tibble(
         pass = p,
         step = names(lst_funs),
-        prop_na = step_na[!rm_funs],
-        prop_removed = step_removed[!rm_funs],
-        step_metric = step_metrics[!rm_funs],
+        prop_na = step_na[funs_left],
+        prop_removed = step_removed[funs_left],
+        step_metric = step_metrics[funs_left],
         pass_metric = tol0
       )
 
@@ -232,7 +242,7 @@ na_polish_metrics <- function(before, after) {
   stopifnot(key_vars(before) == key_vars(after))
 
   mvars <- measures(before)
-  bf <- select(as_tibble(before), !!! mvars)
+  bf <- select(as_tibble(before), !!!mvars)
   nobs_bf <- NROW(bf) * NCOL(bf)
   prop_na <- prop_removed <- 0
   nobs_na <- nobs_removed <- nrows_removed <- ncols_removed <- 0L
@@ -244,13 +254,13 @@ na_polish_metrics <- function(before, after) {
   }
   if ((rows_rm <- NROW(before) > NROW(after))) { # rows removed
     removed_rows <- as_tibble(anti_join(before, after, by = names(after)))
-    removed_rows <- select(removed_rows, !!! mvars)
+    removed_rows <- select(removed_rows, !!!mvars)
     nobs_removed <- NROW(removed_rows) * NCOL(removed_rows)
     nobs_na <- n_overall_na(removed_rows)
     prop_na <- prop_overall_na(removed_rows)
   }
   if (cols_rm && rows_rm) {
-    af <- select(as_tibble(after), !!! measures(after))
+    af <- select(as_tibble(after), !!!measures(after))
     removed_rows <- # rm double counted cols part
       select(removed_rows, intersect(names(bf), names(af)))
     nobs_removed <- nobs_bf - NCOL(af) * NROW(af)

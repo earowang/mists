@@ -153,7 +153,7 @@ na_polish_auto_impl <- function(data, cutoff, tol = .1, funs = na_polish_funs(),
   if (len1) {
     cutoff <- rep(cutoff, length(funs))
   }
-  before <- data
+  before <- data_copy <- data
   tol0 <- 1
   pass <- counter()
 
@@ -203,7 +203,13 @@ na_polish_auto_impl <- function(data, cutoff, tol = .1, funs = na_polish_funs(),
   if (expect == "data") {
     data
   } else {
-    bind_rows(results)
+    final_results <- na_polish_metrics(data_copy, data)
+    results <- bind_rows(results)
+    mutate(
+      results,
+      "final_prop_na" := final_results[["prop_na"]],
+      "final_prop_removed" := final_results[["prop_removed"]]
+    )
   }
 }
 

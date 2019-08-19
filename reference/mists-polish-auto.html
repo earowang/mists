@@ -174,14 +174,15 @@ process. It requires the "cliapp" package to be installed.</p></td>
 #&gt;     &lt;dbl&gt;   &lt;int&gt;        &lt;dbl&gt;        &lt;int&gt;         &lt;int&gt;         &lt;int&gt;
 #&gt; 1   0.631  222758        0.592       353269          5881             6</div><div class='input'>
 <span class='co'># Trace down `na_polish_auto()`</span>
-<span class='fu'>na_polish_autotrace</span>(<span class='no'>wdi_ts</span>, <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>.8</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; # A tibble: 5 x 6
-#&gt;    pass step               prop_na prop_removed step_metric pass_metric
-#&gt;   &lt;int&gt; &lt;chr&gt;                &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
-#&gt; 1     1 na_polish_index      0.671       0.352       0.236       0.334 
-#&gt; 2     1 na_polish_measures   0.879       0.109       0.0959      0.334 
-#&gt; 3     1 na_polish_index2     0.547       0.114       0.0622      0.334 
-#&gt; 4     2 na_polish_index      0.415       0.156       0.0650      0.0760
-#&gt; 5     2 na_polish_index2     0.243       0.0541      0.0131      0.0760</div></pre>
+<span class='fu'>na_polish_autotrace</span>(<span class='no'>wdi_ts</span>, <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>.8</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; # A tibble: 5 x 8
+#&gt;    pass step  prop_na prop_removed step_metric pass_metric final_prop_na
+#&gt;   &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;         &lt;dbl&gt;
+#&gt; 1     1 na_p…   0.671       0.352       0.236       0.334          0.631
+#&gt; 2     1 na_p…   0.879       0.109       0.0959      0.334          0.631
+#&gt; 3     1 na_p…   0.547       0.114       0.0622      0.334          0.631
+#&gt; 4     2 na_p…   0.415       0.156       0.0650      0.0760         0.631
+#&gt; 5     2 na_p…   0.243       0.0541      0.0131      0.0760         0.631
+#&gt; # … with 1 more variable: final_prop_removed &lt;dbl&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

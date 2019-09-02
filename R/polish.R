@@ -190,10 +190,10 @@ na_polish_auto_impl <- function(data, cutoff, tol = .1, funs = na_polish_funs(),
     results[[i]] <- 
       tibble(
         iteration = i,
-        step = names(lst_funs),
+        polisher = names(lst_funs),
         prop_na = step_na[funs_left],
         prop_removed = step_removed[funs_left],
-        step_loss = step_metrics[funs_left],
+        eval_loss = step_metrics[funs_left],
         iter_loss = tol0
       )
 
@@ -312,10 +312,10 @@ cli_report <- function(iteration, tbl) {
     sprintf(
       "{arg %s} {emph (1 - %.3f) x %.3f = %.3f}", 
       justify(
-        backticks(paste0(tbl[["step"]], parenthesis(""))),
+        backticks(paste0(tbl[["polisher"]], parenthesis(""))),
         right = FALSE, space = "\u00a0"
       ), 
-      tbl[["prop_na"]], tbl[["prop_removed"]], tbl[["step_loss"]]
+      tbl[["prop_na"]], tbl[["prop_removed"]], tbl[["eval_loss"]]
     )
   fmt_tol <- sprintf("{emph %.3f}", unique(tbl[["iter_loss"]]))
   cliapp::start_app(theme = cliapp::simple_theme())

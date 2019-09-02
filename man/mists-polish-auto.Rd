@@ -18,7 +18,7 @@ na_polish_autotrace(data, cutoff, tol = 0.1, funs = na_polish_funs(),
 \item{cutoff}{Numerics of length 1 or length of \code{funs} between 0 and 1.}
 
 \item{tol}{A tolerance value close or equal to zero as stopping rule. It
-compares to the loss defined as \code{prop_na * prop_removed} to be minimised.
+compares to the loss defined as \code{(1 - prop_na) * prop_removed} to be minimised.
 See \code{\link[=na_polish_metrics]{na_polish_metrics()}} for details.}
 
 \item{funs}{A list of \code{na_polish_*()} functions to go through. By default,

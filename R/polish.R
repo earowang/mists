@@ -115,7 +115,7 @@ na_polish_index2 <- function(data, cutoff) {
 #' @inheritParams na_polish_measures
 #' @param cutoff Numerics of length 1 or length of `funs` between 0 and 1.
 #' @param tol A tolerance value close or equal to zero as stopping rule. It
-#' compares to the loss defined as `prop_na * prop_removed` to be minimised.
+#' compares to the loss defined as `(1 - prop_na) * prop_removed` to be minimised.
 #' See [`na_polish_metrics()`] for details.
 #' @param funs A list of `na_polish_*()` functions to go through. By default,
 #' `na_polish_funs()` contains "measures", "key", "index", and "index2".
@@ -155,7 +155,7 @@ na_polish_auto_impl <- function(data, cutoff, tol = .1, funs = na_polish_funs(),
   }
   before <- data_copy <- data
   tol0 <- 1
-  pass <- counter()
+  iterator <- counter()
 
   lst_funs <- funs
   vec_cutoff <- cutoff
@@ -164,7 +164,7 @@ na_polish_auto_impl <- function(data, cutoff, tol = .1, funs = na_polish_funs(),
     step_metrics <- # carry out individual steps to determine the order
       map2_dbl(lst_funs, vec_cutoff, function(.f, .c) {
         metrics <- na_polish_metrics(data, .f(data, cutoff = .c))
-        metrics[["prop_na"]] * metrics[["prop_removed"]]
+        (1 - metrics[["prop_na"]]) * metrics[["prop_removed"]]
       })
 
     ord_step <- order(step_metrics, decreasing = TRUE)
@@ -178,26 +178,26 @@ na_polish_auto_impl <- function(data, cutoff, tol = .1, funs = na_polish_funs(),
       tmp_metrics <- na_polish_metrics(data0, data)
       step_na[i] <- tmp_metrics[["prop_na"]]
       step_removed[i] <- tmp_metrics[["prop_removed"]]
-      step_metrics[i] <- step_na[i] * step_removed[i]
+      step_metrics[i] <- (1 - step_na[i]) * step_removed[i]
     }
     funs_left <- step_metrics != 0 # should this be less than tol?
     lst_funs <- lst_funs[funs_left]
     vec_cutoff <- vec_cutoff[funs_left]
     pass_metrics <- na_polish_metrics(before, data)
-    tol0 <- pass_metrics[["prop_na"]] * pass_metrics[["prop_removed"]]
+    tol0 <- (1 - pass_metrics[["prop_na"]]) * pass_metrics[["prop_removed"]]
     before <- data
-    p <- pass()
-    results[[p]] <- 
+    i <- iterator()
+    results[[i]] <- 
       tibble(
-        pass = p,
+        iteration = i,
         step = names(lst_funs),
         prop_na = step_na[funs_left],
         prop_removed = step_removed[funs_left],
-        step_metric = step_metrics[funs_left],
-        pass_metric = tol0
+        step_loss = step_metrics[funs_left],
+        iter_loss = tol0
       )
 
-    if (!quiet) cli_report(p, results[[p]])
+    if (!quiet) cli_report(i, results[[i]])
   }
 
   if (expect == "data") {
@@ -303,24 +303,24 @@ counter <- function() {
   }
 }
 
-cli_report <- function(npass, tbl) {
+cli_report <- function(iteration, tbl) {
   if (!is_installed("cliapp")) {
     abort("`quiet = FALSE` requires the \"cliapp\" package to be installed.")
   }
   if (vec_size(tbl) == 0) return()
   fmt_steps <- 
     sprintf(
-      "{arg %s} {emph %.3f x %.3f = %.3f}", 
+      "{arg %s} {emph (1 - %.3f) x %.3f = %.3f}", 
       justify(
         backticks(paste0(tbl[["step"]], parenthesis(""))),
         right = FALSE, space = "\u00a0"
       ), 
-      tbl[["prop_na"]], tbl[["prop_removed"]], tbl[["step_metric"]]
+      tbl[["prop_na"]], tbl[["prop_removed"]], tbl[["step_loss"]]
     )
-  fmt_tol <- sprintf("{emph %.3f}", unique(tbl[["pass_metric"]]))
+  fmt_tol <- sprintf("{emph %.3f}", unique(tbl[["iter_loss"]]))
   cliapp::start_app(theme = cliapp::simple_theme())
   cliapp::cli_div(theme = list(span.emph = list(color = "red")))
-  cliapp::cli_h1(paste("Pass", npass))
+  cliapp::cli_h1(paste("Iteration", iteration))
   cliapp::cli_ol(fmt_steps)
   cliapp::cli_alert_success(fmt_tol)
 }

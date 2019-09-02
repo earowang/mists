@@ -123,8 +123,8 @@ missing. We would end up with no data if using listwise deletion.
 Polishing columns and rows iteratively sweeps out chunks of `NA` but
 leaves some of them in. The index should be kept intact by slicing the
 ends only due to the temporal ordering. The `na_polish_auto()` automates
-this polishing process by minimising the loss, defined as *the
-proportion of overall missings* weighted by *the proportion of removed
+this polishing process by minimising the loss, defined as (1 - *the
+proportion of overall missings*) weighted by *the proportion of removed
 observations*. It will iterate the following passes:
 `na_polish_measures()`, `na_polish_key()`, `na_polish_index()` until a
 tolerance value (close or equal to zero). The `na_polish_*()` family
@@ -139,7 +139,7 @@ na_polish_metrics(wdi_ts, wdi_after)
 #> # A tibble: 1 x 6
 #>   prop_na nobs_na prop_removed nobs_removed nrows_removed ncols_removed
 #>     <dbl>   <int>        <dbl>        <int>         <int>         <int>
-#> 1   0.636  220533        0.581       346948          5752             6
+#> 1   0.575  240327        0.700       417900          7200             6
 ```
 
 ## Related work

@@ -193,17 +193,17 @@ process. It requires the "cliapp" package to be installed.</p></td>
 #&gt; 1   0.575  240327        0.700       417900          7200             6</div><div class='input'>
 <span class='co'># Trace down `na_polish_auto()`</span>
 <span class='fu'>na_polish_autotrace</span>(<span class='no'>wdi_ts</span>, <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>.8</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; # A tibble: 9 x 8
-#&gt;   iteration step  prop_na prop_removed step_loss iter_loss final_prop_na
-#&gt;       &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;
-#&gt; 1         1 na_p…   0.671       0.352     0.116     0.160          0.575
-#&gt; 2         1 na_p…   0.558       0.126     0.0556    0.160          0.575
-#&gt; 3         1 na_p…   0.878       0.109     0.0133    0.160          0.575
-#&gt; 4         2 na_p…   0.415       0.157     0.0918    0.126          0.575
-#&gt; 5         2 na_p…   0.240       0.0533    0.0405    0.126          0.575
-#&gt; 6         3 na_p…   0.328       0.114     0.0768    0.107          0.575
-#&gt; 7         3 na_p…   0.184       0.0419    0.0342    0.107          0.575
-#&gt; 8         4 na_p…   0.282       0.0913    0.0655    0.0918         0.575
-#&gt; 9         4 na_p…   0.167       0.0346    0.0289    0.0918         0.575
+#&gt;   iteration polisher prop_na prop_removed eval_loss iter_loss final_prop_na
+#&gt;       &lt;int&gt; &lt;chr&gt;      &lt;dbl&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;
+#&gt; 1         1 na_poli…   0.671       0.352     0.116     0.160          0.575
+#&gt; 2         1 na_poli…   0.558       0.126     0.0556    0.160          0.575
+#&gt; 3         1 na_poli…   0.878       0.109     0.0133    0.160          0.575
+#&gt; 4         2 na_poli…   0.415       0.157     0.0918    0.126          0.575
+#&gt; 5         2 na_poli…   0.240       0.0533    0.0405    0.126          0.575
+#&gt; 6         3 na_poli…   0.328       0.114     0.0768    0.107          0.575
+#&gt; 7         3 na_poli…   0.184       0.0419    0.0342    0.107          0.575
+#&gt; 8         4 na_poli…   0.282       0.0913    0.0655    0.0918         0.575
+#&gt; 9         4 na_poli…   0.167       0.0346    0.0289    0.0918         0.575
 #&gt; # … with 1 more variable: final_prop_removed &lt;dbl&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

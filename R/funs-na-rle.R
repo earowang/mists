@@ -341,18 +341,20 @@ start.rle_na <- function(x, ...) {
 #' @export
 start.list_of_rle_na <- function(x, ...) {
   res <- map(x, start)
-  vec_c(!!! res)
+  index_restore(vec_c(!!!res), res[[1]])
 }
 
 #' @importFrom stats end
 #' @export
 end.rle_na <- function(x, ...) {
-  vec_c(!!! na_rle_ends(x))
+  res <- na_rle_ends(x)
+  index_restore(vec_c(!!!res), res[[1]])
 }
 
 #' @export
 end.list_of_rle_na <- function(x, ...) {
-  vec_c(!!! map(x, end))
+  res <- map(x, end)
+  index_restore(vec_c(!!!res), res[[1]])
 }
 
 is_list_of_rle_na <- function(x) {
@@ -370,4 +372,9 @@ na_rle_reverse <- function(x) {
   rep_lengths <- rep.int(rle_lengths, map_int(full_seq, vec_size))
   full_seq <- do.call("c", full_seq) # vec_c(!!! full_seq)
   list("lengths" = rep_lengths, "indices" = full_seq)
+}
+
+index_restore <- function(data, x) {
+  class(data) <- class(x)
+  data
 }

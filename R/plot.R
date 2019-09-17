@@ -143,23 +143,24 @@ na_rle_spinoplot <- function(data, x, y = NULL, facets = NULL, ...) {
     intersect_xy <- semi_join(x_full, y_full, by = c("indices", "facets"))
     overlaps_xy <- count(intersect_xy, lengths, facets)
     inner_xy <- inner_join(overlaps_xy, na_runs_x, by = c("lengths", "facets"))
+    lgl <- factor(c("TRUE", "FALSE"), levels = c("TRUE", "FALSE"))
     frac_intersect <- 
       transmute(
         group_by(inner_xy, lengths, facets),
-        "frac" := n.x / nobs, "overlap" := TRUE
+        "frac" := n.x / nobs, "overlap" := lgl[1]
       )
     frac_diff <- 
       mutate(
         group_by(frac_intersect, facets), 
-        "frac" := 1 - frac, "overlap" := FALSE
+        "frac" := 1 - frac, "overlap" := lgl[2]
       )
     frac_xy <- vec_rbind(frac_intersect, frac_diff)
     ljoin_xy <- left_join(na_runs_x, frac_xy, by = c("lengths", "facets"))
     na_runs_xy <- 
       mutate(
         group_by(ljoin_xy, facets),
-        "overlap" := ifelse(is.na(frac), FALSE, overlap),
-        "frac" := ifelse(is.na(frac), 1, frac)
+        "overlap" := if_else(is.na(frac), lgl[1], overlap),
+        "frac" := if_else(is.na(frac), 1, frac)
       )
     ggplot(na_runs_xy, aes(x = x, y = frac, width = nobs, fill = overlap)) +
       geom_bar(stat = "identity", colour = "white") +

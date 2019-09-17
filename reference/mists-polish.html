@@ -8,21 +8,25 @@
 
 <title>Missing data polishing for tsibble — na_polish_measures • mists</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,8 +34,8 @@
 
 
 
-<meta property="og:title" content="Missing data polishing for tsibble — na_polish_measures" />
 
+<meta property="og:title" content="Missing data polishing for tsibble — na_polish_measures" />
 <meta property="og:description" content="If the proportion of overall missings is less than the cutoff,
 na_polish_measures() removes columns or observations.
 na_polish_key() polishes data by rows or observations, removing the whole
@@ -41,8 +45,10 @@ the starting or the ending NA blocks (if any) within each key series.
 na_polish_index2() polishes data by rows or observations, removing the
 ending NA blocks (if any) within each key series. It is a shortcut of
 na_polish_index(na_fun = na_ends_with).
+
 " />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -54,6 +60,7 @@ na_polish_index(na_fun = na_ends_with).
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -82,7 +89,6 @@ na_polish_index(na_fun = na_ends_with).
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/earowang/mists">
@@ -97,6 +103,7 @@ na_polish_index(na_fun = na_ends_with).
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -108,7 +115,6 @@ na_polish_index(na_fun = na_ends_with).
     </div>
 
     <div class="ref-description">
-    
     <p>If the proportion of overall missings is less than the cutoff,</p><ul>
 <li><p><code>na_polish_measures()</code> removes columns or observations.</p></li>
 <li><p><code>na_polish_key()</code> polishes data by rows or observations, removing the whole
@@ -119,7 +125,7 @@ the starting or the ending <code>NA</code> blocks (if any) within each key serie
 ending <code>NA</code> blocks (if any) within each key series. It is a shortcut of
 <code>na_polish_index(na_fun = na_ends_with)</code>.</p></li>
 </ul>
-    
+
     </div>
 
     <pre class="usage"><span class='fu'>na_polish_measures</span>(<span class='no'>data</span>, <span class='no'>cutoff</span>)
@@ -129,7 +135,7 @@ ending <code>NA</code> blocks (if any) within each key series. It is a shortcut 
 <span class='fu'>na_polish_index</span>(<span class='no'>data</span>, <span class='no'>cutoff</span>, <span class='kw'>na_fun</span> <span class='kw'>=</span> <span class='no'>na_starts_with</span>)
 
 <span class='fu'>na_polish_index2</span>(<span class='no'>data</span>, <span class='no'>cutoff</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -147,17 +153,15 @@ proportion of overall missings is less than the cutoff.</p></td>
       <td><p>Either <code><a href='mists-na-helpers.html'>na_starts_with</a></code> or <code><a href='mists-na-helpers.html'>na_ends_with</a></code>.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The proportion of overall missings is defined as the number of <code>NA</code> divided
 by the number of <strong>measurements</strong> (i.e. excluding key and index).</p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other missing value polishing functions: <code><a href='mists-polish-auto.html'>na_polish_auto</a></code>,
   <code><a href='na_polish_metrics.html'>na_polish_metrics</a></code></p></div>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>wdi_ts</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tsibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tsibble.tidyverts.org/reference/as-tsibble.html'>as_tsibble</a></span>(<span class='no'>wdi</span>, <span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>country_code</span>, <span class='kw'>index</span> <span class='kw'>=</span> <span class='no'>year</span>)
@@ -190,7 +194,7 @@ by the number of <strong>measurements</strong> (i.e. excluding key and index).</
 #&gt; #   sp_dyn_tfrt_in &lt;dbl&gt;, sp_pop_grow &lt;dbl&gt;, sp_pop_totl &lt;dbl&gt;,
 #&gt; #   sp_urb_grow &lt;dbl&gt;, tg_val_totl_gd_zs &lt;dbl&gt;, tt_pri_mrch_xd_wd &lt;dbl&gt;,
 #&gt; #   tx_val_tech_mf_zs &lt;dbl&gt;</div><div class='input'><span class='co'># columns removed</span>
-<span class='fu'><a href='https://dplyr.tidyverse.org/reference/setops.html'>setdiff</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>wdi_ts</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>wdi_cols</span>))</div><div class='output co'>#&gt;  [1] "er_h2o_fwtl_zs" "er_ptd_totl_zs" "ic_reg_durs"    "iq_sci_ovrl"   
+<span class='fu'><a href='https://dplyr.tidyverse.org/reference/setops.html'>setdiff</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>wdi_ts</span>), <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>wdi_cols</span>))</div><div class='output co'>#&gt;  [1] "er_h2o_fwtl_zs" "er_ptd_totl_zs" "ic_reg_durs"    "iq_sci_ovrl"   
 #&gt;  [5] "sh_sta_brtc_zs" "sh_sta_maln_zs" "si_dst_frst_20" "si_pov_dday"   
 #&gt;  [9] "si_pov_nahc"    "sm_pop_netm"    "sp_dyn_conu_zs"</div><div class='input'><span class='fu'>na_polish_key</span>(<span class='no'>wdi_ts</span>, <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>.7</span>)</div><div class='output co'>#&gt; # A tsibble: 9,600 x 57 [1Y]
 #&gt; # Key:       country_code [192]
@@ -291,16 +295,14 @@ by the number of <strong>measurements</strong> (i.e. excluding key and index).</
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#details">Details</a></li>
-
       <li><a href="#see-also">See also</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -308,13 +310,16 @@ by the number of <strong>measurements</strong> (i.e. excluding key and index).</
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

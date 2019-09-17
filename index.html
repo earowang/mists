@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Missingness of Temporal Data • mists</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Missingness of Temporal Data">
 <meta property="og:description" content="Provides 1d, 2d, and visual methods for exploring,
     polishing, and visualising temporal missingness.">
@@ -19,7 +20,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-article">
+    <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -57,13 +58,9 @@
 <!--/.navbar -->
 
       
-      </header><div class="row">
-  <div class="col-md-9 contents">
-    
 
-    
-    
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+      </header><div class="row">
+  <div class="contents col-md-9">
 <div id="mists" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#mists" class="anchor"></a>mists</h1></div>
@@ -75,25 +72,25 @@
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>Install the development version from <a href="https://github.com/">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># install.packages("remotes")</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"earowang/mists"</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb1-2" data-line-number="2">remotes<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/remotes/man/install_github.html">install_github</a></span>(<span class="st">"earowang/mists"</span>)</a></code></pre></div>
 </div>
 <div id="get-started-with-na_rle-and-list_of_na_rle" class="section level2">
 <h2 class="hasAnchor">
-<a href="#get-started-with-na_rle-and-list_of_na_rle" class="anchor"></a>Get started with <code><a href="reference/na-rle.html">na_rle()</a></code> and <code><a href="reference/na-rle.html">list_of_na_rle()</a></code>
+<a href="#get-started-with-na_rle-and-list_of_na_rle" class="anchor"></a>Get started with <code>na_rle()</code> and <code>list_of_na_rle()</code>
 </h2>
 <p>The <code><a href="reference/na-rle.html">na_rle()</a></code> gives a sparse representation for indexing runs of missings, a special type of run length encoding (<code>rle</code>).</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(mists)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">(x &lt;-<span class="st"> </span><span class="kw"><a href="reference/na-rle.html">na_rle</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="dv">4</span><span class="op">:</span><span class="dv">7</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="dv">10</span><span class="op">:</span><span class="dv">15</span>, <span class="ot">NA</span>)))</a>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(mists)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">(x &lt;-<span class="st"> </span><span class="kw"><a href="reference/na-rle.html">na_rle</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="dv">4</span><span class="op">:</span><span class="dv">7</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="dv">10</span><span class="op">:</span><span class="dv">15</span>, <span class="ot">NA</span>)))</a>
 <a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; &lt;Run Length Encoding &lt;NA&gt;[3]&gt;</span></a>
 <a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt; $lengths: &lt;int&gt; 2 2 1 </span></a>
 <a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt; $indices: &lt;int&gt;  2  8 16</span></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">(y &lt;-<span class="st"> </span><span class="kw"><a href="reference/na-rle.html">na_rle</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">10</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="dv">6</span><span class="op">:</span><span class="dv">3</span>, <span class="ot">NA</span>, <span class="dv">1</span>)))</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">(y &lt;-<span class="st"> </span><span class="kw"><a href="reference/na-rle.html">na_rle</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">10</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="dv">6</span><span class="op">:</span><span class="dv">3</span>, <span class="ot">NA</span>, <span class="dv">1</span>)))</a>
 <a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt; &lt;Run Length Encoding &lt;NA&gt;[2]&gt;</span></a>
 <a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">#&gt; $lengths: &lt;int&gt; 3 1 </span></a>
 <a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">#&gt; $indices: &lt;int&gt; 2 9</span></a></code></pre></div>
 <p>It returns a named list of <code>lengths</code> and <code>indices</code> (the starting indices) of <code>NA</code> runs. Set operations can be applied: <code><a href="https://dplyr.tidyverse.org/reference/setops.html">intersect(x, y)</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/setops.html">union(x, y)</a></code>, and <code><a href="https://dplyr.tidyverse.org/reference/setops.html">setdiff(x, y)</a></code>, along with other math operations.</p>
 <p>The <code><a href="reference/na-rle.html">list_of_na_rle()</a></code> makes it easier to work with tibbles.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">na_runs_wind &lt;-<span class="st"> </span>nycflights13<span class="op">::</span>weather <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb3-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(origin) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb3-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/summarise_all.html">summarise_at</a></span>(</a>
@@ -114,28 +111,28 @@
 <p>How do those missings distribute and associate with others? The range plot below shows many of single <code>NA</code> runs occurs to <code>wind_dir</code> in 2013.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">na_runs_wind <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/mists-plot.html">na_rle_rangeplot</a></span>(<span class="dt">x =</span> wind_dir, <span class="dt">y =</span> origin, <span class="dt">shape =</span> <span class="dv">4</span>)</a></code></pre></div>
-<p><img src="reference/figures/README-rangeplot-1.png" width="875" style="display: block; margin: auto;"></p>
+<p><img src="reference/figures/README-rangeplot-1.png" style="display: block; margin: auto;"></p>
 <p>To highlight missings along with the original data, <code><a href="reference/layer_na_rle.html">layer_na_rle()</a></code> adds the layer fitting into the <strong>ggplot2</strong> pipeline.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ggplot2)</a>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(nycflights13<span class="op">::</span>weather, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> time_hour, <span class="dt">y =</span> wind_gust)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb5-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(<span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb5-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="reference/layer_na_rle.html">layer_na_rle</a></span>(wind_gust, <span class="dt">data =</span> na_runs_wind, <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb5-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span>(origin <span class="op">~</span><span class="st"> </span>.) <span class="op">+</span></a>
 <a class="sourceLine" id="cb5-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</a></code></pre></div>
-<p><img src="reference/figures/README-layerplot-1.png" width="875" style="display: block; margin: auto;"></p>
+<p><img src="reference/figures/README-layerplot-1.png" style="display: block; margin: auto;"></p>
 <p>The spinoplot has been extended to examine the association of missing runs with a second variable through temporal overlapping. A large amount of missings in <code>wind_dir</code> intersects with <code>wind_gust</code> missings at all three places.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">na_runs_wind <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/mists-plot.html">na_rle_spinoplot</a></span>(<span class="dt">x =</span> wind_dir, <span class="dt">y =</span> wind_gust, <span class="dt">facets =</span> origin)</a></code></pre></div>
-<p><img src="reference/figures/README-spinoplot-1.png" width="875" style="display: block; margin: auto;"></p>
+<p><img src="reference/figures/README-spinoplot-1.png" style="display: block; margin: auto;"></p>
 </div>
 <div id="missing-data-polishing" class="section level2">
 <h2 class="hasAnchor">
 <a href="#missing-data-polishing" class="anchor"></a>Missing data polishing</h2>
 <p>Too many missings are scattered across variables and observations like the <code>wdi</code> dataset (world development indicators)? Every observation and measured variable contains <code>NA</code>, and almost half of the data goes missing. We would end up with no data if using listwise deletion.</p>
-<pre><code>#&gt; # A tibble: 1 x 5
-#&gt;   prop_overall_na prop_cols_na prop_rows_na data_ncols data_nrows
-#&gt;             &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;int&gt;      &lt;int&gt;
-#&gt; 1           0.449            1            1         57      10850</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co">#&gt; # A tibble: 1 x 5</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#&gt;   prop_overall_na prop_cols_na prop_rows_na data_ncols data_nrows</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt;             &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;int&gt;      &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; 1           0.449            1            1         57      10850</span></a></code></pre></div>
 <p>Polishing columns and rows iteratively sweeps out chunks of <code>NA</code> but leaves some of them in. The index should be kept intact by slicing the ends only due to the temporal ordering. The <code><a href="reference/mists-polish-auto.html">na_polish_auto()</a></code> automates this polishing process by minimising the loss, defined as (1 - <em>the proportion of overall missings</em>) weighted by <em>the proportion of removed observations</em>. It will iterate the following passes: <code><a href="reference/mists-polish.html">na_polish_measures()</a></code>, <code><a href="reference/mists-polish.html">na_polish_key()</a></code>, <code><a href="reference/mists-polish.html">na_polish_index()</a></code> until a tolerance value (close or equal to zero). The <code>na_polish_*()</code> family expects a <a href="http://tsibble.tidyverts.org">tsibble</a>, provided that polishing starts with tidy data.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">wdi_ts &lt;-<span class="st"> </span>wdi <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"><span class="st">  </span>tsibble<span class="op">::</span><span class="kw"><a href="https://tsibble.tidyverts.org/reference/as-tsibble.html">as_tsibble</a></span>(<span class="dt">key =</span> country_code, <span class="dt">index =</span> year)</a>
@@ -185,12 +182,12 @@
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>
-<a href="https://earo.me">Earo Wang</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-6448-5260" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
+<a href="https://earo.me">Earo Wang</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-6448-5260" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
 <li><a href="authors.html">All authors...</a></li>
 </ul>
 </div>
 
-      <div class="dev-status">
+  <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://travis-ci.org/earowang/mists"><img src="https://travis-ci.org/earowang/mists.svg?branch=master" alt="Travis build status"></a></li>
@@ -200,7 +197,6 @@
 </ul>
 </div>
 </div>
-
 </div>
 
 
@@ -209,12 +205,14 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>

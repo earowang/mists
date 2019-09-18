@@ -27,7 +27,7 @@ Imports:
     ggplot2,
     rlang,
     tsibble (>= 0.8.0),
-    vctrs (>= 0.1.99)
+    vctrs (>= 0.2.0)
 Suggests: 
     cliapp,
     covr,
@@ -35,12 +35,9 @@ Suggests:
     nycflights13,
     spelling,
     testthat (>= 2.1.0),
-    tidyr (>= 0.8.3.9000)
+    tidyr (>= 1.0.0)
 VignetteBuilder: 
     knitr
-Remotes:
-    r-lib/vctrs,
-    tidyverse/tidyr
 ByteCompile: true
 Encoding: UTF-8
 Language: en-GB
